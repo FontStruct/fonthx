@@ -1,4 +1,4 @@
-#Contributing to fonthx
+# Contributing to fonthx
 
 Thanks for your interest in contributing to fonthx.
 

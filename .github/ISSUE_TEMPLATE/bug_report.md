@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Something is broken
+about: Something is broken (no FontStruct support requests please!)
 
 ---
 

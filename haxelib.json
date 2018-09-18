@@ -10,7 +10,7 @@
   "classPath": "src/",
   "dependencies": {
     "format": "3.4.1",
-    "hxcpp": "3.1.68",
+    "hxcpp": "4.0.4",
     "hxjava": "3.2.0",
     "buddy": "2.8.2",
     "dox": "1.1.0",

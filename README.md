@@ -7,7 +7,11 @@
 
 ## Installation
 
-1. Install Haxe: https://haxe.org/download/       
+1. Clone this repo with git to a folder on your machine
+
+        git clone git@github.com:FontStruct/fonthx.git
+
+1. Install Haxe, e.g. from https://haxe.org/download/       
     
 1. Install Haxe dependencies
 

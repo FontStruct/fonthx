@@ -1,0 +1,8 @@
+build/examples/pixelfonter/shared.hxml
+-js dist/examples/pixelfonter/node/PixelFonterApp.js
+-lib hxnodejs
+-D nodejs
+
+-cmd node dist/examples/pixelfonter/node/PixelFonterApp.js -i build/examples/pixelfonter/pixel-font-5x5.png -c65-91 -o tmp/pixelfont.ttf
+
+

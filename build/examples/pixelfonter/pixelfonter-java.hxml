@@ -1,0 +1,5 @@
+build/examples/pixelfonter/shared.hxml
+-java dist/examples/pixelfonter/java
+
+-cmd java -jar dist/examples/pixelfonter/java/PixelFonterApp-Debug.jar -i build/examples/pixelfonter/pixel-font-5x5.png -c65-91 -o tmp/pixelfont.ttf
+-cmd /Applications/FontValidator.app/Contents/Resources/FontValidator -file tmp/pixelfont.ttf -report-dir tmp/

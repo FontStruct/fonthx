@@ -1,0 +1,14 @@
+build/examples/pixelfonter/shared.hxml
+
+-cpp dist/examples/pixelfonter/cpp/
+
+-D HXCPP_DEBUG_LINK
+-D HXCPP_STACK_TRACE
+-D HXCPP_STACK_LINE
+-D HXCPP_CHECK_POINTER
+-D HXCPP_M64
+
+-lib hxcpp
+
+-cmd dist/examples/pixelfonter/cpp/PixelFonterApp-Debug -i build/examples/pixelfonter/pixel-font-5x5.png -c65-91 -o tmp/pixelfont.ttf
+-cmd /Applications/FontValidator.app/Contents/Resources/FontValidator -file tmp/pixelfont.ttf -report-dir tmp/

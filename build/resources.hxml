@@ -1,0 +1,15 @@
+-resource assets/codepages/CP874.TXT@CP874
+-resource assets/codepages/CP932.TXT@CP932
+-resource assets/codepages/CP936.TXT@CP936
+-resource assets/codepages/CP949.TXT@CP949
+-resource assets/codepages/CP950.TXT@CP950
+-resource assets/codepages/CP1250.TXT@CP1250
+-resource assets/codepages/CP1251.TXT@CP1251
+-resource assets/codepages/CP1252.TXT@CP1252
+-resource assets/codepages/CP1253.TXT@CP1253
+-resource assets/codepages/CP1254.TXT@CP1254
+-resource assets/codepages/CP1255.TXT@CP1255
+-resource assets/codepages/CP1256.TXT@CP1256
+-resource assets/codepages/CP1257.TXT@CP1257
+-resource assets/codepages/CP1258.TXT@CP1258
+-resource assets/encodings/macroman.txt@ENCMACROMAN

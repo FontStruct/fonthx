@@ -1,0 +1,16 @@
+build/resources.hxml
+
+-main fonthx.examples.pixelfonter.PixelFonterBrowserApp
+-cp src
+
+-lib format
+
+-js dist/examples/pixelfonter/js/PixelFonterBrowserApp.js
+
+-cmd cp build/examples/pixelfonter/pixel-font-5x5.png dist/examples/pixelfonter/js/pixel-font-5x5.png
+-cmd cp build/examples/pixelfonter/pixelfonter.js dist/examples/pixelfonter/js/pixelfonter.js
+-cmd cp build/examples/pixelfonter/pixelfonter.css dist/examples/pixelfonter/js/pixelfonter.css
+
+-cmd cp build/examples/pixelfonter/js.html dist/examples/pixelfonter/js/index.html
+
+

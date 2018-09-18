@@ -1,0 +1,26 @@
+build/resources.hxml
+
+-main fonthx.examples.pixelfonter.PixelFonterBrowserApp
+-cp src
+
+-lib format
+-lib hxcpp
+
+-cpp dist/examples/pixelfonter/wasm/
+
+-D HXCPP_DEBUG_LINK
+-D HXCPP_STACK_TRACE
+-D HXCPP_STACK_LINE
+-D HXCPP_CHECK_POINTER
+-D HXCPP_M64
+# Windows maybe needs this define
+-D EMSCRIPTEN_SDK
+# If you want the .html file showing how to embed the wasm
+-D HXCPP_LINK_EMSCRIPTEN_EXT=.html
+# Tell hxcpp to use emscripten-toolchain.xml
+-D emscripten
+# -D HXCPP_OPTIM_LEVEL=-O2
+-cmd cp build/examples/pixelfonter/pixel-font-5x5.png dist/examples/pixelfonter/wasm/pixel-font-5x5.png
+-cmd cp build/examples/pixelfonter/pixelfonter.js dist/examples/pixelfonter/wasm/pixelfonter.js
+-cmd cp build/examples/pixelfonter/pixelfonter.css dist/examples/pixelfonter/wasm/pixelfonter.css
+# -cmd emrun --no_emrun_detect --browser chrome dist/examples/pixelfonter/wasm/PixelFonterBrowserApp.html

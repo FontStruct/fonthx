@@ -1,0 +1,15 @@
+build/resources.hxml
+
+-main Specs
+-debug
+-cp spec
+-cp src
+-lib buddy
+-lib hxnodejs
+
+-D nodejs
+-js dist/spec/js/spec.js
+
+-cmd node dist/spec/js/spec.js
+
+

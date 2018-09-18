@@ -1,0 +1,12 @@
+{
+  "name": "fonthx",
+  "version": "0.0.1",
+  "description": "Font Generation for Haxe",
+  "license": "MIT",
+  "dependencies": {
+    "gulp-livereload": "^3.8.1"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  }
+}

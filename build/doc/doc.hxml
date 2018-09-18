@@ -1,0 +1,7 @@
+-cp src
+-D doc-gen
+--macro include('fonthx')
+--no-output
+-xml dist/doc/doc.xml
+-lib arguable
+-lib format

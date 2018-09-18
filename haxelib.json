@@ -1,0 +1,18 @@
+{
+  "name": "fonthx",
+  "url" : "https://gitlab.com/meek/fonthx",
+  "license": "MIT",
+  "tags": [],
+  "description": "Font Generation for Haxe",
+  "version": "0.0.1",
+  "releasenote": "-",
+  "contributors": ["Rob Meek"],
+  "classPath": "src/",
+  "dependencies": {
+    "format": "3.4.1",
+    "hxcpp": "3.1.68",
+    "hxjava": "3.2.0",
+    "buddy": "2.8.2",
+    "dox": "1.1.0"
+  }
+}

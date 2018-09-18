@@ -1,0 +1,7 @@
+-main fonthx.examples.pixelfonter.PixelFonterApp
+-cp src
+
+-lib arguable
+-lib format
+
+build/resources.hxml

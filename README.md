@@ -39,7 +39,7 @@ Build:
     
 Run:
 
-    java -jar dist/examples/pixelfonter/java/PixelFonterApp.jar -i build/examples/pixelfonter/pixel-font-5x5.png -c65-91 -o tmp/pixelfont.ttf
+    java -jar dist/examples/pixelfonter/java/PixelFonterApp-Debug.jar -i build/examples/pixelfonter/pixel-font-5x5.png -c65-91 -o tmp/pixelfont.ttf
     
 ## Try the same thing for native C++
 

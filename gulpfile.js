@@ -1,4 +1,6 @@
-var gulp = require('gulp');
+"use strict";
+
+const gulp = require('gulp');
 require('./build/gulp/pixelfonter');
 require('./build/gulp/specs');
 require('./build/gulp/doc');

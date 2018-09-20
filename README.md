@@ -17,27 +17,52 @@
 
         haxelib install haxelib.json
         
-1. To compile for node, you will need to have nodejs installed. To compile for java, you will need to have java installed. Other requirements listed below.       
+1. To compile for node, you will need to have nodejs installed. To compile for java, you will need to have a java JDK installed. Other requirements listed below. If on Windows, you may need to adjust some of the paths below. 
     
 ## Try it for node
+
+Build:
 
     haxe build/examples/pixelfonter/pixelfonter-node.hxml
     
 This will build the pixelfonter example, which will create a TrueType font from a PNG image.
 
+Now run:
+    
+    node dist/examples/pixelfonter/node/PixelFonterApp.js -i build/examples/pixelfonter/pixel-font-5x5.png -c65-91 -o tmp/pixelfont.ttf
+
 ## Try the same thing for Java
 
+Build:
+    
     haxe build/examples/pixelfonter/pixelfonter-java.hxml
+    
+Run:
+
+    java -jar dist/examples/pixelfonter/java/PixelFonterApp.jar -i build/examples/pixelfonter/pixel-font-5x5.png -c65-91 -o tmp/pixelfont.ttf
     
 ## Try the same thing for native C++
 
-    haxe build/examples/pixelfonter/pixelfonter-cpp.hxml    
+Build:
+
+    haxe build/examples/pixelfonter/pixelfonter-cpp.hxml
+    
+Run:
+
+    dist/examples/pixelfonter/cpp/PixelFonterApp-debug -i build/examples/pixelfonter/pixel-font-5x5.png -c65-91 -o tmp/pixelfont.ttf
+         
     
 ## And C# !?!
 
-    haxe build/examples/pixelfonter/pixelfonter-cs.hxml    
+In order to build and run this example on OSX or Linux you will need to install mono, e.g. via brew install mono
 
-– In order to use this example on OSX or Linux you will need to install mono, e.g. via brew install mono
+Build:
+    
+    haxe build/examples/pixelfonter/pixelfonter-cs.hxml
+    
+Run:        
+
+    mono dist/examples/pixelfonter/cs/bin/PixelFonterApp-Debug.exe -i build/examples/pixelfonter/pixel-font-5x5.png -c65-91 -o tmp/pixelfont.ttf
 
 ## And in the browser with a simple GUI
 

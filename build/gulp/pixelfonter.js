@@ -1,18 +1,48 @@
-var gulp = require('gulp');
-var livereload = require('gulp-livereload');
-var haxe = require('./shared').haxe;
+const gulp = require('gulp');
+const parameterized = require('gulp-parameterized');
+const livereload = require('gulp-livereload');
+const haxe = require('./shared').haxe;
+const exec = require('child_process').exec;
+const c = require('./config');
 
-gulp.task("pixelfonter-java", function(cb) {
-	return haxe('build/examples/pixelfonter/pixelfonter-java.hxml', cb);
-});
+const runPixelFonter = function(executable, params) {
+	params = Object.assign({
+		i: 'build/examples/pixelfonter/pixel-font-5x5.png',
+		c: '65-91',
+		o: 'tmp/pixelfont.ttf'
+	}, params);
+	const args = Object.keys(params).map((k) => `-${k} ${params[k]}`).join(' ');
+	const cmd = `${executable} ${args}`;
+	exec(cmd);
+};
 
-gulp.task("pixelfonter-node", function(cb) {
-	return haxe('build/examples/pixelfonter/pixelfonter-node.hxml', cb);
-});
+gulp.task("pixelfonter-java", parameterized(function(cb, params) {
+	return haxe('build/examples/pixelfonter/pixelfonter-java.hxml', function() {
+		runPixelFonter(`java -jar dist/examples/pixelfonter/java/PixelFonterApp${c.isDev? '-Debug' : ''}.jar`, params);
+		cb();
+	});
+}));
 
-gulp.task("pixelfonter-cpp", function(cb) {
-	return haxe('build/examples/pixelfonter/pixelfonter-cpp.hxml', cb);
-});
+gulp.task("pixelfonter-node", parameterized(function(cb, params) {
+	return haxe('build/examples/pixelfonter/pixelfonter-node.hxml', function() {
+		runPixelFonter(`node dist/examples/pixelfonter/node/PixelFonterApp.js`, params);
+		cb();
+	});	
+}));
+
+gulp.task("pixelfonter-cpp", parameterized(function(cb, params) {
+	return haxe('build/examples/pixelfonter/pixelfonter-cpp.hxml', function() {
+		runPixelFonter(`mono dist/examples/pixelfonter/cpp/PixelFonterApp${c.isDev? '-Debug' : ''}`, params);
+		cb();
+	});
+}));
+
+gulp.task("pixelfonter-cs", parameterized(function(cb, params) {
+	return haxe('build/examples/pixelfonter/pixelfonter-cs.hxml', function() {
+		runPixelFonter(`mono dist/examples/pixelfonter/cs/bin/PixelFonterApp${c.isDev? '-Debug' : ''}.exe`, params);
+		cb();
+	});
+}));
 
 gulp.task("pixelfonter-js", function(cb) {
 	return haxe('build/examples/pixelfonter/pixelfonter-js.hxml', function() {

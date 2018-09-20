@@ -1,9 +1,9 @@
-var c = require('./config');
-var exec = require('child_process').exec;
+const c = require('./config');
+const exec = require('child_process').exec;
 
 module.exports = {
 	haxe: function(hxml, cb) {
-		var cmd = 'HXCWD="' + process.cwd() + '" haxe ' + hxml;
+		let cmd = 'HXCWD="' + process.cwd() + '" haxe ' + hxml;
 		if (c.isDev) {
 			cmd += ' -debug';
 		} else {

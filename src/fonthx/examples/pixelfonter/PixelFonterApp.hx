@@ -30,7 +30,7 @@ class PixelFonterApp {
             imagePath: args.get('i').value,
             glyphWidth: args.has('w') ? Std.parseInt(args.get('w').value) : 5,
             glyphHeight: args.has('h') ? Std.parseInt(args.get('h').value) : 5,
-            codepointString: args.has('c') ? args.get('h').value : '65-90,33-58',
+            codepointString: args.has('c') ? args.get('c').value : '65-90,33-58',
             name: args.has('n') ? args.get('n').value : 'Pixel Font',
             outputPath: args.has('o') ? args.get('o').value : 'output.ttf',
         }

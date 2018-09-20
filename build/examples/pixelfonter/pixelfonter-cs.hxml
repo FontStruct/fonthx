@@ -1,7 +1,5 @@
 build/examples/pixelfonter/shared.hxml
 
 -cs dist/examples/pixelfonter/cs
-
 -D net-ver=40
 
--cmd mono dist/examples/pixelfonter/cs/bin/PixelFonterApp.exe -i build/examples/pixelfonter/pixel-font-5x5.png -c65-91 -o tmp/pixelfont-cs.ttf

@@ -2,7 +2,9 @@
   "name": "fonthx",
   "url" : "https://github.com/FontStruct/fonthx",
   "license": "MIT",
-  "tags": ["font", "truetype", "font-generator"],
+  "tags": [
+    "font", "truetype", "font-generator"
+  ],
   "description": "Font Generation for Haxe",
   "version": "0.0.1",
   "releasenote": "Initial release",
@@ -12,6 +14,7 @@
     "format": "3.4.1",
     "hxcpp": "4.0.4",
     "hxjava": "3.2.0",
+    "hxcs": "3.4.0",
     "buddy": "2.8.2",
     "dox": "1.1.0",
     "arguable": "1.0.2",

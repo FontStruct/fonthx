@@ -43,7 +43,7 @@ Build:
     
 Run:
 
-    java -jar dist/examples/pixelfonter/java/PixelFonterApp-Debug.jar -i build/examples/pixelfonter/pixel-font-5x5.png -c65-91 -o tmp/pixelfont.ttf
+    java -jar dist/examples/pixelfonter/java/PixelFonterApp.jar -i build/examples/pixelfonter/pixel-font-5x5.png -c65-91 -o tmp/pixelfont.ttf
     
 ## Try the same thing for native C++
 
@@ -53,7 +53,7 @@ Build:
     
 Run:
 
-    dist/examples/pixelfonter/cpp/PixelFonterApp-debug -i build/examples/pixelfonter/pixel-font-5x5.png -c65-91 -o tmp/pixelfont.ttf
+    dist/examples/pixelfonter/cpp/PixelFonterApp -i build/examples/pixelfonter/pixel-font-5x5.png -c65-91 -o tmp/pixelfont.ttf
          
     
 ## And C# !?!
@@ -66,7 +66,7 @@ Build:
     
 Run:        
 
-    mono dist/examples/pixelfonter/cs/bin/PixelFonterApp-Debug.exe -i build/examples/pixelfonter/pixel-font-5x5.png -c65-91 -o tmp/pixelfont.ttf
+    mono dist/examples/pixelfonter/cs/bin/PixelFonterApp.exe -i build/examples/pixelfonter/pixel-font-5x5.png -c65-91 -o tmp/pixelfont.ttf
 
 ## And in the browser with a simple GUI
 

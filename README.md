@@ -88,6 +88,7 @@ Run:
 
 Set up the dev tools (gulp):
 
+    npm install gulp-cli -g
     npm install
     
 Run specs:

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>PixelFonter JS</title>
+    <link rel="stylesheet" href="pixelfonter.css"/>
+</head>
+<body>
+
+<style></style>
+
+
+<canvas id="canvas"></canvas>
+
+
+<!--<div class="pf"><h1>PixelFonter</h1></div>-->
+
+<section>
+    <h1>Live Generation and Editing of a TrueType pixel font, from a bitmap image, on the client, in Javascript (or WASM), and Haxe.</h1>
+</section>
+
+
+<section>
+    <div class="label">Source (Click to toggle pixels):</div>
+    <div id="cells"></div>
+</section>
+
+<section>
+    <div class="label">WebFont (Click to Edit Text):</div>
+    <div class="pf" contenteditable="true">
+        <p>As you edit the font, this text, set in the WebFont will change appearance accordingly.</p>
+
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+        magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+        pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+            laborum.</p>
+    </div>
+</section>
+
+<section>
+    <a id="download" download="PixelFont.ttf">Download TTF</a>
+</section>
+
+<script src="PixelFonterBrowserApp.js"></script>
+<script src="pixelfonter.js"></script>
+
+</body>
+</html>

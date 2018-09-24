@@ -1,0 +1,28 @@
+section {
+    margin: 30px 0;
+}
+
+#cells {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#cells canvas {
+    margin-bottom: 10px;
+    margin-right: 10px;
+    outline: 1px solid #eee;
+    image-rendering: pixelated;
+    cursor: crosshair;}
+
+.pf {
+    font-family: pixelfont, sans-serif;
+    text-transform: uppercase;
+}
+
+.label {
+    margin-bottom: 10px;
+}
+
+#canvas {
+    display: none;
+}

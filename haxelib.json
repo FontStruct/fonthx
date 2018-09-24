@@ -1,12 +1,12 @@
 {
   "name": "fonthx",
-  "url" : "https://gitlab.com/meek/fonthx",
+  "url" : "https://github.com/FontStruct/fonthx",
   "license": "MIT",
-  "tags": [],
+  "tags": ["font", "truetype", "font-generator"],
   "description": "Font Generation for Haxe",
   "version": "0.0.1",
-  "releasenote": "-",
-  "contributors": ["Rob Meek"],
+  "releasenote": "Initial release",
+  "contributors": ["FontStruct"],
   "classPath": "src/",
   "dependencies": {
     "format": "3.4.1",

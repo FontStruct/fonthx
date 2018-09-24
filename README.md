@@ -5,6 +5,10 @@
 * Aimed at Haxe (or other) developers who wish to create font generation tools
 * Should work with nodejs, js, cpp, c# and java targets. WASM too
 
+## Example
+
+https://fontstruct.github.io/fonthx/
+
 ## Installation
 
 1. Clone this repo with git to a folder on your machine

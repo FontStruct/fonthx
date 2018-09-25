@@ -17,7 +17,7 @@ https://fontstruct.github.io/fonthx/
 
 1. Install Haxe, e.g. from https://haxe.org/download/       
     
-1. Install Haxe dependencies
+1. Install Haxe dependencies (anyone installing with haxelib should note #4)
 
         haxelib install haxelib.json
         
@@ -34,7 +34,7 @@ This will build the pixelfonter example, which will create a TrueType font from 
 Now run:
     
     node dist/examples/pixelfonter/node/PixelFonterApp.js -i build/examples/pixelfonter/pixel-font-5x5.png -c65-91 -o tmp/pixelfont.ttf
-
+    
 ## Try the same thing for Java
 
 Build:

@@ -8,7 +8,9 @@ import haxe.io.Bytes;
 using StringTools;
 using Lambda;
 
-
+/**
+* The core pixelfonter module
+**/
 class PixelFonter {
 
     public static function build(opts:PixelFonterParams):Bytes {

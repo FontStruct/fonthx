@@ -3,6 +3,10 @@ package fonthx.model.font;
 import haxe.ds.IntMap;
 import fonthx.model.font.KerningPair;
 
+/**
+* Interface to implement for a fonthx Font,
+* @see AbstractFont for a base implementation
+**/
 interface IFont {
 
     var glyphs(get, null):Array<IContourGlyph>;
@@ -29,7 +33,6 @@ interface IFont {
     var styleModifiers(get, null):String;
     var extraNamingRecords(get, null):IntMap<String>;
 
-    // todo make these integers
     var idealAscender(get, null):Float;
     var idealDescender(get, null):Float;
     var realAscender(get, null):Float;

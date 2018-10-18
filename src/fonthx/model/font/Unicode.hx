@@ -9,7 +9,7 @@ typedef Blocks = {
 class Unicode {
 
     /*
-	too large
+	Some blocks not yet included (todo FontStruct-specific issue)
 	Unified Canadian Aboriginal Syllabics, 639
 	CJK Unified Ideographs Extension A, 6591
 	CJK Unified Ideographs, 20991

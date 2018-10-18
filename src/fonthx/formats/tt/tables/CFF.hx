@@ -30,7 +30,9 @@ abstract Card16(Int) {
 // https://github.com/fonttools/fonttools/blob/master/Lib/fontTools/cffLib.py
 // https://github.com/devongovett/fontkit
 
-
+/**
+* WIP, WIP, WIP
+**/
 class CFF extends Table {
 
 	private var font:IFont;

@@ -7,6 +7,9 @@ import fonthx.model.font.AbstractFont;
 
 using StringTools;
 
+/**
+* A Pixel Font
+**/
 class PixelFont implements IFont extends AbstractFont {
 
     private var pixelSize:Int;
@@ -31,7 +34,6 @@ class PixelFont implements IFont extends AbstractFont {
     }
 
     public function prepareForExport():Void {
-
 
         // todo: do default prep in TT Builder
         // add space

@@ -10,7 +10,7 @@ class Utils {
 	 */
     public static function getMillisSince1904(date:Date):Int64 {
         // millis since midnight 01/01/70;
-        // this ain’t workin
+        // todo check this
         var now:Int64 = Int64.fromFloat(date.getTime());
         var dayInMillis:Int64 = Int64.ofInt(24 * 60 * 60 * 1000);
         var days1904To1970:Int64 = Int64.ofInt((365 * (1970 - 1904)) + 17); // 17 leap years

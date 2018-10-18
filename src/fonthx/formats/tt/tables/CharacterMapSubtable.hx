@@ -2,9 +2,7 @@ package fonthx.formats.tt.tables;
 
 /**
  * CharacterMap Subtable
- * @author rob
- *
- */
+*/
 class CharacterMapSubtable extends Table {
 	
 	private var platformID:Int;

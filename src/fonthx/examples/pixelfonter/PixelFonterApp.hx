@@ -6,6 +6,9 @@ using StringTools;
 using Lambda;
 using format.png.Tools;
 
+/**
+* CLI version of Pixelfonter
+**/
 class PixelFonterApp {
 
     public static function main() {
@@ -43,8 +46,10 @@ class PixelFonterApp {
         o.pixelData = png.extract32();
         handle.close();
 
+        // get the truetype bytes
         var bytes = PixelFonter.build(o);
 
+        // save ’em
         sys.io.File.saveBytes(o.outputPath, bytes);
 
         return 0;

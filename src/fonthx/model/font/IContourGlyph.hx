@@ -2,6 +2,10 @@ package fonthx.model.font;
 
 import fonthx.model.geom.Rectangle;
 
+/**
+* Interface to implement for a fonthx Glyph
+* @see AbstractContourGlyph for a base implementation
+**/
 interface IContourGlyph {
 
     /**

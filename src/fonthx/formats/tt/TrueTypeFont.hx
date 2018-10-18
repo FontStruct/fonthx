@@ -7,6 +7,9 @@ import fonthx.formats.tt.tables.Table;
 
 using Lambda;
 
+/**
+* A TrueType font
+**/
 class TrueTypeFont {
 
     private var tables:StringMap<Table> ;

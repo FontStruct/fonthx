@@ -34,6 +34,9 @@ EMSCRIPTEN_BINDINGS(my_module) {
 
 ')
 
+/**
+* Pixelfonter for Browser JS and WASM
+**/
 @:expose
 class PixelFonterBrowserApp {
 

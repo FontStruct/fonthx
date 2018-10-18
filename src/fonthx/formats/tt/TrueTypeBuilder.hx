@@ -45,6 +45,9 @@ using Lambda;
 
 class TrueTypeBuilder {
 
+    /**
+    * Given an IFont, generate a Font File for it in the specified format (only TrueType supported)
+    **/
     public static function build(font:IFont, format:FontFileFormat):Bytes {
         trace("Generating font file for " + font.name + " " + font.glyphs.length + " glyphs");
 

@@ -3,6 +3,7 @@ package fonthx.formats.tt.codepage;
 import haxe.ds.IntMap;
 import fonthx.Assets;
 
+// todo incomplete
 class OS2Codepage {
 
     public static var LATIN_1 = 1252;
@@ -24,21 +25,6 @@ class OS2Codepage {
     private static var bits:IntMap<Int>;
 
     /*	
-0 	1252 	Latin 1
-1 	1250 	Latin 2: Eastern Europe
-2 	1251 	Cyrillic
-3 	1253 	Greek
-4 	1254 	Turkish
-5 	1255 	Hebrew
-6 	1256 	Arabic
-7 	1257 	Windows Baltic
-8 	1258 	Vietnamese
-9-15 	  	Reserved for Alternate ANSI
-16 	874 	Thai
-17 	932 	JIS/Japan
-18 	936 	Chinese: Simplified chars--PRC and Singapore
-19 	949 	Korean Wansung
-20 	950 	Chinese: Traditional chars--Taiwan and Hong Kong
 21 	1361 	Korean Johab
 22-28 	  	Reserved for Alternate ANSI & OEM
 29 	  	Macintosh Character Set (US Roman)

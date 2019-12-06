@@ -1,5 +1,7 @@
 package fonthx.model.font;
 
+import fonthx.model.font.features.Feature;
+
 import haxe.ds.IntMap;
 
 class AbstractFont implements IFont {
@@ -14,6 +16,7 @@ class AbstractFont implements IFont {
     @:isVar public var realAscender(get, set):Float;
     @:isVar public var realDescender(get, set):Float;
     @:isVar public var typoLineGap(get, set):Float;
+    @:isVar public var features(get, null):Array<Feature>;
     public var copyright(get, null):String;
     public var creationDate(get, null):String;
     public var author(get, null): String;
@@ -33,6 +36,7 @@ class AbstractFont implements IFont {
 
     public function new() {
         glyphs = new Array();
+        features = new Array();
         extraNamingRecords = new IntMap();
     }
 
@@ -263,6 +267,9 @@ class AbstractFont implements IFont {
         return null;
     }
 
+    function get_features():Array<Feature> {
+        return features;
+    }
 
 
 }

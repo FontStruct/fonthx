@@ -40,10 +40,25 @@ class TrueTypeFileWriter implements ITrueTypeWriter {
     /**
 	 * append a 16-bit unsigned integer.
 	 */
-
     public function writeUSHORT(b:Int):ITrueTypeWriter {
         write((b >>> 8) & 0xFF);
         write(b & 0xFF);
+        return this;
+    }
+
+    /**
+	* append a 16-bit unsigned integer – alias for writeUSHORT
+	 */
+    public function writeUINT16(b:Int):ITrueTypeWriter {
+        writeUSHORT(b);
+        return this;
+    }
+
+    /**
+	* append a 16-bit unsigned integer – alias for writeUSHORT
+	 */
+    public function writeOffset16(b:Int):ITrueTypeWriter {
+        writeUSHORT(b);
         return this;
     }
 

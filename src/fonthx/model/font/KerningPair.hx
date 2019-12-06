@@ -2,10 +2,6 @@ package fonthx.model.font;
 
 import Std;
 
-/**
-    Simple Kerning Pair
-    For Unicode codepoints only
-**/
 class KerningPair {
 
     public var left:Int;

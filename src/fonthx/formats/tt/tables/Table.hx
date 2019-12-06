@@ -18,6 +18,7 @@ class Table {
     public static var LOCA = "loca";
     public static var CFF = "CFF ";
     public static var KERN = "kern";
+    public static var GPOS = "gpos";
 
     /**
     * @see https://developer.apple.com/fonts/TrueType-Reference-Manual/RM06/Chap6.html
@@ -32,10 +33,10 @@ class Table {
     // "sfnt", "tdir",
 
     public static var compileOrder = [HEAD, HHEA, MAXP, OS2, HMTX, CMAP, GLYF, LOCA,
-        CFF, KERN, NAME, POST];
+        CFF, KERN, NAME, POST, GPOS];
 
     public static var optimalOrder = [HEAD, HHEA, MAXP, OS2, HMTX, CMAP, LOCA, GLYF,
-        CFF, KERN, NAME, POST];
+        CFF, KERN, NAME, POST, GPOS];
 
     public var tag:String;
     public var offset:Int;

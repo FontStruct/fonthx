@@ -1,5 +1,6 @@
 package fonthx.formats.tt;
 
+import fonthx.formats.tt.tables.opentype.GPOSTable;
 import haxe.Int64;
 import haxe.io.BytesBuffer;
 import haxe.io.Bytes;
@@ -67,6 +68,7 @@ class TrueTypeBuilder {
 
         if (font.hasKerning()) {
             ttf.addTable(createKerningTable(font));
+            ttf.addTable(createGPOSTable(font));
         }
 
         ttf.addTable(createMaximumProfileTable(font));
@@ -420,6 +422,13 @@ class TrueTypeBuilder {
 
     private static function createKerningTable(font:IFont):KerningTable {
         var table = new KerningTable();
+        table.setKerningPairs(font.getKerningPairs());
+        return table;
+    }
+
+    private static function createGPOSTable(font:IFont):GPOSTable {
+        var table = new GPOSTable();
+        table.initForSimpleKerning();
         table.setKerningPairs(font.getKerningPairs());
         return table;
     }

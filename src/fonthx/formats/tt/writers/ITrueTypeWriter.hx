@@ -17,6 +17,16 @@ interface ITrueTypeWriter {
     public function writeUSHORT(b:Int):ITrueTypeWriter;
 
     /**
+	* append a 16-bit unsigned integer – alias for writeUSHORT
+	*/
+    public function writeUINT16(b:Int):ITrueTypeWriter;
+
+    /**
+	* append a 16-bit unsigned integer.– alias for writeUSHORT
+	*/
+    public function writeOffset16(b:Int):ITrueTypeWriter;
+
+    /**
 	* append a 16-bit signed integer.
 	*/
     public function writeSHORT(b:Int):ITrueTypeWriter;

@@ -13,7 +13,7 @@ class KerningTable extends Table
 	private var pairs:Array<KerningPair>;
 
 	/**
-	 * Contstruct a new HorizontalMetricsTable
+	 * Contstruct a new KernTable
 	 */
 	public function new() {
 		super(Table.KERN);

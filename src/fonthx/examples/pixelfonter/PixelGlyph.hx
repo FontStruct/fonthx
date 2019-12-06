@@ -13,15 +13,23 @@ class PixelGlyph extends AbstractContourGlyph implements IContourGlyph {
     public var pixelSize:Int;
 
     public var bounds:Rectangle;
+    public var gridBounds:Rectangle;
 
     public function new(codepoint:Int) {
         super(codepoint);
         pixels = new Array();
         bounds = new Rectangle();
+        gridBounds = null;
     }
 
     public function addPixel(x:Int, y:Int) {
         pixels.push(new Pixel(x, y));
+        if (gridBounds == null) {
+            gridBounds = new Rectangle((x + 1), (y + 1), 1, 1);
+        } else {
+            gridBounds.add((x + 1), (y + 1));
+        }
+        // todo following is flawed (if left side is offset from 0)
         bounds.add((x + 1) * pixelSize, (y + 1) * pixelSize);
     }
 
@@ -31,6 +39,10 @@ class PixelGlyph extends AbstractContourGlyph implements IContourGlyph {
 
     override public function getBounds():Rectangle {
         return bounds;
+    }
+
+    public function getGridBounds():Rectangle {
+        return gridBounds;
     }
 
     /**
@@ -56,6 +68,10 @@ class PixelGlyph extends AbstractContourGlyph implements IContourGlyph {
             consumer.endShape();
         }
         consumer.end();
+    }
+
+    public function getPixels() {
+        return pixels;
     }
 
     override public function get_advancedWidth():Float {

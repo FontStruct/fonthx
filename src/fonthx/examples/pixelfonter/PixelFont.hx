@@ -1,5 +1,12 @@
 package fonthx.examples.pixelfonter;
 
+import fonthx.examples.pixelfonter.PixelGlyph.Pixel;
+import fonthx.model.font.KerningPair;
+import fonthx.model.font.features.LanguageTag;
+import fonthx.model.font.features.ScriptTag;
+import fonthx.model.font.features.FeatureTag;
+import fonthx.model.font.features.Kerning;
+import fonthx.model.font.KerningClass;
 import fonthx.model.geom.Rectangle;
 import fonthx.model.font.IContourGlyph;
 import fonthx.model.font.IFont;
@@ -58,6 +65,8 @@ class PixelFont implements IFont extends AbstractFont {
             return a.codepoint - b.codepoint;
         });
 
+        this.features.push(autoKern(0));
+
     }
 
     override public function get_uniqueFamilyName() {
@@ -78,7 +87,7 @@ class PixelFont implements IFont extends AbstractFont {
 
     override public function get_postscriptName() {
         var psName = ~/[^\x00-\x7F]]/g.replace(get_uniqueFamilyName(), '');
-        psName =  psName.replace(' ', '');
+        psName = psName.replace(' ', '');
         return psName;
     }
 
@@ -90,6 +99,93 @@ class PixelFont implements IFont extends AbstractFont {
         return 0;
     }
 
+    override public function getKerningPairs():Array<KerningPair> {
+        return cast(this.features[0], Kerning).pairs;
+    }
 
+    private function autoKern(kernSpacing:Int):Kerning {
+        var kerning = new Kerning();
+        kerning.feature = cast FeatureTag.FEAT_KERN;
+        kerning.language = cast LanguageTag.ENGLISH;
+        kerning.script = cast ScriptTag.LATIN;
+        var leftId = 0;
+        for (left in glyphs) {
+            var rightId = 0;
+            for (right in glyphs) {
+                var kern = autoKernGlyphs(cast(left, PixelGlyph), cast(right, PixelGlyph), kernSpacing);
+                if (kern != 0) {
+                    kerning.pairs.push(new KerningPair(leftId, rightId, kern));
+                }
+                rightId ++;
+            }
+            leftId ++;
+        }
+        if (kerning.pairs.length > 0) {
+            for (pair in kerning.pairs) {
+                pair.value = Std.int(pair.value * pixelSize);
+            }
+        }
+        return kerning;
+    }
+
+    private static function autoKernGlyphs(left:PixelGlyph, right:PixelGlyph, spacing:Int = 0):Int {
+
+        if (left.getPixels().length == 0 || right.getPixels().length == 0) {
+            return 0;
+        }
+
+        var leftBounds:Rectangle = left.getGridBounds();
+        var rightBounds:Rectangle = right.getGridBounds();
+        var leftPixels:Array<Pixel> = left.getPixels();
+        var rightPixels:Array<Pixel> = right.getPixels();
+
+        // build an array of “rightmost” nodes on the left
+        var leadEdgePixels:Map<Int, Int> = new Map<Int, Int>();
+        for (px in leftPixels) {
+            if (!leadEdgePixels.exists(px.y) || px.x > leadEdgePixels[px.y]) {
+                leadEdgePixels[px.y] = px.x;
+            }
+        }
+
+        // build an array of “leftmost” nodes on the right
+        var trailEdgePixels:Map<Int, Int> = new Map<Int, Int>();
+        for (px in rightPixels) {
+            if (!trailEdgePixels.exists(px.y) || px.x < trailEdgePixels[px.y]) {
+                trailEdgePixels[px.y] = px.x;
+            }
+        }
+
+        // start glyphs at offsets to get the basic unkerned spacing
+        var leftOffset:Int = 0 - Std.int(leftBounds.left);
+        var rightOffset:Int = 0 - Std.int(rightBounds.left);
+        rightOffset += Std.int(leftBounds.width);
+
+        var kern:Int = 0;
+        var closeEnough:Bool = false;
+        var y:Int;
+        var trailingEdge:Int;
+        while (!closeEnough) {
+            for (y in trailEdgePixels.keys()) {
+                trailingEdge = trailEdgePixels[y] + rightOffset + kern;
+                if (
+                (leadEdgePixels.exists(y) && trailingEdge == (leadEdgePixels[y] + leftOffset)) ||
+                (leadEdgePixels.exists(y + 1) && trailingEdge == (leadEdgePixels[y + 1] + leftOffset)) ||
+                (leadEdgePixels.exists(y - 1) && trailingEdge == (leadEdgePixels[y - 1] + leftOffset))) {
+                    // we are touching!
+                    closeEnough = true;
+                    // kern++;
+                    break;
+                }
+            }
+            if (kern < -20) {
+                kern = 0;
+                break;
+            }
+            if (!closeEnough) {
+                kern--;
+            }
+        }
+        return kern;
+    }
 
 }

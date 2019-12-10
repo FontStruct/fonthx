@@ -25,9 +25,9 @@ class PixelGlyph extends AbstractContourGlyph implements IContourGlyph {
     public function addPixel(x:Int, y:Int) {
         pixels.push(new Pixel(x, y));
         if (gridBounds == null) {
-            gridBounds = new Rectangle((x + 1), (y + 1), 1, 1);
+            gridBounds = new Rectangle(x, y, 1, 1);
         } else {
-            gridBounds.add((x + 1), (y + 1));
+            gridBounds.add(x, y);
         }
         // todo following is flawed (if left side is offset from 0)
         bounds.add((x + 1) * pixelSize, (y + 1) * pixelSize);

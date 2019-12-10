@@ -65,7 +65,7 @@ class PixelFont implements IFont extends AbstractFont {
             return a.codepoint - b.codepoint;
         });
 
-        this.features.push(autoKern(0));
+        this.features.push(autoKern());
 
     }
 
@@ -103,7 +103,7 @@ class PixelFont implements IFont extends AbstractFont {
         return cast(this.features[0], Kerning).pairs;
     }
 
-    private function autoKern(kernSpacing:Int):Kerning {
+    private function autoKern():Kerning {
         var kerning = new Kerning();
         kerning.feature = cast FeatureTag.FEAT_KERN;
         kerning.language = cast LanguageTag.ENGLISH;
@@ -112,7 +112,7 @@ class PixelFont implements IFont extends AbstractFont {
         for (left in glyphs) {
             var rightId = 0;
             for (right in glyphs) {
-                var kern = autoKernGlyphs(cast(left, PixelGlyph), cast(right, PixelGlyph), kernSpacing);
+                var kern = autoKernGlyphs(cast(left, PixelGlyph), cast(right, PixelGlyph));
                 if (kern != 0) {
                     kerning.pairs.push(new KerningPair(leftId, rightId, kern));
                 }
@@ -128,7 +128,7 @@ class PixelFont implements IFont extends AbstractFont {
         return kerning;
     }
 
-    private static function autoKernGlyphs(left:PixelGlyph, right:PixelGlyph, spacing:Int = 0):Int {
+    private static function autoKernGlyphs(left:PixelGlyph, right:PixelGlyph):Int {
 
         if (left.getPixels().length == 0 || right.getPixels().length == 0) {
             return 0;
@@ -158,6 +158,10 @@ class PixelFont implements IFont extends AbstractFont {
         // start glyphs at offsets to get the basic unkerned spacing
         var leftOffset:Int = 0 - Std.int(leftBounds.left);
         var rightOffset:Int = 0 - Std.int(rightBounds.left);
+        var trace = left.codepoint == 65 && right.codepoint == 73;
+        if (trace) {
+            trace(leadEdgePixels, trailEdgePixels, leftOffset, rightOffset, leftBounds, rightBounds);
+        }
         rightOffset += Std.int(leftBounds.width);
 
         var kern:Int = 0;
@@ -173,7 +177,6 @@ class PixelFont implements IFont extends AbstractFont {
                 (leadEdgePixels.exists(y - 1) && trailingEdge == (leadEdgePixels[y - 1] + leftOffset))) {
                     // we are touching!
                     closeEnough = true;
-                    // kern++;
                     break;
                 }
             }

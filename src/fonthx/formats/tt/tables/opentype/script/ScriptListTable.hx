@@ -1,62 +1,71 @@
 package fonthx.formats.tt.tables.opentype.script;
 
-import fonthx.model.font.features.ScriptTag;
-import fonthx.model.font.features.FeatureTag;
-import fonthx.model.font.features.LanguageTag;
-import fonthx.formats.tt.tables.opentype.language.LangSysRecord;
 import fonthx.formats.tt.writers.ITrueTypeWriter;
+import fonthx.model.font.features.Layout;
+import fonthx.model.font.features.ScriptTag;
+
+using Lambda;
 
 /**
  * @see https://docs.microsoft.com/en-us/typography/opentype/spec/chapter2#scripts-and-languages
  */
-class ScriptListTable {
+class ScriptListTable extends LayoutAware {
 
-    private var records:Array<ScriptRecord>;
+    private var layout:Layout;
+    public var length(get, null):Int;
 
-    public function new() {
-        records = new Array();
+    public function new(layoutTable:LayoutTable) {
+        super(layoutTable);
+    }
+
+    public function setLayout(layout:Layout) {
+        this.layout = layout;
     }
 
     public function write(tt:ITrueTypeWriter) {
-        tt.writeSHORT(this.records.length); // Number of ScriptRecords
-        for (record in records) {
-            record.write(tt);
+
+        tt.writeSHORT(layout.scripts.length); // Number of ScriptRecords
+
+        var offset = 2 + (layout.scripts.length * 6);
+        for (i in 0...layout.scripts.length) {
+            var script = layout.scripts[i];
+            // Write ScriptRecord // https://docs.microsoft.com/en-us/typography/opentype/spec/chapter2#slTbl_sRec
+            tt.writeTag(script.tag.toString());
+            tt.writeOffset16(offset); // Offset to Script table, from beginning of ScriptList
+            if (script.tag != DEFAULT) {
+                offset += (4 + (script.languages.length * 6));
+            }
+        }
+
+        // Write Script Tables
+        // https://docs.microsoft.com/en-us/typography/opentype/spec/chapter2#script-table-and-language-system-record
+        for (i in 0...layout.scripts.length) {
+            var script = layout.scripts[i];
+            if (script.tag == DEFAULT) {
+                continue;
+            }
+            // defaultLangSys
+            tt.writeOffset16((layout.defaultLangSys == null)? 0 : (4 + (script.languages.length * 6)));
+            // langSysCount
+            tt.writeUINT16(script.languages.length);
+            var offset = 0;
+            // LangSysRecords
+            for (language in script.languages) {
+                tt.writeTag(language.tag);
+                // Offset to LangSys table, from beginning of Script table
+                tt.writeOffset16(0);
+                // lookupOrder (16)
+                // requiredFeatureIndex (16)
+                // featureIndexCount (16)
+                // featureIndices[featureIndexCount] (16[])
+                // language.lookups.length * (2 + 2 + 2
+                offset += 6;
+            }
         }
     }
 
-    public function addFeature(tag:ScriptTag, lang:LanguageTag, feat:FeatureTag) {
-        var lang = addLanguage(tag, lang);
-    }
-
-    public function addLanguage(tag:ScriptTag, lang:LanguageTag):LangSysRecord {
-        var script = this.addScript(tag);
-        return  script.addLanguage(lang);
-    }
-
-    public function addScript(tag:ScriptTag):ScriptRecord {
-        var script = getScriptRecord(tag);
-        if (script == null) {
-            script = new ScriptRecord(tag);
-            this.records.push(script);
-            sort();
-        }
-        return script;
-    }
-
-    private function sort() {
-        this.records.sort(function(a:ScriptRecord, b:ScriptRecord) {
-            return (a.tag.toString() > b.tag.toString()) ? 1 : (b.tag.toString() > a.tag.toString()) ? -1 : 0;
-        });
-    }
-
-    private function getScriptRecord(tag:ScriptTag) {
-        var record = records.filter(function(r:ScriptRecord) {
-            return r.tag == tag;
-        });
-        if (record.length > 0) {
-            return records[0];
-        }
-        return null;
+    function get_length():Int {
+        return 0;
     }
 
 }

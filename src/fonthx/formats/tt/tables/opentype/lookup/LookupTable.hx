@@ -1,5 +1,6 @@
 package fonthx.formats.tt.tables.opentype.lookup;
 
+import fonthx.model.font.features.lookups.LookupType;
 import fonthx.formats.tt.writers.ITrueTypeWriter;
 
 /**

@@ -1,18 +1,23 @@
 package fonthx.formats.tt.tables.opentype.feature;
 
-import fonthx.model.font.features.FeatureTag;
 import fonthx.formats.tt.writers.ITrueTypeWriter;
+import fonthx.model.font.features.Feature;
+
+using Lambda;
 
 /**
  * GPOS Table
  * @see https://docs.microsoft.com/en-us/typography/opentype/spec/chapter2#flTbl
  * @see
  */
-class FeatureListTable {
+class FeatureListTable extends LayoutAware {
 
+    private var features:Array<Feature>;
     private var records:Array<FeatureRecord>;
+    public var length(get, null):Int;
 
-    public function new() {
+    public function new(layoutTable:LayoutTable) {
+        super(layoutTable);
         records = new Array();
     }
 
@@ -29,29 +34,17 @@ class FeatureListTable {
         });
     }
 
-    public function addFeature(tag:FeatureTag) {
-        var feature = getFeatureRecord(tag);
-        if (feature == null) {
-            feature = new FeatureRecord(tag);
-            this.records.push(feature);
-            this.sort();
-        }
-        return feature;
-
+    public function addFeature(feature:Feature) {
+        var featureRecord = new FeatureRecord(feature);
+        records.push(featureRecord);
+        sort();
+        return featureRecord;
     }
 
-    private function getFeatureRecord(tag:FeatureTag) {
-        var record = records.filter(function(r:FeatureRecord) {
-            return r.tag == tag;
-        });
-        if (record.length > 0) {
-            return records[0];
-        }
-        return null;
+    function get_length():Int {
+        return records.fold(function(record, l) {
+            return l + record.length;
+        }, 2);
     }
 
 }
-
-
-
-

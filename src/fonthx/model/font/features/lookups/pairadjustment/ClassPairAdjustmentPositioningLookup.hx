@@ -1,25 +1,11 @@
 package fonthx.model.font.features.lookups.pairadjustment;
 
-class PairAdjustmentPositioningLookup implements ILookup {
+class ClassPairAdjustmentPositioningLookup implements ILookup {
 
-    @:isVar public var pairs(get, null):Array<PositioningPair>;
     @:isVar public var classes(get, null):Array<PositioningPairClass>;
 
     public function new() {
-        pairs = new Array();
         classes = new Array();
-    }
-
-    public function get_pairs() {
-        return pairs;
-    }
-
-    public function addPair(pair:PositioningPair) {
-        this.pairs.push(pair);
-    }
-
-    public function addPairs(pairs:Array<PositioningPair>) {
-        this.pairs = this.pairs.concat(pairs);
     }
 
     public function get_classes():Array<PositioningPairClass> {

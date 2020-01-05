@@ -1,10 +1,14 @@
 package fonthx.model.font;
 
-import fonthx.model.font.features.Feature;
-
+import fonthx.model.font.features.LanguageTag;
+import fonthx.model.font.features.Language;
+import fonthx.model.font.features.Layout;
+import fonthx.model.font.features.lookups.pairadjustment.PositioningPair;
 import haxe.ds.IntMap;
+using Lambda;
 
 class AbstractFont implements IFont {
+
 
     @:isVar public var glyphs(get, null):Array<IContourGlyph>;
     @:isVar public var name(get, set):String;
@@ -16,7 +20,7 @@ class AbstractFont implements IFont {
     @:isVar public var realAscender(get, set):Float;
     @:isVar public var realDescender(get, set):Float;
     @:isVar public var typoLineGap(get, set):Float;
-    @:isVar public var features(get, null):Array<Feature>;
+    @:isVar public var layout(get, null):Layout;
     public var copyright(get, null):String;
     public var creationDate(get, null):String;
     public var author(get, null): String;
@@ -36,7 +40,8 @@ class AbstractFont implements IFont {
 
     public function new() {
         glyphs = new Array();
-        features = new Array();
+        layout = new Layout();
+        layout.defaultLangSys = new Language(LanguageTag.DEFAULT);
         extraNamingRecords = new IntMap();
     }
 
@@ -263,13 +268,14 @@ class AbstractFont implements IFont {
         return getKerningPairs() != null && getKerningPairs().length > 0;
     }
 
-    public function getKerningPairs():Array<KerningPair> {
+    public function getKerningPairs():Array<PositioningPair> {
         return null;
     }
 
-    function get_features():Array<Feature> {
-        return features;
+    function get_layout():Layout {
+        return layout;
     }
+
 
 
 }

@@ -1,12 +1,15 @@
 package fonthx.examples.pixelfonter;
 
+import fonthx.model.font.features.LanguageTag;
+import fonthx.model.font.features.Language;
+import fonthx.model.font.features.Script;
+import fonthx.model.font.features.lookups.pairadjustment.PairAdjustmentPositioningLookup;
+import fonthx.model.font.features.Feature;
 import fonthx.examples.pixelfonter.PixelGlyph.Pixel;
-import fonthx.model.font.KerningPair;
+import fonthx.model.font.features.lookups.pairadjustment.PositioningPair;
 import fonthx.model.font.features.LanguageTag;
 import fonthx.model.font.features.ScriptTag;
 import fonthx.model.font.features.FeatureTag;
-import fonthx.model.font.features.Kerning;
-import fonthx.model.font.KerningClass;
 import fonthx.model.geom.Rectangle;
 import fonthx.model.font.IContourGlyph;
 import fonthx.model.font.IFont;
@@ -65,8 +68,14 @@ class PixelFont implements IFont extends AbstractFont {
             return a.codepoint - b.codepoint;
         });
 
-        this.features.push(autoKern());
+        var defaultScript = new Script(DEFAULT);
+        var latinScript = new Script(LATIN);
+        var kerning = new Feature(FEAT_KERN);
+        kerning.addLookup(autoKern());
 
+        layout.addScript(defaultScript);
+        layout.addScript(latinScript);
+        layout.addFeature(kerning);
     }
 
     override public function get_uniqueFamilyName() {
@@ -99,33 +108,26 @@ class PixelFont implements IFont extends AbstractFont {
         return 0;
     }
 
-    override public function getKerningPairs():Array<KerningPair> {
-        return cast(this.features[0], Kerning).pairs;
+    override public function getKerningPairs():Array<PositioningPair> {
+        return cast(layout.features[0].lookups[0], PairAdjustmentPositioningLookup).pairs; // fixme hmmm
     }
 
-    private function autoKern():Kerning {
-        var kerning = new Kerning();
-        kerning.feature = cast FeatureTag.FEAT_KERN;
-        kerning.language = cast LanguageTag.ENGLISH;
-        kerning.script = cast ScriptTag.LATIN;
+    private function autoKern():PairAdjustmentPositioningLookup {
+        var kerningLookup = new PairAdjustmentPositioningLookup();
         var leftId = 0;
         for (left in glyphs) {
             var rightId = 0;
             for (right in glyphs) {
                 var kern = autoKernGlyphs(cast(left, PixelGlyph), cast(right, PixelGlyph));
                 if (kern != 0) {
-                    kerning.pairs.push(new KerningPair(leftId, rightId, kern));
+                    kern = Std.int(kern * pixelSize);
+                    kerningLookup.addPair(new PositioningPair(leftId, rightId, kern));
                 }
                 rightId ++;
             }
             leftId ++;
         }
-        if (kerning.pairs.length > 0) {
-            for (pair in kerning.pairs) {
-                pair.value = Std.int(pair.value * pixelSize);
-            }
-        }
-        return kerning;
+        return kerningLookup;
     }
 
     private static function autoKernGlyphs(left:PixelGlyph, right:PixelGlyph):Int {

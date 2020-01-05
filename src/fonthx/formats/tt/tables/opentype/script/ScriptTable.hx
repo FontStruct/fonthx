@@ -4,15 +4,19 @@ import fonthx.model.font.features.LanguageTag;
 import fonthx.formats.tt.tables.opentype.language.LangSysRecord;
 import fonthx.formats.tt.writers.ITrueTypeWriter;
 
+using Lambda;
+
 /**
  * Script Table and Language System Record
  * @see https://docs.microsoft.com/en-us/typography/opentype/spec/chapter2#script-table-and-language-system-record
  * @see
  */
+// todo maybe combine some of these classes – e.g. script and feature records have same interface
 class ScriptTable {
 
     public var defaultSysRecord = 0;
     private var languageRecords:Array<LangSysRecord>;
+    public var length(get, null):Int;
 
     public function new() {
         languageRecords = new Array();
@@ -52,6 +56,12 @@ class ScriptTable {
             return record[0];
         }
         return null;
+    }
+
+    function get_length():Int {
+        return languageRecords.fold(function(record:LangSysRecord, l) {
+            return l + record.length;
+        }, 4);
     }
 
 }

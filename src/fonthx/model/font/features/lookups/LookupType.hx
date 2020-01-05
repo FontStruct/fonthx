@@ -1,4 +1,4 @@
-package fonthx.formats.tt.tables.opentype.lookup;
+package fonthx.model.font.features.lookups;
 
 @:enum
 abstract LookupType(Int) {

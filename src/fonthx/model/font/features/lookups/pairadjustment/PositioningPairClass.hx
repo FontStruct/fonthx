@@ -1,4 +1,4 @@
-package fonthx.model.font.features;
+package fonthx.model.font.features.lookups.pairadjustment;
 
 class PositioningPairClass {
 

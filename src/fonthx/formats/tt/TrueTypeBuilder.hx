@@ -1,5 +1,6 @@
 package fonthx.formats.tt;
 
+import fonthx.model.font.features.FeatureTag;
 import fonthx.formats.tt.tables.opentype.GPOSTable;
 import haxe.Int64;
 import haxe.io.BytesBuffer;
@@ -428,8 +429,7 @@ class TrueTypeBuilder {
 
     private static function createGPOSTable(font:IFont):GPOSTable {
         var table = new GPOSTable();
-        table.initForSimpleKerning();
-        table.setKerningPairs(font.getKerningPairs());
+        table.setLayout(font.layout);
         return table;
     }
 

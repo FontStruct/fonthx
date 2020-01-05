@@ -2,6 +2,9 @@ package fonthx.formats.tt.tables.opentype.feature;
 
 import fonthx.formats.tt.tables.opentype.lookup.LookupTable;
 import fonthx.formats.tt.writers.ITrueTypeWriter;
+import fonthx.model.font.features.Feature;
+
+using Lambda;
 
 /**
  * Feature tables defined within the GSUB table contain references to glyph substitution lookups, and
@@ -10,9 +13,12 @@ import fonthx.formats.tt.writers.ITrueTypeWriter;
  */
 class FeatureTable {
 
+    public var feature:Feature;
     private var lookups:Array<LookupTable>;
+    public var length(get, null):Int;
 
-    public function new() {
+    public function new(feature:Feature) {
+        this.feature = feature;
         lookups = new Array();
     }
 
@@ -26,6 +32,10 @@ class FeatureTable {
 
     public function addLookup(lookup:LookupTable) {
         this.lookups.push(lookup);
+    }
+
+    function get_length():Int {
+        return 4 + (lookups.length * 2);
     }
 
 }

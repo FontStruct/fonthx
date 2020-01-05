@@ -1,24 +1,21 @@
 package fonthx.model.font.features;
 
-import fonthx.model.font.features.lookups.ILookup;
 
 // default script is LATIN
 // example KERN lookups for cyrillic (russian, greek, serbian), latin (english, french, german)
 // example LIGA lookups for cyrillic (russian, greek, serbian), latin (english, french, german)
 
-class Feature {
+class Script {
 
-    public var feature:FeatureTag;
-    public var script:ScriptTag;
-    public var language:LanguageTag;
-    public var lookups:Array<ILookup>;
+    public var tag:ScriptTag;
+    public var languages:Array<Language>;
 
-    public function new(tag:FeatureTag) {
-        this.feature = tag;
-        lookups = new Array();
+    public function new(tag:ScriptTag) {
+        this.tag = tag;
+        languages = new Array();
     }
 
-    public function addLookup(lookup:ILookup) {
-        lookups.push(lookup);
+    public function addLanguage(language:Language) {
+        languages.push(language);
     }
 }

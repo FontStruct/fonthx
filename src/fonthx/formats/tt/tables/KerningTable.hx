@@ -1,6 +1,6 @@
 package fonthx.formats.tt.tables;
 
-import fonthx.model.font.KerningPair;
+import fonthx.model.font.features.lookups.pairadjustment.PositioningPair;
 import fonthx.formats.tt.writers.ITrueTypeWriter;
 
 /**
@@ -10,7 +10,7 @@ import fonthx.formats.tt.writers.ITrueTypeWriter;
 class KerningTable extends Table
 {
 	// members
-	private var pairs:Array<KerningPair>;
+	private var pairs:Array<PositioningPair>;
 
 	/**
 	 * Contstruct a new KernTable
@@ -77,7 +77,7 @@ class KerningTable extends Table
 		}
 	}
 
-	public function setKerningPairs(pairs:Array<KerningPair>) {
+	public function setKerningPairs(pairs:Array<PositioningPair>) {
 		this.pairs = pairs;
 	}
 

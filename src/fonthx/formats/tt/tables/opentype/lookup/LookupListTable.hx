@@ -6,11 +6,12 @@ import fonthx.formats.tt.writers.ITrueTypeWriter;
  * LookupListTable
  * @see https://docs.microsoft.com/en-us/typography/opentype/spec/chapter2#lookup-list-table
  */
-class LookupListTable {
+class LookupListTable extends LayoutAware {
 
     private var lookups:Array<LookupTable>;
 
-    public function new() {
+    public function new(layoutTable:LayoutTable) {
+        super(layoutTable);
         lookups = new Array();
     }
 
@@ -21,10 +22,4 @@ class LookupListTable {
         }
     }
 
-
-
 }
-
-
-
-

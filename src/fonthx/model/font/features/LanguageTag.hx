@@ -7,6 +7,8 @@ package fonthx.model.font.features;
 @:enum
 abstract LanguageTag(String) {
 
+    public var DEFAULT = 'DFLT';
+
     public var ABAZA = 'ABA ';
     public var ABKHAZIAN = 'ABK ';
     public var ACHOLI = 'ACH ';

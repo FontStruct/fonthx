@@ -5,17 +5,19 @@ package fonthx.model.font.features;
 // example KERN lookups for cyrillic (russian, greek, serbian), latin (english, french, german)
 // example LIGA lookups for cyrillic (russian, greek, serbian), latin (english, french, german)
 
-class Script {
+import fonthx.model.font.features.lookups.ILookup;
 
-    public var tag:ScriptTag;
-    public var languages:Array<Language>;
+class Language {
 
-    public function new(tag:ScriptTag) {
+    public var tag:LanguageTag;
+    public var lookups:Array<ILookup>;
+
+    public function new(tag:LanguageTag) {
         this.tag = tag;
-        languages = new Array();
+        lookups = new Array();
     }
 
-    public function addLanguage(language:Language) {
-        languages.push(language);
+    public function addLookup(lookup:ILookup) {
+        lookups.push(lookup);
     }
 }

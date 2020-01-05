@@ -1,8 +1,9 @@
 package fonthx.model.font;
 
+import fonthx.model.font.features.FeatureTag;
 import fonthx.model.font.features.Feature;
 import haxe.ds.IntMap;
-import fonthx.model.font.KerningPair;
+import fonthx.model.font.features.lookups.pairadjustment.PositioningPair;
 
 /**
 * Interface to implement for a fonthx Font,
@@ -41,13 +42,15 @@ interface IFont {
     var typoLineGap(get, null):Float;
 
     var features(get, null):Array<Feature>;
+    function hasFeature(tag:FeatureTag):Bool;
+    function getFeature(tag:FeatureTag):Feature;
 
     function getGlyphForCodepoint(cp:Int):IContourGlyph;
     function getLineGap():Int;
     function getNumberOfHMetrics():Int;
 
     function hasKerning():Bool;
-    function getKerningPairs():Array<KerningPair>;
+    function getKerningPairs():Array<PositioningPair>;
 
 
 }

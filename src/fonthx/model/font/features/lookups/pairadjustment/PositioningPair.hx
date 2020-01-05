@@ -1,8 +1,8 @@
-package fonthx.model.font;
+package fonthx.model.font.features;
 
 import Std;
 
-class KerningPair {
+class PositioningPair {
 
     public var left:Int;
     public var right:Int;
@@ -19,7 +19,7 @@ class KerningPair {
     }
 
     public function toString() {
-        return KerningPair.getKey(left, right) + ": " + value;
+        return PositioningPair.getKey(left, right) + ": " + value;
     }
 
 }

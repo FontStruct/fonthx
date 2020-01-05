@@ -13,7 +13,6 @@ abstract LookupType(Int) {
     public var GPOS_CHAINED_CONTEXT_POSITIONING  = 8; // Position one or more glyphs in chained context
     public var GPOS_EXTENSION_POSITIONING        = 9; // Extension mechanism for other positionings
 
-
     @:to
     public function toInt():Int {
         return this;

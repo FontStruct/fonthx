@@ -1,6 +1,6 @@
-package fonthx.model.font;
+package fonthx.model.font.features;
 
-class KerningClass {
+class PositioningPairClass {
 
     @:isVar public var name(get, set):String;
     public var pairs:Array<Array<Int>>;

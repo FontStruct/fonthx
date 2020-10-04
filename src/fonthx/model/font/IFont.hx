@@ -38,10 +38,10 @@ interface IFont {
     var realAscender(get, null):Float;
     var realDescender(get, null):Float;
     var typoLineGap(get, null):Float;
+    function getLineGap():Int;
 
     function getGlyphForCodepoint(cp:Int):IContourGlyph;
 
-    function getLineGap():Int;
     function getNumberOfHMetrics():Int;
 
     function hasKerning():Bool;

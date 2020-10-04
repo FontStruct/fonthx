@@ -207,14 +207,14 @@ class TrueTypeBuilder {
         return cmap;
     }
 
-    private static function createHorizontalHeaderTable(fnt:IFont):HorizontalHeaderTable {
+    private static function createHorizontalHeaderTable(font:IFont):HorizontalHeaderTable {
         var table = new HorizontalHeaderTable();
         var minLSB = MathUtils.MAX_INT;
         var minRSB = MathUtils.MAX_INT;
         var maxAdvancedWidth = 0;
         var xMaxExtent = 0;
         var b:Rectangle;
-        for (glyph in fnt.glyphs) {
+        for (glyph in font.glyphs) {
             if (glyph.numContours <= 0) {
                 continue;
             }
@@ -236,15 +236,15 @@ class TrueTypeBuilder {
         }
         table
             .setAdvanceWidthMax(maxAdvancedWidth)
-            .setAscender(Std.int(fnt.realAscender))
+            .setAscender(Std.int(font.realAscender))
             .setCaretOffset(0)
             .setCaretSlopeRise(1)
             .setCaretSlopeRun(0)
-            .setDescender(Std.int(fnt.realDescender))
-            .setLineGap(fnt.getLineGap())
+            .setDescender(Std.int(font.realDescender))
+            .setLineGap(font.getLineGap())
             .setMinLeftSideBearing(minLSB)
             .setMinRightSideBearing(minRSB)
-            .setNumberOfHMetrics(fnt.getNumberOfHMetrics())
+            .setNumberOfHMetrics(font.getNumberOfHMetrics())
             .setXMaxExtent(xMaxExtent)
         ;
         return table;

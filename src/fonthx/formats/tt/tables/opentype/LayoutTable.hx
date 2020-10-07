@@ -25,8 +25,9 @@ class LayoutTable extends Table {
 
     public function setLayout(layout:Layout) {
         scriptList.setLayout(layout);
+        featureList.setLayout(layout);
+        lookupList.setLayout(layout);
     }
-
 
     override public function write(tt:ITrueTypeWriter) {
         tt.writeUINT16(majorVersion);

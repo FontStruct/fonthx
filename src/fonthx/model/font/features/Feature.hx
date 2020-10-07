@@ -1,6 +1,6 @@
 package fonthx.model.font.features;
 
-import fonthx.model.font.features.lookups.ILookup;
+import fonthx.model.font.features.lookups.Lookup;
 
 // default script is LATIN
 // example KERN lookups for cyrillic (russian, greek, serbian), latin (english, french, german)
@@ -9,14 +9,16 @@ import fonthx.model.font.features.lookups.ILookup;
 class Feature {
 
     public var tag:FeatureTag;
-    public var lookups:Array<ILookup>;
+    public var idx:Int;
+    public var lookups:Array<Lookup>;
 
     public function new(tag:FeatureTag) {
         this.tag = tag;
+        this.idx = 0;
         lookups = new Array();
     }
 
-    public function addLookup(lookup:ILookup) {
+    public function addLookup(lookup:Lookup) {
         lookups.push(lookup);
     }
 }

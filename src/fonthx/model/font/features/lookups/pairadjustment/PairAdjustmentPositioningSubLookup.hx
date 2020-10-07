@@ -1,10 +1,13 @@
 package fonthx.model.font.features.lookups.pairadjustment;
 
-class PairAdjustmentPositioningLookup implements ILookup {
+import fonthx.model.font.features.lookups.AbstractSubLookup;
+
+class PairAdjustmentPositioningSubLookup extends AbstractSubLookup implements ISubLookup {
 
     @:isVar public var pairs(get, null):Array<PositioningPair>;
 
     public function new() {
+        super();
         pairs = new Array();
     }
 
@@ -13,11 +16,14 @@ class PairAdjustmentPositioningLookup implements ILookup {
     }
 
     public function addPair(pair:PositioningPair) {
-        this.pairs.push(pair);
+        pairs.push(pair);
+        addGlyphIndex(pair.left);
     }
 
     public function addPairs(pairs:Array<PositioningPair>) {
-        this.pairs = this.pairs.concat(pairs);
+        for (pair in pairs) {
+            addPair(pair);
+        }
     }
 
 }

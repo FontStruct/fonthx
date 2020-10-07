@@ -6,6 +6,7 @@ build/resources.hxml
 -cp src
 -lib buddy
 -lib hxnodejs
+-lib tracehx
 
 -D nodejs
 -js dist/spec/js/spec.js

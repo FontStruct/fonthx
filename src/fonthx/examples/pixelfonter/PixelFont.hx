@@ -3,7 +3,7 @@ package fonthx.examples.pixelfonter;
 import fonthx.model.font.features.LanguageTag;
 import fonthx.model.font.features.Language;
 import fonthx.model.font.features.Script;
-import fonthx.model.font.features.lookups.pairadjustment.PairAdjustmentPositioningLookup;
+import fonthx.model.font.features.lookups.pairadjustment.PairAdjustmentPositioningSubLookup;
 import fonthx.model.font.features.Feature;
 import fonthx.examples.pixelfonter.PixelGlyph.Pixel;
 import fonthx.model.font.features.lookups.pairadjustment.PositioningPair;
@@ -109,11 +109,11 @@ class PixelFont implements IFont extends AbstractFont {
     }
 
     override public function getKerningPairs():Array<PositioningPair> {
-        return cast(layout.features[0].lookups[0], PairAdjustmentPositioningLookup).pairs; // fixme hmmm
+        return cast(layout.features[0].lookups[0], PairAdjustmentPositioningSubLookup).pairs; // fixme hmmm
     }
 
-    private function autoKern():PairAdjustmentPositioningLookup {
-        var kerningLookup = new PairAdjustmentPositioningLookup();
+    private function autoKern():PairAdjustmentPositioningSubLookup {
+        var kerningLookup = new PairAdjustmentPositioningSubLookup();
         var leftId = 0;
         for (left in glyphs) {
             var rightId = 0;

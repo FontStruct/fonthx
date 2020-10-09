@@ -18,37 +18,27 @@ package fonthx.formats.tt.tables.opentype.lookup.coverage;
  *
  */
 import fonthx.formats.tt.writers.ITrueTypeWriter;
-class GlyphRangeCoverageTable extends AbstractCoverageTable {
+class GlyphRangeCoverageTable implements ICommonTable {
 
-    public var length(get, null):Int;
-    public var ranges:Array<Array<Int>>;
+    public var length(get, never):Int;
+    public var ranges:Array<CoverageRange>;
 
-    public function new() {
-        ranges = new Array();
-        this.format = AbstractCoverageTable.RANGE_FORMAT;
-    }
-
-    public function addRange(start:Int, end:Int) {
-        ranges.push([start, end]);
+    public function new(ranges:Array<CoverageRange>) {
+        this.ranges = ranges;
     }
 
     public function write(tt:ITrueTypeWriter) {
-        ranges.sort(function(a, b) {
-            return a[0] - b[0];
-        });
-        tt.writeUINT16(this.format);
-        tt.writeUINT16(this.indices.length);
-        var coverageIdx  = 0;
+        tt.writeUINT16(2);
+        tt.writeUINT16(this.ranges.length);
         for (range in ranges) {
-            tt.writeUINT16(range[0]);
-            tt.writeUINT16(range[1]);
-            tt.writeUINT16(coverageIdx);
-            coverageIdx = range[0] + ((range[1] - range[0]) + 1);
+            tt.writeUINT16(range.start);
+            tt.writeUINT16(range.end);
+            tt.writeUINT16(range.idx);
         }
     }
 
     public function get_length():Int {
-        return (this.indices.length + 2) * 2;
+        return  4 + (this.ranges.length * 6);
     }
 
 

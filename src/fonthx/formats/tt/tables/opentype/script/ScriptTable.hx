@@ -1,71 +1,63 @@
 package fonthx.formats.tt.tables.opentype.script;
-
-import fonthx.model.font.features.LanguageTag;
-import fonthx.formats.tt.tables.opentype.language.LangSysRecord;
+import fonthx.model.font.features.Language;
+import fonthx.formats.tt.tables.opentype.lookup.ICommonTable;
 import fonthx.formats.tt.writers.ITrueTypeWriter;
+import fonthx.model.font.features.Script;
+class ScriptTable implements ICommonTable {
 
-using Lambda;
+    public var script:Script;
+    public var length(get, never):Int;
 
-/**
- * Script Table and Language System Record
- * @see https://docs.microsoft.com/en-us/typography/opentype/spec/chapter2#script-table-and-language-system-record
- * @see
- */
-// todo maybe combine some of these classes – e.g. script and feature records have same interface
-class ScriptTable {
-
-    public var defaultSysRecord = 0;
-    private var languageRecords:Array<LangSysRecord>;
-    public var length(get, null):Int;
-
-    public function new() {
-        languageRecords = new Array();
+    public function new(script:Script) {
+        this.script = script;
     }
 
     public function write(tt:ITrueTypeWriter) {
-        // defaultSysRecord
-        tt.writeOffset16(this.defaultSysRecord);
-        // langSysCount
-        tt.writeUINT16(languageRecords.length);
-        for (record in languageRecords) {
-            record.write(tt);
+        if (script.tag == DEFAULT) {
+            return;
+        }
+        // Offset16 defaultLangSys Offset to default LangSys table, from beginning of this Script table — may be NULL
+        tt.writeOffset16((script.defaultLangSys == null) ? 0 : (4 + (script.languages.length * 6)));
+        // uint16 langSysCount Number of LangSysRecords for this script — excluding the default LangSys
+        tt.writeUINT16(script.languages.length);
+
+        // Write LangSysRecords
+        var scriptTableOffset = 4 + (script.languages.length * 6);
+        if (script.defaultLangSys != null) {
+            scriptTableOffset += getLangSysTableLength(script.defaultLangSys);
+        }
+        for (language in script.languages) {
+            tt.writeTag(language.tag);
+            tt.writeOffset16(scriptTableOffset); // Offset16 langSysOffset Offset to LangSys table, from beginning of Script table
+            scriptTableOffset += getLangSysTableLength(language);
+        }
+
+        // Write LangSys tables
+        // https://docs.microsoft.com/en-us/typography/opentype/spec/chapter2#language-system-table
+        for (language in script.allLanguages) {
+            tt.writeUINT16(0); // lookupOrder = NULL (reserved for an offset to a reordering table)
+            tt.writeUINT16(0xFFFF); // requiredFeatureIndex – for now, no support for required features
+            tt.writeUINT16(language.features.length); // featureIndexCount
+            for (feature in language.features) {
+                tt.writeUINT16(feature.idx); // Array of indices into the FeatureList, in arbitrary order
+            }
         }
     }
 
-    public function setDefaultLanguage(tag:LanguageTag) {
-
-    }
-
-    public function addLanguage(tag:LanguageTag):LangSysRecord {
-        var record = getLangSysRecord(tag);
-        if (record == null) {
-            record = new LangSysRecord(tag);
-            languageRecords.push(record);
+    public function get_length():Int {
+        if (script.tag == DEFAULT) {
+            return 0;
         }
-        return record;
-//        this.languageRecords.sort(function(a:LangSysRecord, b:LangSysRecord) {
-//            return (a.tag.toString() > b.tag.toString()) ? 1 : (b.tag.toString() > a.tag.toString()) ? -1 : 0;
-//        });
-    }
-
-    private function getLangSysRecord(tag:LanguageTag) {
-        var record = languageRecords.filter(function(r:LangSysRecord) {
-            return r.tag == tag;
-        });
-        if (record.length > 0) {
-            return record[0];
+        var l = 4; // header
+        l += (6 * script.languages.length); // LangSysRecords
+        // langSysTables
+        for (language in script.allLanguages) {
+            l += getLangSysTableLength(language);
         }
-        return null;
+        return l;
     }
 
-    function get_length():Int {
-        return languageRecords.fold(function(record:LangSysRecord, l) {
-            return l + record.length;
-        }, 4);
+    private function getLangSysTableLength(language:Language) {
+        return 6 + (2 * language.features.length);
     }
-
 }
-
-
-
-

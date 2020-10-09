@@ -1,5 +1,6 @@
 package fonthx.formats.tt.tables.opentype.lookup;
 
+import fonthx.model.font.features.lookups.Lookup;
 import fonthx.model.font.features.lookups.LookupType;
 import fonthx.formats.tt.writers.ITrueTypeWriter;
 
@@ -13,33 +14,31 @@ import fonthx.formats.tt.writers.ITrueTypeWriter;
  */
 class LookupTable {
 
-    private var flag:Int = 0;
+    private var lookup:Lookup;
     private var subtables:Array<ILookupSubtable>;
-    private var type:LookupType;
 
-    public function new() {
+    public function new(lookup:Lookup) {
+        this.lookup = lookup;
         subtables = new Array();
     }
 
     public function write(tt:ITrueTypeWriter) {
-        tt.writeUINT16(type); // Different enumerations for GSUB and GPOS
-        tt.writeUINT16(flag); // Lookup qualifiers
-        tt.writeUINT16(subtables.length); // Number of subtables for this lookup
-        for (subtable in subtables) {
+        tt.writeUINT16(lookup.type);                    // uint16 	lookupType 	Different enumerations for GSUB and GPOS
+        tt.writeUINT16(lookup.flags);                   // uint16 	lookupFlag 	Lookup qualifiers
+        tt.writeUINT16(lookup.subLookups.length);       // uint16 	subTableCount 	Number of subtables for this lookup
+        for (sublookup in lookup.subLookups) {
+            var subtable = LookupSubtableFactory.createSubtable(sublookup);
+            subtables.push(subtable);
+            // Offset16 	subtableOffsets[subTableCount] 	Array of offsets to lookup subtables, from beginning of Lookup table
             tt.writeOffset16(0); // Array of offsets to lookup subtables, from beginning of Lookup table
         }
-        /*
-        // Index (base 0) into GDEF mark glyph sets structure. This field is only present if bit useMarkFilteringSet of lookup flags is set.
-        tt.writeUINT16(markFilteringSet);
-         */
-    }
+        for (subtable in subtables) {
+            subtable.write(tt);
+        }
 
-    public function setType(type:LookupType) {
-        this.type = type;
-    }
 
-    public function setFlag(flag:Int) {
-        this.flag = this.flag | flag;
+
+
     }
 
 

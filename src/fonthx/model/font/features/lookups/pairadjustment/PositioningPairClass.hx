@@ -6,13 +6,17 @@ class PositioningPairClass {
     public var pairs:Array<Array<Int>>;
     public var value:Float;
 
-    public function new(name: String, value:Float = 0) {
+    public function new(
+        name:String,
+        value:Float
+    ) {
+        this.name = name;
         this.value = value;
         this.pairs = new Array();
     }
 
-    public function addPair(g1:Int, g2: Int) {
-        this.pairs.push([g1, g2]);
+    public function addPair(idx1:Int, idx2:Int) {
+        this.pairs.push([idx1, idx2]);
     }
 
     public function toString() {

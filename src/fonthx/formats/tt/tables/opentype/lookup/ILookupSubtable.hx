@@ -1,5 +1,6 @@
 package fonthx.formats.tt.tables.opentype.lookup;
 
-interface ILookupSubtable {
+interface ILookupSubtable extends ICommonTable {
+
 
 }

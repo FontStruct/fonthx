@@ -1,8 +1,7 @@
 package fonthx.formats.tt.tables.opentype.feature;
 
-import fonthx.model.font.features.Layout;
 import fonthx.formats.tt.writers.ITrueTypeWriter;
-import fonthx.model.font.features.Feature;
+import fonthx.model.font.features.Layout;
 
 using Lambda;
 
@@ -11,11 +10,13 @@ using Lambda;
  * @see https://docs.microsoft.com/en-us/typography/opentype/spec/chapter2#flTbl
  * @see
  */
-class FeatureListTable extends LayoutAware {
+class FeatureListTable {
 
     private var layout:Layout;
-    private var features:Array<Feature>;
-    public var length(get, null):Int;
+    public var length(get, never):Int;
+
+    public function new() {
+    }
 
     public function setLayout(layout:Layout) {
         this.layout = layout;
@@ -26,17 +27,17 @@ class FeatureListTable extends LayoutAware {
         var offset = 2 + (6 * layout.features.length);
         // FeatureRecord
         for (feature in layout.features) {
-            tt.writeTag(feature.tag);   // Tag featureTag
-            tt.writeOffset16(offset);   // Offset16 featureOffset, Offset to Feature table, from beginning of FeatureList
+            tt.writeTag(feature.tag); // Tag featureTag
+            tt.writeOffset16(offset); // Offset16 featureOffset, Offset to Feature table, from beginning of FeatureList
             offset += (4 + (feature.lookups.length * 2));
         }
         // Feature table
         for (feature in layout.features) {
-            tt.writeOffset16(0);                        // Offset16 featureParams = NULL (reserved for offset to FeatureParams)
-            tt.writeUINT16(feature.lookups.length);     // uint16 lookupIndexCount Number of LookupList indices for this feature
+            tt.writeOffset16(0); // Offset16 featureParams = NULL (reserved for offset to FeatureParams)
+            tt.writeUINT16(feature.lookups.length); // uint16 lookupIndexCount Number of LookupList indices for this feature
             for (lookup in feature.lookups) {
-                tt.writeUINT16(lookup.idx);             // uint16 lookupListIndices[lookupIndexCount]
-                                                        // Array of indices into the LookupList — zero-based (first lookup is LookupListIndex = 0)
+                tt.writeUINT16(lookup.idx); // uint16 lookupListIndices[lookupIndexCount]
+                // Array of indices into the LookupList — zero-based (first lookup is LookupListIndex = 0)
             }
         }
     }

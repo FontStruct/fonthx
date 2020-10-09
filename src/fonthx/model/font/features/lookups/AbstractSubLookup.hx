@@ -8,6 +8,10 @@ class AbstractSubLookup {
     }
 
     public function addGlyphIndex(idx:Int) {
-        coveredGlyphIndices.push(idx);
+        if (coveredGlyphIndices.indexOf(idx) == -1) {
+            coveredGlyphIndices.push(idx);
+            // todo do we need to sort here? do we even need this field and this class? – it’s really to do with the output format
+            coveredGlyphIndices.sort(function(a, b) {return a - b;});
+        }
     }
 }

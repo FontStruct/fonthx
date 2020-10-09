@@ -12,11 +12,13 @@ section {
     margin-right: 10px;
     outline: 1px solid #eee;
     image-rendering: pixelated;
-    cursor: crosshair;}
+    cursor: crosshair;
+}
 
 .pf {
     font-family: pixelfont, sans-serif;
     text-transform: uppercase;
+    font-kerning: normal;
 }
 
 .label {

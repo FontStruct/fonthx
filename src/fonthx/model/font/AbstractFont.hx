@@ -41,7 +41,6 @@ class AbstractFont implements IFont {
     public function new() {
         glyphs = new Array();
         layout = new Layout();
-        layout.defaultLangSys = new Language(LanguageTag.DEFAULT);
         extraNamingRecords = new IntMap();
     }
 

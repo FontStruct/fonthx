@@ -11,25 +11,17 @@ import fonthx.formats.tt.writers.ITrueTypeWriter;
 * @see https://docs.microsoft.com/en-us/typography/opentype/spec/chapter2#coverage-format-1
 *
 */
-class GlyphIndexCoverageTable extends AbstractCoverageTable {
+class GlyphIndexCoverageTable implements ICommonTable {
 
-    public var length(get, null):Int;
-    public var indices:Array<Int>;
+    public var length(get, never):Int;
+    private var indices:Array<Int>;
 
-    public function new() {
-        indices = new Array();
-        this.format = AbstractCoverageTable.LIST_FORMAT;
-    }
-
-    public function addIndex(i:Int) {
-        indices.push(i);
+    public function new(indices:Array<Int>) {
+        this.indices = indices;
     }
 
     public function write(tt:ITrueTypeWriter) {
-        indices.sort(function(a, b) {
-            return a - b;
-        });
-        tt.writeUINT16(this.format);
+        tt.writeUINT16(1);
         tt.writeUINT16(this.indices.length);
         for (i in indices) {
             tt.writeUINT16(i);
@@ -37,7 +29,7 @@ class GlyphIndexCoverageTable extends AbstractCoverageTable {
     }
 
     public function get_length():Int {
-        return (this.indices.length + 2) * 2;
+        return 4 + (this.indices.length * 2);
     }
 
 }

@@ -5,10 +5,17 @@ import fonthx.model.font.features.lookups.AbstractSubLookup;
 class ClassPairAdjustmentPositioningSubLookup extends AbstractSubLookup implements ISubLookup {
 
     @:isVar public var classes(get, null):Array<PositioningPairClass>;
+    public var format1:PositioningValueFormat;
+    public var format2:PositioningValueFormat;
 
-    public function new() {
+    public function new(
+        format1:PositioningValueFormat = PositioningValueFormat.X_ADVANCE,
+        format2:PositioningValueFormat = PositioningValueFormat.NONE
+    ) {
         super();
         classes = new Array();
+        this.format2 = format2;
+        this.format1 = format1;
     }
 
     public function get_classes():Array<PositioningPairClass> {
@@ -17,8 +24,8 @@ class ClassPairAdjustmentPositioningSubLookup extends AbstractSubLookup implemen
 
     public function addClass(clazz:PositioningPairClass) {
         this.classes.push(clazz);
-        clazz.pairs.map(function(p:PositioningPair) {
-           addGlyphIndex(p.left);
+        clazz.pairs.map(function(glyphIndices) {
+           addGlyphIndex(glyphIndices[0]);
         });
     }
 

@@ -18,9 +18,9 @@ class LayoutTable extends Table {
         super(tag);
         majorVersion = 1;
         minorVersion = 0;
-        scriptList = new ScriptListTable(this);
-        featureList = new FeatureListTable(this);
-        lookupList = new LookupListTable(this);
+        scriptList = new ScriptListTable();
+        featureList = new FeatureListTable();
+        lookupList = new LookupListTable();
     }
 
     public function setLayout(layout:Layout) {
@@ -32,7 +32,7 @@ class LayoutTable extends Table {
     override public function write(tt:ITrueTypeWriter) {
         tt.writeUINT16(majorVersion);
         tt.writeUINT16(minorVersion);
-        var offset = 0x0A;
+        var offset = 10;                // (length of this header)
         tt.writeOffset16(offset);       // Offset to ScriptList table, from beginning of layout table (always 10 bytes)
         offset += scriptList.length;
         tt.writeOffset16(offset);       // Offset to FeatureList table, from beginning of layout table

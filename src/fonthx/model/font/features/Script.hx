@@ -22,7 +22,7 @@ class Script {
     }
 
     public function get_allLanguages() {
-        var all = languages;
+        var all = languages.copy();
         if (defaultLangSys != null) {
             all.unshift(defaultLangSys);
         }

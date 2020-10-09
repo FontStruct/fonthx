@@ -24,9 +24,9 @@ class ClassPairAdjustmentPositioningSubLookup extends AbstractSubLookup implemen
 
     public function addClass(clazz:PositioningPairClass) {
         this.classes.push(clazz);
-        clazz.pairs.map(function(glyphIndices) {
-           addGlyphIndex(glyphIndices[0]);
-        });
+        for (pair in clazz.pairs) {
+           addGlyphIndex(pair[0]);
+        }
     }
 
     public function addClasses(classes:Array<PositioningPairClass>) {

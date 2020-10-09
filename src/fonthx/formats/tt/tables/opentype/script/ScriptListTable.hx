@@ -35,8 +35,8 @@ class ScriptListTable {
         for (scriptTable in scriptTables) {
             var script = scriptTable.script;
             // Write ScriptRecord // https://docs.microsoft.com/en-us/typography/opentype/spec/chapter2#slTbl_sRec
-            tt.writeTag(script.tag.toString());
-            tt.writeOffset16(offset); // Offset from beginning of ScriptList Table to Script table
+            tt.writeTag(script.tag.toString())
+                .writeOffset16(offset); // Offset from beginning of ScriptList Table to Script table
             if (script.tag != ScriptTag.DEFAULT) {
                 offset += scriptTable.length;
             }

@@ -18,7 +18,7 @@ class Table {
     public static var LOCA = "loca";
     public static var CFF = "CFF ";
     public static var KERN = "kern";
-    public static var GPOS = "gpos";
+    public static var GPOS = "GPOS";
 
     /**
     * @see https://developer.apple.com/fonts/TrueType-Reference-Manual/RM06/Chap6.html

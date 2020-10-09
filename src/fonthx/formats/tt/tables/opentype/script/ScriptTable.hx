@@ -3,6 +3,7 @@ import fonthx.model.font.features.Language;
 import fonthx.formats.tt.tables.opentype.lookup.ICommonTable;
 import fonthx.formats.tt.writers.ITrueTypeWriter;
 import fonthx.model.font.features.Script;
+
 class ScriptTable implements ICommonTable {
 
     public var script:Script;

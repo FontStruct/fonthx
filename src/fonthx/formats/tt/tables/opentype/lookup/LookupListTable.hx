@@ -26,10 +26,10 @@ class LookupListTable {
         }
         tt.writeUINT16(layout.lookups.length);  // uint16 lookupCount - Number of lookups in this table (the font)
         var offset = 2 + (2 * layout.lookups.length);
-        for (lookup in layout.lookups) {
+        for (lookupTable in lookupTables) {
             tt.writeOffset16(offset);           // Offset16 lookups[lookupCount] Array of offsets to Lookup tables,
-                                                // from beginning of LookupList — zero based (first lookup is Lookup index = 0)
-            offset += (6 + lookup.subLookups.length * 2); // not sure about this
+            // from beginning of LookupList — zero based (first lookup is Lookup index = 0)
+            offset += lookupTable.length; // not sure about this
         }
         // Lookup Tables
         for (lookupTable in lookupTables) {

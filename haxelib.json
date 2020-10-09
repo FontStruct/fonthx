@@ -11,14 +11,14 @@
   "contributors": ["FontStruct"],
   "classPath": "src/",
   "dependencies": {
-    "format": "3.4.1",
-    "hxcpp": "4.0.4",
+    "format": "3.5.0",
+    "hxcpp": "4.1.15",
     "hxjava": "3.2.0",
     "hxcs": "3.4.0",
-    "buddy": "2.8.2",
+    "buddy": "2.12.1",
     "dox": "1.1.0",
     "arguable": "1.0.2",
-    "tracehx": "0.0.2"
-//    "hxnodejs": "4.0.9"
+    "tracehx": "0.0.2",
+    "hxnodejs": "12.1.0"
   }
 }

@@ -14,8 +14,8 @@ class CoverageTableHelper {
 
     public static function buildRanges(indices:Array<Int>):Array<CoverageRange> {
         var prev = -2;
-        var currRange:CoverageRange;
-        var ranges:Array<CoverageRange> = indices.fold(function(glyphIdx:Int, acc:Array<CoverageRange>) {
+        var currRange:CoverageRange = null;
+        var ranges:Array<CoverageRange> = indices.fold((glyphIdx:Int, acc:Array<CoverageRange>) -> {
             if (glyphIdx != prev + 1) {
                 if (currRange != null) {
                     currRange.end = prev;

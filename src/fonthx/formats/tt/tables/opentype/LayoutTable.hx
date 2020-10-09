@@ -30,14 +30,14 @@ class LayoutTable extends Table {
     }
 
     override public function write(tt:ITrueTypeWriter) {
-        tt.writeUINT16(majorVersion);
-        tt.writeUINT16(minorVersion);
-        var offset = 10;                // (length of this header)
-        tt.writeOffset16(offset);       // Offset to ScriptList table, from beginning of layout table (always 10 bytes)
+        var offset = 10; // (length of this header)
+        tt.writeUINT16(majorVersion)
+            .writeUINT16(minorVersion)
+            .writeOffset16(offset); // Offset to ScriptList table, from beginning of layout table (always 10 bytes)
         offset += scriptList.length;
-        tt.writeOffset16(offset);       // Offset to FeatureList table, from beginning of layout table
+        tt.writeOffset16(offset); // Offset to FeatureList table, from beginning of layout table
         offset += featureList.length;
-        tt.writeOffset16(offset);       // Offset to LookupList table, from beginning of layout table
+        tt.writeOffset16(offset); // Offset to LookupList table, from beginning of layout table
         scriptList.write(tt);
         featureList.write(tt);
         lookupList.write(tt);

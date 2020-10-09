@@ -1,7 +1,6 @@
 package fonthx.examples.pixelfonter;
 
 import fonthx.model.font.features.lookups.LookupType;
-import fonthx.formats.tt.tables.opentype.lookup.LookupTable;
 import fonthx.model.font.features.lookups.Lookup;
 import fonthx.model.font.features.LanguageTag;
 import fonthx.model.font.features.Language;
@@ -10,7 +9,6 @@ import fonthx.model.font.features.lookups.pairadjustment.PairAdjustmentPositioni
 import fonthx.model.font.features.Feature;
 import fonthx.examples.pixelfonter.PixelGlyph.Pixel;
 import fonthx.model.font.features.lookups.pairadjustment.PositioningPair;
-import fonthx.model.font.features.LanguageTag;
 import fonthx.model.font.features.ScriptTag;
 import fonthx.model.font.features.FeatureTag;
 import fonthx.model.geom.Rectangle;
@@ -71,21 +69,21 @@ class PixelFont implements IFont extends AbstractFont {
             return a.codepoint - b.codepoint;
         });
 
+
         var latinScript = new Script(LATIN);
         var defaultLang = new Language(DEFAULT);
         var kerning = new Feature(FEAT_KERN);
-        defaultLang.addFeature(kerning);
-        layout.addFeature(kerning);
-
         var pairsLookup = autoKern();
 
         kerning.addLookup(pairsLookup);
-        layout.addLookup(pairsLookup);
-
+        defaultLang.addFeature(kerning);
+        latinScript.defaultLangSys = defaultLang;
         latinScript.addLanguage(defaultLang);
+
+        layout.addFeature(kerning);
+        layout.addLookup(pairsLookup);
         layout.addScript(latinScript);
 
-        latinScript.addLanguage(defaultLang);
     }
 
     override public function get_uniqueFamilyName() {
@@ -174,10 +172,6 @@ class PixelFont implements IFont extends AbstractFont {
         // start glyphs at offsets to get the basic unkerned spacing
         var leftOffset:Int = 0 - Std.int(leftBounds.left);
         var rightOffset:Int = 0 - Std.int(rightBounds.left);
-        var trace = left.codepoint == 65 && right.codepoint == 73;
-        if (trace) {
-            trace(leadEdgePixels, trailEdgePixels, leftOffset, rightOffset, leftBounds, rightBounds);
-        }
         rightOffset += Std.int(leftBounds.width);
 
         var kern:Int = 0;

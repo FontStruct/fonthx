@@ -21,6 +21,10 @@ section {
     font-kerning: normal;
 }
 
+.pf--unkerned {
+    font-kerning: none !important;
+}
+
 .label {
     margin-bottom: 10px;
 }

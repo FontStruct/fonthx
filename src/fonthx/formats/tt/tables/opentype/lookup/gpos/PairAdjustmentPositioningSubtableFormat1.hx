@@ -1,6 +1,5 @@
 package fonthx.formats.tt.tables.opentype.lookup.gpos;
 
-import fonthx.model.font.features.lookups.pairadjustment.PositioningValueFormat;
 import fonthx.formats.tt.tables.opentype.lookup.coverage.CoverageTableHelper;
 import fonthx.formats.tt.writers.ITrueTypeWriter;
 import fonthx.model.font.features.lookups.pairadjustment.PairAdjustmentPositioningSubLookup;
@@ -30,55 +29,21 @@ class PairAdjustmentPositioningSubtableFormat1 implements ILookupSubtable {
 
     public function write(tt:ITrueTypeWriter):Void {
 
-        // coverage – each pairset needs a coverage idx
-        var coverage = subLookup.pairs.fold(function(p:PositioningPair, acc:Array<Int>) {
-            if (acc.indexOf(p.idx1) == -1) {
-                acc.push(p.idx1);
-            }
-            return acc;
-        }, new Array<Int>());
-        coverage.sort(function(a, b) {
-            return a - b;
-        });
+        var coverageTable = getCoverageTable();
+        var valueRecordLength = getValueRecordLength();
+        var groupedPairs = getGroupedPairs();
 
-        var coverageTable = CoverageTableHelper.getCoverageTable(coverage);
-
-        tt.writeUINT16(1);                                      // uint16 	posFormat Format identifier
-        var offset = 10 + (2 * subLookup.pairs.length);
-        tt.writeOffset16(offset);                               // Offset16 coverageOffset Offset to Coverage table, from beginning of this PairPos subtable
-        tt.writeUINT16(cast subLookup.format1);                 // uint16 	valueFormat1	Defines the types of data in valueRecord1 — for the first glyph in the pair (may be zero).
-        tt.writeUINT16(cast subLookup.format2);                 // uint16   valueFormat2	Defines the types of data in valueRecord2 — for the second glyph in the pair (may be zero).
-        tt.writeUINT16(subLookup.pairs.length);                 // uint16   pairSetCount	Number of PairSet tables
-        // Array of offsets to PairSet tables. Offsets are from beginning of this PairPos subtable, ordered by Coverage Index.
-        offset += coverageTable.length;
-        var valueRecordLength = 0;
-        if (subLookup.hasFirstValues()) {
-            valueRecordLength += 2;
-        }
-        if (subLookup.hasSecondValues()) {
-            valueRecordLength += 2;
-        }
-        var pairs = subLookup.pairs.copy();
-        pairs.sort(function(a, b) {
-            return a.idx1 - b.idx1;
-        });
+        tt.writeUINT16(1); // uint16 	posFormat Format identifier
+        tt.writeOffset16(this.length - coverageTable.length); // Offset16 coverageOffset Offset to Coverage table, from beginning of this PairPos subtable
+        tt.writeUINT16(cast subLookup.format1); // uint16 	valueFormat1	Defines the types of data in valueRecord1 — for the first glyph in the pair (may be zero).
+        tt.writeUINT16(cast subLookup.format2); // uint16   valueFormat2	Defines the types of data in valueRecord2 — for the second glyph in the pair (may be zero).
+        tt.writeUINT16(groupedPairs.length); // uint16   pairSetCount	Number of PairSet tables
 
         // group the pairs according to first glyph
-        var currentGroup:Array<PositioningPair> = [];
-        var lastPair:PositioningPair = null;
-        var groupedPairs = pairs.fold(function(p:PositioningPair, acc:Array<Array<PositioningPair>>) {
-            if (lastPair != null && p.idx1 != lastPair.idx1) {
-                currentGroup = [];
-                acc.push(currentGroup);
-            }
-            currentGroup.push(p);
-            lastPair = p;
-            return acc;
-        }, [currentGroup]);
-
+        var offset = 10 + (2 * groupedPairs.length);
         for (group in groupedPairs) {
-            tt.writeOffset16(offset);   // Offset16 pairSetOffsets[pairSetCount] Array of offsets to PairSet tables.
-                                        // Offsets are from beginning of PairPos subtable, ordered by Coverage Index.
+            tt.writeOffset16(offset); // Offset16 pairSetOffsets[pairSetCount] Array of offsets to PairSet tables.
+            // Offsets are from beginning of this PairPos subtable, ordered by Coverage Index.
             offset += (2 + (group.length * valueRecordLength));
             group.sort(function(a, b) {return a.idx2 - b.idx2;});
         }
@@ -96,18 +61,84 @@ class PairAdjustmentPositioningSubtableFormat1 implements ILookupSubtable {
                 tt.writeUINT16(pair.idx2);
                 // https://docs.microsoft.com/en-us/typography/opentype/spec/gpos#valueRecord
                 if (subLookup.hasFirstValues()) {
-                    tt.writeSHORT(Std.int(pair.x));
+                    tt.writeSHORT(Std.int(pair.x)); // int16
                 }
                 if (subLookup.hasSecondValues()) {
-                    tt.writeSHORT(Std.int(pair.y));
+                    tt.writeSHORT(Std.int(pair.y)); // int16
                 }
             }
         }
+        coverageTable.write(tt); // coverage table at the end
     }
 
     public function get_length():Int {
-        return 0;
+        var valueRecordLength = getValueRecordLength();
+        var groupedPairs = getGroupedPairs();
+        var l = 10;
+        l += groupedPairs.length * 2; // pairSetOffsets
+        // pair set tables
+        l += groupedPairs.length * 2; // pairValueCount
+        for (group in groupedPairs) {
+            l += (group.length * valueRecordLength);
+        }
+        l += getCoverageTable().length;
+        return l;
     }
 
+    private var _coverageTable:ICommonTable = null;
+
+    private function getCoverageTable():ICommonTable {
+        if (_coverageTable != null) {
+            return _coverageTable;
+        }
+        // coverage – each pairset needs a coverage idx
+        var coverage = subLookup.pairs.fold((p:PositioningPair, acc:Array<Int>) -> {
+            if (acc.indexOf(p.idx1) == -1) {
+                acc.push(p.idx1);
+            }
+            return acc;
+        }, new Array<Int>());
+        coverage.sort(function(a, b) {
+            return a - b;
+        });
+        var _coverageTable = CoverageTableHelper.getCoverageTable(coverage);
+        return _coverageTable;
+    }
+
+    private var _grouped:Array<Array<PositioningPair>> = null;
+
+    private function getGroupedPairs() {
+        var pairs = subLookup.pairs.copy();
+        pairs.sort(function(a, b) {
+            return a.idx1 - b.idx1;
+        });
+        // group the pairs according to first glyph
+        if (_grouped != null) {
+            return _grouped;
+        }
+        var currentGroup:Array<PositioningPair> = [];
+        var lastPair:PositioningPair = null;
+        _grouped = pairs.fold((p:PositioningPair, acc:Array<Array<PositioningPair>>) -> {
+            if (lastPair != null && p.idx1 != lastPair.idx1) {
+                currentGroup = [];
+                acc.push(currentGroup);
+            }
+            currentGroup.push(p);
+            lastPair = p;
+            return acc;
+        }, [currentGroup]);
+        return _grouped;
+    }
+
+    private function getValueRecordLength():Int {
+        var valueRecordLength = 2;
+        if (subLookup.hasFirstValues()) {
+            valueRecordLength += 2;
+        }
+        if (subLookup.hasSecondValues()) {
+            valueRecordLength += 2;
+        }
+        return valueRecordLength;
+    }
 
 }

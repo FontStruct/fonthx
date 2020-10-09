@@ -1,7 +1,6 @@
 package fonthx.examples.pixelfonter;
 
 import arguable.ArgParser;
-
 using StringTools;
 using Lambda;
 using format.png.Tools;
@@ -12,6 +11,7 @@ using format.png.Tools;
 class PixelFonterApp {
 
     public static function main() {
+
         trace("Executing PixelFonter");
 
         ArgParser.delimiter = '-';

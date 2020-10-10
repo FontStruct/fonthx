@@ -10,6 +10,7 @@ class Unicode {
 
     /*
 	Some blocks not yet included (todo FontStruct-specific issue)
+	CJK Compatibility Ideographs, 511
 	Unified Canadian Aboriginal Syllabics, 639
 	CJK Unified Ideographs Extension A, 6591
 	CJK Unified Ideographs, 20991
@@ -18,7 +19,6 @@ class Unicode {
 	High Surrogates, 895
 	Low Surrogates, 1023
 	Private Use Area, 6399
-	CJK Compatibility Ideographs, 511
 	Arabic Presentation Forms-A, 687
 	Cuneiform, 1023
 	Egyptian Hieroglyphs, 1071
@@ -203,8 +203,11 @@ class Unicode {
             start:0x13A0,
             end:0x13FF,
             name:"Cherokee"
+        }, {
+            start:0x1400,
+            end:0x167F,
+            name:"Unified Canadian Aboriginal Syllabics"
         },
-            //{start:0x1400, end:0x167F, name:"Unified Canadian Aboriginal Syllabics"},
         {
             start:0x1680,
             end:0x169F,

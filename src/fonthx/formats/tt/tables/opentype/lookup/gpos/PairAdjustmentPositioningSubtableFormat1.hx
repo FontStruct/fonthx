@@ -92,7 +92,7 @@ class PairAdjustmentPositioningSubtableFormat1 implements ILookupSubtable {
             return _coverageTable;
         }
         // coverage – each pairset needs a coverage idx
-        var coverage = subLookup.pairs.fold((p:PositioningPair, acc:Array<Int>) -> {
+        var coverage = subLookup.pairs.fold(function(p:PositioningPair, acc:Array<Int>) {
             if (acc.indexOf(p.idx1) == -1) {
                 acc.push(p.idx1);
             }
@@ -118,7 +118,7 @@ class PairAdjustmentPositioningSubtableFormat1 implements ILookupSubtable {
         }
         var currentGroup:Array<PositioningPair> = [];
         var lastPair:PositioningPair = null;
-        _grouped = pairs.fold((p:PositioningPair, acc:Array<Array<PositioningPair>>) -> {
+        _grouped = pairs.fold(function(p:PositioningPair, acc:Array<Array<PositioningPair>>) {
             if (lastPair != null && p.idx1 != lastPair.idx1) {
                 currentGroup = [];
                 acc.push(currentGroup);

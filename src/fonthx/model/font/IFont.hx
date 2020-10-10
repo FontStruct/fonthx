@@ -46,8 +46,8 @@ interface IFont {
 
     var layout(get, null):Layout;
 
-    function getGlyphForCodepoint(cp:Int):IContourGlyph;
     function getLineGap():Int;
+    function getGlyphForCodepoint(cp:Int):IContourGlyph;
     function getNumberOfHMetrics():Int;
 
     function hasKerning():Bool;

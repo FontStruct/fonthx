@@ -2,3 +2,4 @@
 /dist
 /tmp/*
 !/tmp/.gitkeep
+/emsdk

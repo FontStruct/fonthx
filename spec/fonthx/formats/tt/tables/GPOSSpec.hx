@@ -141,9 +141,7 @@ class GPOSSpec extends buddy.BuddySuite {
 
                 featureTableBytes[0].should.be(0x00);   // Number of FeatureRecords in this table (1)
                 featureTableBytes[1].should.be(0x01);
-
-                traceBytesInTable(featureTableBytes);
-
+                
             });
         });
     }

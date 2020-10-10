@@ -5,9 +5,10 @@ import haxe.crypto.Base64;
 using format.png.Tools;
 
 @:buildXml('
-<linker id="exe" exe="emcc">
+<linker id="exe" exe="em++">
     <flag value="--bind"/>
     <flag value="-s"/>
+    <flag value="WASM=1"/>
     <flag value="ALLOW_MEMORY_GROWTH=1"/>
     <flag value="-s"/>
     <flag value="TOTAL_MEMORY=32MB"/>

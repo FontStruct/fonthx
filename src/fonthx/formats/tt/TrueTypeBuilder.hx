@@ -363,7 +363,7 @@ class TrueTypeBuilder {
         }
 
         table
-            .setVendorID("FSTR")
+            .setVendorID(font.vendorID)
             .setFontSelectionFlags(OS2FontSelectionFlags.REGULAR)
             .setFirstCharIndex(getFirstCharCode(font))
             .setLastCharIndex(getLastCharCode(font))

@@ -30,6 +30,7 @@ interface IFont {
     var postscriptName(get, null):String;
     var trademark(get, null):String;
     var manufacturerURL(get, null):String;
+    var vendorID(get, null):String;
     var vendorURL(get, null):String;
     var URL(get, null):String;
     var license(get, null):String;

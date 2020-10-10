@@ -86,6 +86,10 @@ class PixelFont implements IFont extends AbstractFont {
 
     }
 
+    override function get_vendorID():String {
+        return "PXFR";
+    }
+
     override public function get_uniqueFamilyName() {
         return 'PixelFonter' + name;
     }

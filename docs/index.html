@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>FontStruct/fonthx</title>
+    <title>PixelFonter JS</title>
     <link rel="stylesheet" href="pixelfonter.css"/>
 </head>
 <body>
@@ -13,10 +13,8 @@
 
 <canvas id="canvas"></canvas>
 
-<p><a href="https://github.com/FontStruct/fonthx">Source and info on github</a></p>
 
-<div class="pf"><h1>fonthx pixelfonter demo</h1></div>
-
+<!--<div class="pf"><h1>PixelFonter</h1></div>-->
 
 <section>
     <h1>Live Generation and Editing of a TrueType pixel font, from a bitmap image, on the client, in Javascript (or WASM), and Haxe.</h1>
@@ -24,26 +22,28 @@
 
 
 <section>
-    <div class="label">Source Image (Click to toggle pixels):</div>
+    <div class="label">Source (Click to toggle pixels):</div>
     <div id="cells"></div>
 </section>
 
 <section>
-    <div class="label">Generated WebFont (Click to Edit Text):</div>
+    <div class="label">WebFont (Click to Edit Text):</div>
     <div class="pf" contenteditable="true">
         <p>As you edit the font, this text, set in the WebFont will change appearance accordingly.</p>
 
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+        <p>Built and rebuilt in real-time. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
         magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
         consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
         pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
             laborum.</p>
+
     </div>
+    <button onclick="document.querySelector('.pf').classList.toggle('pf--unkerned')">Toggle Kerning</button>
+
 </section>
 
 <section>
     <a id="download" download="PixelFont.ttf">Download TTF</a>
-    <p><a href="https://github.com/FontStruct/fonthx">Source and info on github</a></p>
 </section>
 
 <script src="PixelFonterBrowserApp.js"></script>

@@ -62,10 +62,10 @@ class GPOSSpec extends buddy.BuddySuite {
                 bytes[4].should.be(0x00);
                 bytes[5].should.be(0x0A); // offset to script list table (always 10)
                 bytes[6].should.be(0x00);
-                bytes[7].should.be(0x22); // offset to feature list table = 34
+                bytes[7].should.be(0x28); // offset to feature list table = 34
                 // = 2 (recordCount bytes) + 6 (1 x scriptRecord) + 4 (1 x script table header) + 6 (1 x language record) + 10 (SLT offset)
                 bytes[8].should.be(0x00);
-                bytes[9].should.be(0x24); // offset to lookup list, just 2 more than feature list offset because we have no features
+                bytes[9].should.be(0x2A); // offset to lookup list, just 2 more than feature list offset because we have no features
 
             });
             it("Can add a valid script list table", function() {
@@ -92,7 +92,7 @@ class GPOSSpec extends buddy.BuddySuite {
                 bytes[14].should.be(0x47);  // G
                 bytes[15].should.be(0x20);  // " "
                 bytes[16].should.be(0);     // offset to LangSys table
-                bytes[17].should.be(0x0A);
+                bytes[17].should.be(0x10);
                 // LangSys tables – (2)
                 bytes[18].should.be(0);     // lookupOrder = NULL
                 bytes[19].should.be(0);
@@ -115,7 +115,6 @@ class GPOSSpec extends buddy.BuddySuite {
                 // c’est ca
                 bytes.length.should.be(34);
             });
-            @include
             it("Can add a valid feature list table for kerning", function() {
                 // https://docs.microsoft.com/en-us/typography/opentype/spec/chapter2#flTbl
                 var kerning = new Feature(FeatureTag.FEAT_KERN);

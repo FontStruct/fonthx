@@ -72,17 +72,17 @@ class PixelFont implements IFont extends AbstractFont {
 
         var latinScript = new Script(LATIN);
         var defaultLang = new Language(DEFAULT);
-        var kerning = new Feature(FEAT_KERN);
-        var pairsLookup = autoKern();
-
-        kerning.addLookup(pairsLookup);
-        defaultLang.addFeature(kerning);
         latinScript.defaultLangSys = defaultLang;
         latinScript.addLanguage(defaultLang);
 
+        var kerning = new Feature(FEAT_KERN);
+        var kerningLookup = autoKern();
+        kerning.addLookup(kerningLookup);
+        defaultLang.addFeature(kerning);
+
         layout.addFeature(kerning);
-        layout.addLookup(pairsLookup);
         layout.addScript(latinScript);
+        layout.addLookup(kerningLookup);
 
     }
 

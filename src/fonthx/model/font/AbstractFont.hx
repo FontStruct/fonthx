@@ -1,7 +1,5 @@
 package fonthx.model.font;
 
-import fonthx.model.font.features.LanguageTag;
-import fonthx.model.font.features.Language;
 import fonthx.model.font.features.Layout;
 import fonthx.model.font.features.lookups.pairadjustment.PositioningPair;
 import haxe.ds.IntMap;
@@ -252,6 +250,10 @@ class AbstractFont implements IFont {
         return this.typoLineGap = value;
     }
 
+    public function get_layout():Layout {
+        return layout;
+    }
+
     function get_extraNamingRecords():IntMap<String> {
         return extraNamingRecords;
     }
@@ -274,10 +276,6 @@ class AbstractFont implements IFont {
 
     public function getKerningPairs():Array<PositioningPair> {
         return null;
-    }
-
-    function get_layout():Layout {
-        return layout;
     }
 
 

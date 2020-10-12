@@ -79,6 +79,11 @@ class TrueTypeFileWriter implements ITrueTypeWriter {
         return this;
     }
 
+    public function writeCard8(b:Int):ITrueTypeWriter {
+        write(b);
+        return this;
+    }
+
     public function writeTag(s:String):ITrueTypeWriter {
         write(s.charCodeAt(0));
         write(s.charCodeAt(1));
@@ -159,7 +164,7 @@ class TrueTypeFileWriter implements ITrueTypeWriter {
 	 * @param mod
 	 */
     public function pad(fromMark:Bool = false) {
-        var missing = 4 - ((fromMark? pos - mark : pos) % 4);
+        var missing = 4 - ((fromMark ? pos - mark : pos) % 4);
         if (missing <= 0 || missing >= 4) {
             return;
         }

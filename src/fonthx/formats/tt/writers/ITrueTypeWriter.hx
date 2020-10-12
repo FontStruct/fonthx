@@ -77,4 +77,9 @@ interface ITrueTypeWriter {
 	 */
     public function pad(fromMark:Bool = false):Void;
 
+    /**
+    * Append a Card8 – 0 – 255 – 1-byte unsigned number
+    **/
+    public function writeCard8(b:Int):ITrueTypeWriter;
+
 }

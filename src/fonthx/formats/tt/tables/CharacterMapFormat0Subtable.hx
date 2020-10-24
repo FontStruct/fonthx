@@ -9,6 +9,7 @@ import haxe.io.Bytes;
  * mapping table This is a simple 1 to 1 mapping of character codes to glyph
  * indices. The glyph set is limited to 256. Note that if this format is used to
  * index into a larger glyph set, only the first 256 glyphs will be accessible.
+ * https://docs.microsoft.com/en-us/typography/opentype/otspec140/cmap#format-0-byte-encoding-table
  */
 class CharacterMapFormat0Subtable extends CharacterMapSubtable {
 

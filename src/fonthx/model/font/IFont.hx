@@ -1,5 +1,6 @@
 package fonthx.model.font;
 
+import fonthx.formats.tt.types.Fixed;
 import fonthx.model.font.features.Layout;
 import fonthx.model.font.features.Script;
 import fonthx.model.font.features.FeatureTag;
@@ -14,44 +15,48 @@ import fonthx.model.font.features.lookups.pairadjustment.PositioningPair;
 interface IFont {
 
     var glyphs(get, null):Array<IContourGlyph>;
-
+    var name(get, null):String;
+    var author(get, null): String;
+    var style(get, null):String;
+    var creationDate(get, null):String;
+    var version(get, null):String;
+    var layout(get, null):Layout;
     var emSquare(get, null):Int;
 
-    var name(get, set):String;
-    var style(get, null):String;
-    var sampleText(get, null):String;
-    var copyright(get, null):String;
-    var creationDate(get, null):String;
-    var author(get, null): String;
+    function getGlyphForCodepoint(cp:Int):IContourGlyph;
+    function getKerningPairs():Array<PositioningPair>;
+
+    // todo put following in IExportableFont or ITrueTypable (and IPostscriptable)?
     var description(get, null):String;
-    var uniqueFamilyName(get, null):String;
     var fullName(get, null):String;
-    var version(get, null):String;
+    var styleModifiers(get, null):String;
+    var copyright(get, null):String;
+    var license(get, null):String;
+    var licenseURL(get, null):String;
+    var uniqueFamilyName(get, null):String;
     var postscriptName(get, null):String;
     var trademark(get, null):String;
     var manufacturerURL(get, null):String;
     var vendorID(get, null):String;
     var vendorURL(get, null):String;
     var URL(get, null):String;
-    var license(get, null):String;
-    var licenseURL(get, null):String;
-    var styleModifiers(get, null):String;
-    var extraNamingRecords(get, null):IntMap<String>;
+    var sampleText(get, null):String;
 
+    var extraNamingRecords(get, null):IntMap<String>;
     var idealAscender(get, null):Float;
     var idealDescender(get, null):Float;
     var realAscender(get, null):Float;
     var realDescender(get, null):Float;
     var typoLineGap(get, null):Float;
 
-    var layout(get, null):Layout;
-
     function getLineGap():Int;
-    function getGlyphForCodepoint(cp:Int):IContourGlyph;
     function getNumberOfHMetrics():Int;
-
     function hasKerning():Bool;
-    function getKerningPairs():Array<PositioningPair>;
 
+    // postscript table/CFF specific
+    function isFixedPitch():Bool;
+    function getItalicAngle():Float;
+    function getUnderlinePosition():Int;
+    function getUnderlineThickness():Int;
 
 }

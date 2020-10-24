@@ -1,4 +1,4 @@
-package fonthx.formats.tt;
+package fonthx.model.geom;
 
 class DrawingCommand {
     public static inline var MOVETO = 0;   // PathIterator.SEG_MOVETO

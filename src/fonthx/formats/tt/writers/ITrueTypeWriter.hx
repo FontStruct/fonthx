@@ -65,10 +65,16 @@ interface ITrueTypeWriter {
     public function writePascalString(name:String):ITrueTypeWriter;
 
     /**
+	 * append a version number
+	 * @throws IOException
+	 */
+    public function writeVersion(major:Int, minor:Int):ITrueTypeWriter;
+
+    /**
 	 * append a fixed 32-bit signed fixed-ContourPoint number (16.16)
 	 * @throws IOException 
 	 */
-    public function writeFixed(mantissa:Int, fraction:Int):ITrueTypeWriter;
+    public function writeFixed(f:Float):ITrueTypeWriter;
 
     /**
 	 *  make sure the output length is divisible by 4
@@ -81,5 +87,10 @@ interface ITrueTypeWriter {
     * Append a Card8 – 0 – 255 – 1-byte unsigned number
     **/
     public function writeCard8(b:Int):ITrueTypeWriter;
+
+    /**
+    * Append a Card16 – 0 – 65535 – 2-byte unsigned number
+    **/
+    public function writeCard16(b:Int):ITrueTypeWriter;
 
 }

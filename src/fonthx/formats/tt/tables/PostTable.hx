@@ -1,6 +1,9 @@
 package fonthx.formats.tt.tables;
 
+import fonthx.model.font.IFont;
 import fonthx.formats.tt.writers.ITrueTypeWriter;
+
+using fonthx.formats.tt.types.Fixed;
 
 /**
  * Postscript table
@@ -34,46 +37,32 @@ class PostTable extends Table {
     public static var VERSION_3_0 = 0x00030000;
 
 	private var version:Int;
-	private var italicAngleMantissa:Int;
-	private var italicAngleFraction:Int;
-	private var underlinePosition:Int;
-	private var underlineThickness:Int;
-	private var isFixedPitch:Int;
-	private var minMemType42:Int;
-	private var maxMemType42:Int;
-	private var minMemType1:Int;
-	private var maxMemType1:Int;
-	
+    private var font:IFont;
 	private var names:Array<String>;
 	private var standardNames:Array<Int>;
 
 	/**
 	 * Create a new POST table
 	 */
-	public function new(version:Int) {
+	public function new(font:IFont, version:Int) {
 		super(Table.POST);
+        this.font = font;
 		this.version = version;
-		italicAngleMantissa = 0;
-		italicAngleFraction = 0;
-		underlinePosition = 100;
-		underlineThickness = 10;
-		isFixedPitch = 0;
 		names = new Array<String>();
 		standardNames = new Array<Int>();
 	}
 
-
 	override public function write(tt:ITrueTypeWriter) {
 		tt
             .writeULONG(version)
-		    .writeFixed(italicAngleMantissa, italicAngleFraction)
-            .writeUSHORT(underlinePosition)
-		    .writeUSHORT(underlineThickness)
-            .writeULONG(isFixedPitch)
-            .writeULONG(minMemType42)
-            .writeULONG(maxMemType42)
-            .writeULONG(minMemType1)
-            .writeULONG(maxMemType1)
+		    .writeFixed(font.getItalicAngle())
+            .writeUSHORT(font.getUnderlinePosition())
+		    .writeUSHORT(font.getUnderlineThickness())
+            .writeULONG(font.isFixedPitch()? 1 : 0)
+            .writeULONG(0)   // minMemType42 – unimplemented
+            .writeULONG(0)   // maxMemType42
+            .writeULONG(0)    // minMemType1
+            .writeULONG(0)    // maxMemType1
         ;
 		if (version == VERSION_2_0) {
 			tt.writeUSHORT(names.length +  standardNames.length);
@@ -106,60 +95,6 @@ class PostTable extends Table {
 	 */
 	public function appendNamedGlyph(name:String) {
 		names.push(name);
-	}
-
-	/**
-	 * Set monospaced flag
-	 * 
-	 * @param value
-	 */
-	public function setMonospaced(value:Bool):PostTable {
-		isFixedPitch = value ? 1 : 0;
-        return this;
-	}
-
-	/**
-	 * Italic angle in counter-clockwise degrees from the vertical. 0.0 for
-	 * upright text, negative for text that leans to the right (forward).
-	 * 
-	 * @param mantissa
-	 * @param fraction
-	 */
-	public function setItalicAngle(mantissa:Int, fraction:Int):PostTable {
-		italicAngleMantissa = mantissa;
-		italicAngleFraction = fraction;
-        return this;
-	}
-
-	/**
-	 * This is the suggested distance of the top of the underline from the
-	 * baseline. (negative values indicate below baseline).
-	 * 
-	 * @param underlinePosition
-	 */
-	public function setUnderlinePosition(underlinePosition:Int):PostTable {
-		this.underlinePosition = underlinePosition;
-        return this;
-	}
-
-	/**
-	 * Set a suggested value for the underline thickness.
-	 * 
-	 * @param underlineThickness
-	 */
-	public function setUnderlineThickness(underlineThickness:Int):PostTable {
-		this.underlineThickness = underlineThickness;
-        return this;
-	}
-
-	/**
-	 * Set the version use constants VERSION_1_0 etc.
-	 * 
-	 * @param version
-	 */
-	public function setVersion(version:Int):PostTable {
-		this.version = version;
-        return this;
 	}
 
 

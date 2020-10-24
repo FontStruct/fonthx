@@ -13,3 +13,4 @@
 -resource assets/codepages/CP1257.TXT@CP1257
 -resource assets/codepages/CP1258.TXT@CP1258
 -resource assets/encodings/macroman.txt@ENCMACROMAN
+-resource assets/aglfn.txt@AGLFN

@@ -1,6 +1,8 @@
 package fonthx.formats.tt;
 
-import fonthx.model.font.features.FeatureTag;
+import fonthx.model.font.glyphnames.GlyphNamer;
+import fonthx.model.font.glyphnames.AGLFN;
+import fonthx.model.font.unicode.UnicodeRanges;
 import fonthx.formats.tt.tables.opentype.GPOSTable;
 import haxe.Int64;
 import haxe.io.BytesBuffer;
@@ -18,7 +20,6 @@ import fonthx.formats.tt.constants.OS2Weight;
 import fonthx.formats.tt.constants.OS2Width;
 import fonthx.formats.tt.constants.Platform;
 import fonthx.formats.tt.constants.UnicodeEncoding;
-import fonthx.formats.tt.tables.CFF;
 import fonthx.formats.tt.tables.CharacterMapFormat4Subtable;
 import fonthx.formats.tt.tables.CharacterMapTable;
 import fonthx.formats.tt.tables.FontHeader;
@@ -37,6 +38,7 @@ import fonthx.formats.tt.tables.Table;
 import fonthx.formats.tt.tables.TableDirectory;
 import fonthx.formats.tt.utils.Utils;
 import fonthx.formats.tt.writers.TrueTypeFileWriter;
+import fonthx.formats.tt.cff.CFF;
 import fonthx.model.font.IContourGlyph;
 import fonthx.model.font.IFont;
 import fonthx.model.geom.Rectangle;
@@ -57,6 +59,8 @@ class TrueTypeBuilder {
             return null;
         }
 
+        GlyphNamer.nameGlyphs(font.glyphs);
+
         ExecutionTimer.start('TrueType.build');
 
         var tdir = new TableDirectory();
@@ -75,7 +79,7 @@ class TrueTypeBuilder {
         ttf.addTable(createMaximumProfileTable(font));
         ttf.addTable(createNamingTable(font));
         ttf.addTable(createOS2Table(font));
-        ttf.addTable(createPostTable(font));
+        ttf.addTable(new PostTable(font, PostTable.VERSION_3_0));
 
         if (format == FontFileFormat.OpenType) {
             ttf.addTable(createCFFTable(font));
@@ -162,11 +166,11 @@ class TrueTypeBuilder {
         var head = new FontHeader();
         var now = Date.now();
         head
-            .setFormat(format)
-            .setCreated(Utils.getMillisSince1904(now))
-            .setModified(Utils.getMillisSince1904(now))
-            .setFontRevision(1, 0)
-            .setEmSquare(fnt.emSquare);
+        .setFormat(format)
+        .setCreated(Utils.getMillisSince1904(now))
+        .setModified(Utils.getMillisSince1904(now))
+        .setFontRevision(1, 0)
+        .setEmSquare(fnt.emSquare);
         // calculate bounds
         var bounds = null;
         for (g in fnt.glyphs) {
@@ -183,11 +187,11 @@ class TrueTypeBuilder {
             bounds = new Rectangle();
         }
         head
-            .setBounds(bounds)
-            .setMacStyle(MacStyle.REGULAR) // todo: parameterize
-            .setFontDirectionHint(2) // todo: make constants for this
-            .setLongOffsetFormat(true)
-            .setSmallestReadablePixelSize(8)
+        .setBounds(bounds)
+        .setMacStyle(MacStyle.REGULAR) // todo: parameterize
+        .setFontDirectionHint(2) // todo: make constants for this
+        .setLongOffsetFormat(true)
+        .setSmallestReadablePixelSize(8)
         ;
         return head;
     }
@@ -238,17 +242,17 @@ class TrueTypeBuilder {
             }
         }
         table
-            .setAdvanceWidthMax(maxAdvancedWidth)
-            .setAscender(Std.int(font.realAscender))
-            .setCaretOffset(0)
-            .setCaretSlopeRise(1)
-            .setCaretSlopeRun(0)
-            .setDescender(Std.int(font.realDescender))
-            .setLineGap(font.getLineGap())
-            .setMinLeftSideBearing(minLSB)
-            .setMinRightSideBearing(minRSB)
-            .setNumberOfHMetrics(font.getNumberOfHMetrics())
-            .setXMaxExtent(xMaxExtent)
+        .setAdvanceWidthMax(maxAdvancedWidth)
+        .setAscender(Std.int(font.realAscender))
+        .setCaretOffset(0)
+        .setCaretSlopeRise(1)
+        .setCaretSlopeRun(0)
+        .setDescender(Std.int(font.realDescender))
+        .setLineGap(font.getLineGap())
+        .setMinLeftSideBearing(minLSB)
+        .setMinRightSideBearing(minRSB)
+        .setNumberOfHMetrics(font.getNumberOfHMetrics())
+        .setXMaxExtent(xMaxExtent)
         ;
         return table;
     }
@@ -264,8 +268,8 @@ class TrueTypeBuilder {
     private static function createMaximumProfileTable(fnt:IFont):MaximumProfileTable {
         var table = new MaximumProfileTable();
         table
-            .setVersion(MaximumProfileTable.TRUETYPE_OUTLINES)
-            .setNumGlyphs(fnt.glyphs.length);
+        .setVersion(MaximumProfileTable.TRUETYPE_OUTLINES)
+        .setNumGlyphs(fnt.glyphs.length);
         var maxPoints = 0;
         var maxContours = 0;
         for (g in fnt.glyphs) {
@@ -279,8 +283,8 @@ class TrueTypeBuilder {
             }
         }
         table
-            .setMaxPoints(maxPoints)
-            .setMaxContours(maxContours);
+        .setMaxPoints(maxPoints)
+        .setMaxContours(maxContours);
         return table;
     }
 
@@ -340,38 +344,38 @@ class TrueTypeBuilder {
         var table = new OS2Table();
         var halfEM = Std.int(font.emSquare / 2);
         table
-            .setVersion(0x0002)
-            .setAvgCharWidth(calculateAvgCharWidth(font))
-            .setWeightClass(OS2Weight.NORMAL)
-            .setWidthClass(OS2Width.NORMAL)
-            .setEmbedding(OS2Embeddable.PREVIEW_AND_PRINT)
-            .setYSubscriptXSize(halfEM)
-            .setYSubscriptYSize(halfEM)
-            .setYSubscriptXOffset(0)
-            .setYSubscriptYOffset(Std.int(font.idealDescender / 2))
-            .setYSuperscriptXSize(halfEM)
-            .setYSuperscriptYSize(halfEM)
-            .setYSuperscriptXOffset(0)
-            .setYSuperscriptYOffset(halfEM)
-            .setStrikeoutSize(Std.int(font.emSquare / 20))
-            .setStrikeoutPosition(Std.int(font.emSquare / 5))
+        .setVersion(0x0002)
+        .setAvgCharWidth(calculateAvgCharWidth(font))
+        .setWeightClass(OS2Weight.NORMAL)
+        .setWidthClass(OS2Width.NORMAL)
+        .setEmbedding(OS2Embeddable.PREVIEW_AND_PRINT)
+        .setYSubscriptXSize(halfEM)
+        .setYSubscriptYSize(halfEM)
+        .setYSubscriptXOffset(0)
+        .setYSubscriptYOffset(Std.int(font.idealDescender / 2))
+        .setYSuperscriptXSize(halfEM)
+        .setYSuperscriptYSize(halfEM)
+        .setYSuperscriptXOffset(0)
+        .setYSuperscriptYOffset(halfEM)
+        .setStrikeoutSize(Std.int(font.emSquare / 20))
+        .setStrikeoutPosition(Std.int(font.emSquare / 5))
         ;
         var codepoints:Array<Int> = new Array<Int>();
         for (g in font.glyphs) {
             codepoints.push(g.codepoint);
-            table.addUnicodeRange(UnicodeRange.getKeyForCodepoint(g.codepoint));
+            table.addUnicodeRange(UnicodeRanges.getKeyForCodepoint(g.codepoint));
         }
 
         table
-            .setVendorID(font.vendorID)
-            .setFontSelectionFlags(OS2FontSelectionFlags.REGULAR)
-            .setFirstCharIndex(getFirstCharCode(font))
-            .setLastCharIndex(getLastCharCode(font))
-            .setTypoAscender(Std.int(font.idealAscender)) // http://typophile.com/node/13081?
-            .setTypoDescender(Std.int(font.idealDescender))
-            .setTypoLineGap(Std.int(font.typoLineGap))
-            .setWinAscent(Std.int(font.realAscender))
-            .setWinDescent(Std.int(0 - font.realDescender));
+        .setVendorID(font.vendorID)
+        .setFontSelectionFlags(OS2FontSelectionFlags.REGULAR)
+        .setFirstCharIndex(getFirstCharCode(font))
+        .setLastCharIndex(getLastCharCode(font))
+        .setTypoAscender(Std.int(font.idealAscender)) // http://typophile.com/node/13081?
+        .setTypoDescender(Std.int(font.idealDescender))
+        .setTypoLineGap(Std.int(font.typoLineGap))
+        .setWinAscent(Std.int(font.realAscender))
+        .setWinDescent(Std.int(0 - font.realDescender));
 
         // trace([font.idealAscender, font.idealDescender, font.typoLineGap, font.realAscender, font.realDescender].join(' '));
 
@@ -387,9 +391,9 @@ class TrueTypeBuilder {
             capHeight = Std.int(H.getBounds().height);
         }
         table
-            .setCapHeight(capHeight)
-            .setDefaultChar(0)
-            .setBreakChar(0x20);
+        .setCapHeight(capHeight)
+        .setDefaultChar(0)
+        .setBreakChar(0x20);
 
         var codepages:Array<OS2Codepage> = new Array<OS2Codepage>();
         codepages.push(new OS2Codepage(OS2Codepage.LATIN_1));
@@ -407,17 +411,6 @@ class TrueTypeBuilder {
                 table.addCodePage(cpg.getBit());
             }
         }
-        return table;
-    }
-
-    private static function createPostTable(font:IFont):PostTable {
-        var table = new PostTable(PostTable.VERSION_3_0);
-        table
-            .setMonospaced(false)
-            .setItalicAngle(0, 0)
-            .setUnderlinePosition(Std.int(font.emSquare / 10))
-            .setUnderlineThickness(Std.int(font.emSquare / 20))
-        ;
         return table;
     }
 
@@ -498,7 +491,7 @@ class TrueTypeBuilder {
             checksum += (bytes.get(i) << 24) + (bytes.get(i + 1) << 16) + (bytes.get(i + 2) << 8) + (bytes.get(i + 3));
             i += 4;
         }
-        checksum %= Int64.make(1,0); //Math.pow(2,32);
+        checksum %= Int64.make(1, 0); //Math.pow(2,32);
         return checksum.low;
     }
 

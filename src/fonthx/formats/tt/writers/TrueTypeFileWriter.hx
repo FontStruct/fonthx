@@ -1,9 +1,10 @@
 package fonthx.formats.tt.writers;
 
 import fonthx.formats.tt.io.IByteWriter;
-import fonthx.utils.StringEncoder;
 import haxe.Int64;
 import haxe.io.Bytes;
+
+using fonthx.formats.tt.types.Fixed;
 
 class TrueTypeFileWriter implements ITrueTypeWriter {
 
@@ -84,6 +85,11 @@ class TrueTypeFileWriter implements ITrueTypeWriter {
         return this;
     }
 
+    public function writeCard16(b:Int):ITrueTypeWriter {
+        writeUINT16(b);
+        return this;
+    }
+
     public function writeTag(s:String):ITrueTypeWriter {
         write(s.charCodeAt(0));
         write(s.charCodeAt(1));
@@ -152,9 +158,14 @@ class TrueTypeFileWriter implements ITrueTypeWriter {
 	 * append a fixed 32-bit signed fixed-ContourPoint number (16.16)
 	 * @throws IOException 
 	 */
-    public function writeFixed(mantissa:Int, fraction:Int):ITrueTypeWriter {
-        writeUSHORT(mantissa);
-        writeUSHORT(fraction);
+    public function writeFixed(f:Float):ITrueTypeWriter {
+        writeULONG(f.toFixed());
+        return this;
+    }
+
+    public function writeVersion(major:Int, minor:Int):ITrueTypeWriter {
+        writeUSHORT(major);
+        writeUSHORT(minor);
         return this;
     }
 

@@ -1,4 +1,4 @@
-package fonthx.model.font;
+package fonthx.model.font.unicode;
 
 typedef Blocks = {
     var start:Int;

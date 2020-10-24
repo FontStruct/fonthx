@@ -39,6 +39,11 @@ interface IContourGlyph {
     var rsb(get, set):Float;
 
     /**
+    * get/set the glyph’s name
+    **/
+    var name(get, set):String;
+
+    /**
     * @return true if the Glyph is unmapped (i.e. has no codepoint mapping in the cmap)
     **/
     var unmapped:Bool;

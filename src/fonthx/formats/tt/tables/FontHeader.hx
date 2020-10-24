@@ -14,8 +14,8 @@ class FontHeader extends Table {
 
     private var format:FontFileFormat;
     private var checkSumAdjustment:Int; // long
-    private var fontRevisionMantissa:Int;
-    private var fontRevisionFraction:Int;
+    private var fontVersionMajor:Int;
+    private var fontVersionMinor:Int;
     private var unitsPerEm:Int;
     private var flags:Int;
     private var created:Int64;
@@ -36,8 +36,8 @@ class FontHeader extends Table {
         super(Table.HEAD);
         format = FontFileFormat.TrueType;
         checkSumAdjustment = 0;
-        fontRevisionMantissa = 1;
-        fontRevisionFraction = 0;
+        fontVersionMajor = 1;
+        fontVersionMinor = 0;
         unitsPerEm = 1024;
         // todo: fully implement flags
         flags = 0 << 15 |   // Bit 0: Baseline for font at y=0;
@@ -76,7 +76,7 @@ class FontHeader extends Table {
             tt.writeULONG(0x00010000);
         }
         tt
-        .writeFixed(fontRevisionMantissa, fontRevisionFraction)
+        .writeVersion(fontVersionMajor, fontVersionMinor)
         .writeULONG(checkSumAdjustment)
         .writeULONG(0x5F0F3CF5)
         .writeUSHORT(flags)
@@ -121,8 +121,8 @@ class FontHeader extends Table {
 	 * @param fraction floating point part of version,  e.g. the 0 in 1.0
 	 */
     public function setFontRevision(mantissa:Int, fraction:Int):FontHeader {
-        fontRevisionMantissa = mantissa;
-        fontRevisionFraction = fraction;
+        fontVersionMajor = mantissa;
+        fontVersionMinor = fraction;
         return this;
     }
 

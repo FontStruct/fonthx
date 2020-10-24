@@ -2,7 +2,6 @@ package fonthx.formats.tt.tables;
 
 import fonthx.formats.tt.glyph.GlyphDescriptionContourConsumer;
 import fonthx.model.font.IFont;
-import fonthx.formats.tt.DrawingCommand;
 import fonthx.formats.tt.glyph.SimpleGlyphDescription;
 import fonthx.formats.tt.writers.ITrueTypeWriter;
 

@@ -5,6 +5,7 @@ build/resources.hxml
 
 -lib format
 -lib hxcpp
+-lib polygonal-printf
 
 -cpp dist/examples/pixelfonter/wasm/
 

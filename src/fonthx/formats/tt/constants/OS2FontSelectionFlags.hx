@@ -1,7 +1,7 @@
 package fonthx.formats.tt.constants;
 
 @:enum
-abstract OS2FontSelectionFlags(Int) {
+abstract OS2FontSelectionFlags(Int) to Int {
 
 	/**
 	 * Font contains Italic characters, otherwise they are upright.

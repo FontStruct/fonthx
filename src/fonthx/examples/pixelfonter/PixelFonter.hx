@@ -1,8 +1,8 @@
 package fonthx.examples.pixelfonter;
 
 import fonthx.utils.ExecutionTimer;
-import fonthx.formats.tt.FontFileFormat;
-import fonthx.formats.tt.TrueTypeBuilder;
+import fonthx.opentype.FontFileFormat;
+import fonthx.opentype.OpenTypeBuilder;
 import haxe.io.Bytes;
 
 using StringTools;
@@ -55,7 +55,7 @@ class PixelFonter {
         }
 
         font.prepareForExport();
-        var bytes = TrueTypeBuilder.build(font, TrueType);
+        var bytes = OpenTypeBuilder.build(font, TrueType);
 
         ExecutionTimer.end('PixelFonter::generate');
 

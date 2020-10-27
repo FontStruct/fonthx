@@ -5,7 +5,6 @@ using StringTools;
 class GlyphNamer {
 
     public static function nameGlyphs(glyphs:Array<IContourGlyph>) {
-        trace("naming glyphs");
         AGLFN.init();
         var idx = 0;
         for (g in glyphs) {

@@ -1,6 +1,6 @@
 package fonthx.model.font;
 
-import fonthx.formats.tt.types.Fixed;
+import fonthx.opentype.types.Fixed;
 import fonthx.model.font.features.Layout;
 import fonthx.model.font.features.Script;
 import fonthx.model.font.features.FeatureTag;

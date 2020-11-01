@@ -5,6 +5,7 @@ import fonthx.opentype.io.IByteWriter;
 import haxe.Int64;
 import haxe.io.Bytes;
 
+using Lambda;
 using fonthx.opentype.types.Fixed;
 
 class TrueTypeFileWriter implements ITrueTypeWriter {
@@ -170,6 +171,42 @@ class TrueTypeFileWriter implements ITrueTypeWriter {
         return this;
     }
 
+    public function writeByteBlockIndex(blocks:Array<Bytes>):ITrueTypeWriter {
+        writeCard16(blocks.length);      // count Number of objects stored in INDEX
+        if (blocks.length == 0) {
+            return this; // we only need the count field
+        }
+        // calc offsize
+        var offSize = 4;
+        var lastOffset = blocks.fold(function(s:Bytes, acc:Int) {
+            return acc + s.length;
+        }, 1);
+        if (lastOffset <= 0xff) {
+            offSize = 1;
+        } else if (lastOffset <= 0xffff) {
+            offSize = 2;
+        } else if (lastOffset <= 0xffffff) {
+            offSize = 3;
+        }
+        writeByte(offSize);              // offSize (1-4, number of bytes used to store offsets in this index)
+        var offset = 1;
+        for (o in blocks) {
+            writeByte(offset);           // array of offsets
+            offset += o.length;
+        }
+        writeByte(offset);               // An additional offset is added at the end of the offset array so the length of the last object may be determined
+        for (bytes in blocks) {
+            writeBytes(bytes);          // write the actual data
+        }
+        return this;
+    }
+
+    public function writeStringsIndex(data:Array<String>):ITrueTypeWriter {
+        var blocks = data.map(function(s:String) {
+            return Bytes.ofString(s);
+        });
+        return writeByteBlockIndex(blocks);
+    }
     /**
 	 *  make sure the stream length is divisible by 4 
 	 *  pad with zeroes

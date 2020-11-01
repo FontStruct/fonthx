@@ -1,7 +1,7 @@
 package fonthx.opentype.cff.operators;
 
 @:enum
-abstract CharStringType2Ops(Int) to Int {
+abstract CharstringOp(Int) to Int {
 
     var escape = 0xC00;
 
@@ -116,5 +116,7 @@ abstract CharStringType2Ops(Int) to Int {
     var vvcurveto = 26;
 
     var endchar = 14;
+
+    var callgsubr = 29;
 
 }

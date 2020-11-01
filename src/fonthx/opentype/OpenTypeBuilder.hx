@@ -13,7 +13,6 @@ import fonthx.opentype.constants.OS2Weight;
 import fonthx.opentype.constants.OS2Width;
 import fonthx.opentype.constants.Platform;
 import fonthx.opentype.constants.UnicodeEncoding;
-import fonthx.opentype.options.BuildOptions.DefaultOptions;
 import fonthx.opentype.tables.CharacterMapFormat4Subtable;
 import fonthx.opentype.tables.CharacterMapTable;
 import fonthx.opentype.tables.FontHeader;
@@ -40,7 +39,6 @@ import fonthx.model.font.unicode.UnicodeRanges;
 import fonthx.model.geom.Rectangle;
 import fonthx.utils.ExecutionTimer;
 import fonthx.utils.MathUtils;
-import haxe.ds.StringMap;
 import haxe.Int64;
 import haxe.io.Bytes;
 import haxe.io.BytesBuffer;
@@ -56,9 +54,11 @@ class OpenTypeBuilder {
     public static function build(
         font:IFont,
         format:FontFileFormat = FontFileFormat.TrueType,
-        options:StringMap<String> = null
+        options:BuildOptions = null
     ):Bytes {
-        options = DefaultOptions.provide().merge(options);
+        if (options == null) {
+            options = new BuildOptions();
+        }
 
         trace("Generating font file for " + font.name + " " + font.glyphs.length + " glyphs");
 
@@ -85,11 +85,11 @@ class OpenTypeBuilder {
         }
 
         ttf.addTable(createMaximumProfileTable(font));
-        ttf.addTable(createNamingTable(font));
+        ttf.addTable(createNamingTable(font, options));
         ttf.addTable(createOS2Table(font));
         ttf.addTable(new PostTable(font, PostTable.VERSION_3_0));
 
-        if (format == FontFileFormat.OpenType) {
+        if (format == FontFileFormat.CFF) {
             ttf.addTable(createCFFTable(font, options));
         } else {
             var glyphTable = new GlyphTable(font);
@@ -170,12 +170,12 @@ class OpenTypeBuilder {
     private static function createFontHeader(fnt:IFont, format:FontFileFormat):FontHeader {
         var head = new FontHeader();
         var now = Date.now();
-        head
-        .setFormat(format)
-        .setCreated(Utils.getMillisSince1904(now))
-        .setModified(Utils.getMillisSince1904(now))
-        .setFontRevision(1, 0)
-        .setEmSquare(fnt.emSquare);
+        head.setFormat(format)
+            .setCreated(Utils.getMillisSince1904(now))
+            .setModified(Utils.getMillisSince1904(now))
+            .setFontRevision(1, 0)
+            .setEmSquare(fnt.emSquare)
+        ;
         // calculate bounds
         var bounds = null;
         for (g in fnt.glyphs) {
@@ -191,12 +191,11 @@ class OpenTypeBuilder {
         if (bounds == null) {
             bounds = new Rectangle();
         }
-        head
-        .setBounds(bounds)
-        .setMacStyle(MacStyle.REGULAR) // todo: parameterize
-        .setFontDirectionHint(2) // todo: make constants for this
-        .setLongOffsetFormat(true)
-        .setSmallestReadablePixelSize(8)
+        head.setBounds(bounds)
+            .setMacStyle(MacStyle.REGULAR) // todo: parameterize
+            .setFontDirectionHint(2) // todo: make constants for this
+            .setLongOffsetFormat(true)
+            .setSmallestReadablePixelSize(8)
         ;
         return head;
     }
@@ -293,7 +292,7 @@ class OpenTypeBuilder {
         return table;
     }
 
-    private static function createNamingTable(fnt:IFont):NamingTable {
+    private static function createNamingTable(fnt:IFont, options:BuildOptions):NamingTable {
         var table = new NamingTable();
         for (i in 1...3) {
             var platform = Platform.UNICODE;
@@ -334,9 +333,9 @@ class OpenTypeBuilder {
                 addRecord(NamingRecord.LICENSE_URL, fnt.licenseURL);
             }
             addRecord(NamingRecord.SAMPLE_TEXT, fnt.sampleText);
-            if (fnt.extraNamingRecords != null) {
-                for (id in fnt.extraNamingRecords.keys()) {
-                    addRecord(id, fnt.extraNamingRecords.get(id));
+            if (options.extraNamingRecords != null) {
+                for (id in options.extraNamingRecords.keys()) {
+                    addRecord(id, options.extraNamingRecords.get(id));
                 }
             }
         }
@@ -431,7 +430,7 @@ class OpenTypeBuilder {
         return table;
     }
 
-    private static function createCFFTable(font:IFont, options:StringMap<String>):CFF {
+    private static function createCFFTable(font:IFont, options:BuildOptions):CFF {
         var table = new CFF(font, options);
         return table;
     }

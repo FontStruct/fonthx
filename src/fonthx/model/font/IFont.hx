@@ -26,7 +26,7 @@ interface IFont {
     function getGlyphForCodepoint(cp:Int):IContourGlyph;
     function getKerningPairs():Array<PositioningPair>;
 
-    // todo put following in IExportableFont or ITrueTypable (and IPostscriptable)?
+    // todo put following in IExportableFont or IOpenTypable (and IPostscriptable)?
     var description(get, null):String;
     var fullName(get, null):String;
     var styleModifiers(get, null):String;
@@ -42,7 +42,6 @@ interface IFont {
     var URL(get, null):String;
     var sampleText(get, null):String;
 
-    var extraNamingRecords(get, null):IntMap<String>;
     var idealAscender(get, null):Float;
     var idealDescender(get, null):Float;
     var realAscender(get, null):Float;

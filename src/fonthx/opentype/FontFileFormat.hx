@@ -3,5 +3,5 @@ package fonthx.opentype;
 @:enum
 abstract FontFileFormat(String) {
     var TrueType = 'ttf';
-    var OpenType = 'otf';
+    var CFF = 'otf';
 }

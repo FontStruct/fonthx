@@ -35,7 +35,6 @@ class AbstractFont implements IFont {
     public var license(get, null):String;
     public var licenseURL(get, null):String;
     public var styleModifiers(get, null):String;
-    public var extraNamingRecords(get, null):IntMap<String>;
 
     public function new() {
         glyphs = new Array();
@@ -46,7 +45,6 @@ class AbstractFont implements IFont {
         copyright = '';
         description = '';
         emSquare = 1000;
-        extraNamingRecords = new IntMap();
     }
 
     public function getGlyphForCodepoint(cp:Int):IContourGlyph {
@@ -252,10 +250,6 @@ class AbstractFont implements IFont {
 
     public function get_layout():Layout {
         return layout;
-    }
-
-    function get_extraNamingRecords():IntMap<String> {
-        return extraNamingRecords;
     }
 
     function get_glyphs():Array<IContourGlyph> {

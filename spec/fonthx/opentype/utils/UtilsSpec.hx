@@ -1,4 +1,4 @@
-package fonthx.formats.tt.utils;
+package fonthx.opentype.utils;
 
 import haxe.Int64;
 using buddy.Should;

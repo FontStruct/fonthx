@@ -1,13 +1,13 @@
-package fonthx.formats.tt.tables;
+package fonthx.opentype.tables;
 
 import fonthx.model.font.features.lookups.LookupType;
 import fonthx.model.font.features.lookups.Lookup;
 import fonthx.model.font.features.LanguageTag;
 import fonthx.model.font.features.Language;
-import fonthx.formats.tt.tables.opentype.LayoutTable;
-import fonthx.formats.tt.io.ByteWriter;
-import fonthx.formats.tt.tables.opentype.GPOSTable;
-import fonthx.formats.tt.writers.TrueTypeFileWriter;
+import fonthx.opentype.tables.opentype.LayoutTable;
+import fonthx.opentype.io.ByteWriter;
+import fonthx.opentype.tables.opentype.GPOSTable;
+import fonthx.opentype.writers.TrueTypeFileWriter;
 import fonthx.model.font.features.Feature;
 import fonthx.model.font.features.FeatureTag;
 import fonthx.model.font.features.Layout;
@@ -22,9 +22,9 @@ using Lambda;
 class GPOSSpec extends buddy.BuddySuite {
 
     private function getTableAsArray(gpos:LayoutTable):Array<Int> {
-        var byteWriter = new ByteWriter();
-        gpos.write(new TrueTypeFileWriter(byteWriter));
-        var bytes = byteWriter.getBytes();
+        var tt = new TrueTypeFileWriter();
+        gpos.write(tt);
+        var bytes = tt.getBytes();
         var b = [];
         for (i in 0...bytes.length) {
             b.push(bytes.get(i));

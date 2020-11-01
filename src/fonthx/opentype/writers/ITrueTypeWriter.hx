@@ -93,6 +93,13 @@ interface ITrueTypeWriter {
     **/
     public function writeCard16(b:Int):ITrueTypeWriter;
 
+    /**
+    * Write a CFF Index of Byte Blocks
+    **/
+    public function writeByteBlockIndex(blocks:Array<Bytes>):ITrueTypeWriter;
+
+    public function writeStringsIndex(data:Array<String>):ITrueTypeWriter;
+
     public function getBytes():Bytes;
 
 }

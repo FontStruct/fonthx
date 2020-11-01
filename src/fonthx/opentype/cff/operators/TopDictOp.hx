@@ -1,7 +1,7 @@
 package fonthx.opentype.cff.operators;
 
 @:enum
-abstract TopDictOps(Int) to Int {
+abstract TopDictOp(Int) to Int {
 
     var escape = 0xC00;
 

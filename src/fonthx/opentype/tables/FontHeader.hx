@@ -13,9 +13,8 @@ import fonthx.opentype.writers.ITrueTypeWriter;
 class FontHeader extends Table {
 
     private var format:FontFileFormat;
-    private var checkSumAdjustment:Int; // long
-    private var fontVersionMajor:Int;
-    private var fontVersionMinor:Int;
+    private var tableVersionMajor:Int;
+    private var tableVersionMinor:Int;
     private var unitsPerEm:Int;
     private var flags:Int;
     private var created:Int64;
@@ -35,9 +34,8 @@ class FontHeader extends Table {
     public function new() {
         super(Table.HEAD);
         format = FontFileFormat.TrueType;
-        checkSumAdjustment = 0;
-        fontVersionMajor = 1;
-        fontVersionMinor = 0;
+        tableVersionMajor = 1;
+        tableVersionMinor = 0;
         unitsPerEm = 1024;
         // todo: fully implement flags
         flags = 0 << 15 |   // Bit 0: Baseline for font at y=0;
@@ -70,14 +68,14 @@ class FontHeader extends Table {
     }
 
     override public function write(tt:ITrueTypeWriter) {
-        if (format == OpenType) {
+        if (format == FontFileFormat.CFF) {
             tt.writeTag('OTTO');
         } else {
             tt.writeULONG(0x00010000);
         }
         tt
-        .writeVersion(fontVersionMajor, fontVersionMinor)
-        .writeULONG(checkSumAdjustment)
+        .writeVersion(tableVersionMajor, tableVersionMinor)
+        .writeULONG(0) // will be rewritten
         .writeULONG(0x5F0F3CF5)
         .writeUSHORT(flags)
         .writeUSHORT(unitsPerEm) // unitsPerEm Valid range is from 16 to 16384
@@ -121,18 +119,8 @@ class FontHeader extends Table {
 	 * @param fraction floating point part of version,  e.g. the 0 in 1.0
 	 */
     public function setFontRevision(mantissa:Int, fraction:Int):FontHeader {
-        fontVersionMajor = mantissa;
-        fontVersionMinor = fraction;
-        return this;
-    }
-
-    /**
-	 * Set the checksum adjustment for this font
-	 * @param fontLength
-	 * the length of the entire font in bytes
-	 */
-    public function setCheckSumAdjustment(fontLength:Int):FontHeader {
-        checkSumAdjustment = 0xB1B0AFBA - fontLength;
+        tableVersionMajor = mantissa;
+        tableVersionMinor = fraction;
         return this;
     }
 

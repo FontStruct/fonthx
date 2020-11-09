@@ -46,6 +46,10 @@ Run:
 
     java -jar dist/examples/pixelfonter/java/PixelFonterApp.jar -i build/examples/pixelfonter/pixel-font-5x5.png -c65-91 -o tmp/pixelfont.ttf
     
+Or, for a font with CFF outlines:
+
+    java -jar dist/examples/pixelfonter/java/PixelFonterApp.jar -i build/examples/pixelfonter/pixel-font-5x5.png -c65-91 -o tmp/pixelfont.otf -f otf    
+    
 ## Try the same thing for native C++
 
 Build:

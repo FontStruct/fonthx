@@ -191,10 +191,10 @@ class TrueTypeFileWriter implements ITrueTypeWriter {
         writeByte(offSize);              // offSize (1-4, number of bytes used to store offsets in this index)
         var offset = 1;
         for (o in blocks) {
-            writeByte(offset);           // array of offsets
+            writeOffset(offset, offSize);
             offset += o.length;
         }
-        writeByte(offset);               // An additional offset is added at the end of the offset array so the length of the last object may be determined
+        writeOffset(offset, offSize);            // An additional offset is added at the end of the offset array so the length of the last object may be determined
         for (bytes in blocks) {
             writeBytes(bytes);          // write the actual data
         }
@@ -207,6 +207,23 @@ class TrueTypeFileWriter implements ITrueTypeWriter {
         });
         return writeByteBlockIndex(blocks);
     }
+
+    public function writeOffset(offset:Int, offSize:Int) {
+        switch (offSize) {
+            case 1:
+                writeByte(offset);
+            case 2:
+                writeUSHORT(offset);
+            case 3:
+                writeByte((offset >>> 16) & 0xFF);
+                writeByte((offset >>> 8) & 0xFF);
+                writeByte(offset & 0xFF);
+            default:
+                writeULONG(offset);
+        }
+    }
+
+
     /**
 	 *  make sure the stream length is divisible by 4 
 	 *  pad with zeroes

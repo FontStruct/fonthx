@@ -117,7 +117,7 @@ class OpenTypeBuilder {
             var table = ttf.getTable(tag);
             if (table == null) continue;
             numTables++;
-            var writer = new TrueTypeFileWriter();
+            var writer = new TrueTypeFileWriter(); // need a factory for this (DI)
             trace('Writing ${table.tag}'); // todo control verbosity
             table.write(writer);
             table.length = writer.getPosition(); // store actual not padded length

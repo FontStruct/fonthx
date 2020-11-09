@@ -26,15 +26,10 @@ class Dictionary {
 
     public var bytes:BytesBuffer;
 
-    public function new() {
-        bytes = new BytesBuffer();
-    }
-
-    public function addIntArray(k:Int, v:Array<Int>) {
-        for (i in v) {
-            bytes.encodeInt(i);
+    public function new(bytes:BytesBuffer = null) {
+        if (bytes == null) {
+            this.bytes = new BytesBuffer();
         }
-        bytes.encodeOperator(k);
     }
 
     public function addInt(k:Int, v:Int) {
@@ -50,5 +45,21 @@ class Dictionary {
         bytes.encodeFixed(f);
         bytes.encodeOperator(k);
     }
+
+    public function addIntArray(k:Int, v:Array<Int>) {
+        for (i in v) {
+            bytes.encodeInt(i);
+        }
+        bytes.encodeOperator(k);
+    }
+
+    public function addByte(b:Int) {
+        bytes.addByte(b);
+    }
+
+    public function addOperator(k:Int) {
+        bytes.encodeOperator(k);
+    }
+
 
 }

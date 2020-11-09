@@ -8,8 +8,8 @@ class Charsets {
 
     public static function write(tt:ITrueTypeWriter, f:IFont, strings:Strings) {
         var notdef = '.notdef';
-        var ranges = new Array<Range>();
-        var currRange = new Range();
+        var ranges = new Array<SIDRange>();
+        var currRange = new SIDRange();
         ranges.push(currRange);
         for (g in f.glyphs) {
             if (g.name == notdef) continue;
@@ -20,12 +20,12 @@ class Charsets {
                 } else if (currRange.continuesWith(sid)) {
                     currRange.extend(sid);
                 } else {
-                    currRange = new Range(sid);
+                    currRange = new SIDRange(sid);
                     ranges.push(currRange);
                 }
             }
         }
-        var maxRange = ranges.fold(function(r:Range, acc:Int) {
+        var maxRange = ranges.fold(function(r:SIDRange, acc:Int) {
             if (r.length() > acc) {
                 acc = r.length();
             }
@@ -41,7 +41,6 @@ class Charsets {
                 format = 2;
             }
         }
-
         tt.writeCard8(format);
 
         if (format == 0) {
@@ -55,6 +54,7 @@ class Charsets {
         } else {
             for (r in ranges) {
                 tt.writeUINT16(r.first);
+                trace(r.first, r.remaining);
                 if (format == 1) {
                     tt.writeCard8(r.remaining);
                 } else {
@@ -66,7 +66,7 @@ class Charsets {
 
 }
 
-private class Range {
+private class SIDRange {
     public var first(default, set):Int;
     public var remaining(get, null):Int;
     var last:Int;

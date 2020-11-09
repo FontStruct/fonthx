@@ -24,7 +24,7 @@ class Subpath {
     private var _hash:String;
     public function getHash(forceRehash = false):String {
         if (_hash == null || forceRehash) {
-         _hash = Md5.make(bytes).toString();
+         _hash = Md5.encode(bytes.toString()).toString();
         }
         return _hash;
     }
@@ -43,7 +43,7 @@ class Subpath {
     function get_bytes() {
         if (_bytes != null) return _bytes;
         var buffer:BytesBuffer = ops.fold(function(op:IOperation, b:BytesBuffer) {
-            b.addBytes(op.bytes, 0, b.length);
+            b.addBytes(op.bytes, 0, op.bytes.length);
             return b;
         }, new BytesBuffer());
         _bytes = buffer.getBytes();

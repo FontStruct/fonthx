@@ -22,12 +22,12 @@ class AbstractOperation implements IOperation {
     function get_bytes():Bytes {
         if (_bytes != null) return _bytes;
         var buffer = new BytesBuffer();
-        buffer.encodeOperator(op);
         if (values != null) {
             for (v in values) {
                 encodeValue(buffer, v);
             }
         }
+        buffer.encodeOperator(op);
         _bytes = buffer.getBytes();
         return _bytes;
     }

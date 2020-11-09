@@ -35,6 +35,9 @@ class PixelFonter {
         // create the font with an emSquare
         var font = new PixelFont(opts.name, em, pixelSize);
 
+        var notDef = font.addGlyph(0);
+        notDef.name = '.notdef';
+
         // build the glyph data
         var numRows = opts.imageHeight / opts.glyphHeight;
         for (idx in 0 ... codepoints.length) {
@@ -55,7 +58,7 @@ class PixelFonter {
         }
 
         font.prepareForExport();
-        var bytes = OpenTypeBuilder.build(font, TrueType);
+        var bytes = OpenTypeBuilder.build(font, opts.format == 'ttf' ? TrueType : CFF);
 
         ExecutionTimer.end('PixelFonter::generate');
 

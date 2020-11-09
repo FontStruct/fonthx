@@ -57,6 +57,7 @@ class PixelFonterBrowserApp {
             codepointString: '65-90,33-58',
             name: 'Pixel Font',
             outputPath: '',
+            format: 'ttf'
         }
         var bytes = Base64.decode(imageData.split(',')[1]);
         var handle = new BytesInput(bytes);
@@ -65,8 +66,8 @@ class PixelFonterBrowserApp {
         o.imageHeight = png.getHeader().height;
         o.pixelData = png.extract32();
         handle.close();
-        var ttf = PixelFonter.build(o);
-        return Base64.encode(ttf);
+        var file = PixelFonter.build(o);
+        return Base64.encode(file);
     }
 
 

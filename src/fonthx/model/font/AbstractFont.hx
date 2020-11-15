@@ -1,9 +1,7 @@
 package fonthx.model.font;
 
-import fonthx.opentype.types.Fixed;
 import fonthx.model.font.features.Layout;
 import fonthx.model.font.features.lookups.pairadjustment.PositioningPair;
-import haxe.ds.IntMap;
 using Lambda;
 
 class AbstractFont implements IFont {
@@ -40,8 +38,8 @@ class AbstractFont implements IFont {
         glyphs = new Array();
         name = 'Unnamed';
         layout = new Layout();
-        version="1.0";
-        style="Regular";
+        version = '1.0';
+        style = "Regular";
         copyright = '';
         description = '';
         emSquare = 1000;
@@ -116,7 +114,7 @@ class AbstractFont implements IFont {
     }
 
     function get_version():String {
-        return version;
+        return '1.0';
     }
 
     function set_version(value:String) {
@@ -276,7 +274,7 @@ class AbstractFont implements IFont {
         return false;
     }
 
-    public function getItalicAngle():Float{
+    public function getItalicAngle():Float {
         return 0;
     }
 

@@ -47,22 +47,27 @@ class PixelFont implements IFont extends AbstractFont {
     public function prepareForExport():Void {
 
         // todo: do default prep in TT Builder
-        // add space
-        var space = addGlyph(0x20);
-        space.bounds = new Rectangle(0, 0, pixelSize * 2, emSquare);
 
-        // add CR (0x0D)
-        var cr = addGlyph(0x0D);
-        cr.unmapped = true;
-
-        // add .nul glyph
-        var nul = addGlyph(0);
-        nul.unmapped = true;
+        // https://docs.microsoft.com/en-us/typography/opentype/spec/recom#glyph-0-the-notdef-glyph
+        // https://docs.microsoft.com/en-us/typography/opentype/otspec170/recom#first-four-glyphs-in-fonts
 
         // add .notdef glyph
         var notdef = addGlyph(0);
         notdef.unmapped = true;
         //NotDefGlyph.draw(notdef, 500);
+
+//        // add .nul glyph
+//        var nul = addGlyph(0);
+//
+//        // add CR (0x0D)
+//        var cr = addGlyph(0x0D);
+//        cr.bounds = new Rectangle(0, 0, pixelSize * 2, emSquare);
+//
+        // add space
+        var space = addGlyph(0x20);
+        space.bounds = new Rectangle(0, 0, pixelSize * 2, emSquare);
+
+
 
         // sort glyphs by codepoint
         glyphs.sort(function(a:IContourGlyph, b:IContourGlyph) {
@@ -103,7 +108,7 @@ class PixelFont implements IFont extends AbstractFont {
     }
 
     override public function get_version() {
-        return 'Version 0.0';
+        return '1.0';
     }
 
     override public function get_postscriptName() {

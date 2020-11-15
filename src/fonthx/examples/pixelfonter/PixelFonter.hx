@@ -1,5 +1,6 @@
 package fonthx.examples.pixelfonter;
 
+import fonthx.opentype.BuildOptions;
 import fonthx.utils.ExecutionTimer;
 import fonthx.opentype.FontFileFormat;
 import fonthx.opentype.OpenTypeBuilder;
@@ -35,9 +36,6 @@ class PixelFonter {
         // create the font with an emSquare
         var font = new PixelFont(opts.name, em, pixelSize);
 
-        var notDef = font.addGlyph(0);
-        notDef.name = '.notdef';
-
         // build the glyph data
         var numRows = opts.imageHeight / opts.glyphHeight;
         for (idx in 0 ... codepoints.length) {
@@ -52,7 +50,7 @@ class PixelFonter {
                     var idx = ((y * opts.imageWidth) + x) * 4;
                     var colour = opts.pixelData.get(idx);
                     if (colour != 0) continue;
-                    glyph.addPixel(dx, opts.glyphHeight - dy); // note inverted y axis
+                    glyph.addPixel(dx, opts.glyphHeight - (dy + 1)); // note inverted y axis
                 }
             }
         }

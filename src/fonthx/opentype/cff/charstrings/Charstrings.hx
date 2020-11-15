@@ -1,9 +1,8 @@
 package fonthx.opentype.cff.charstrings;
-import haxe.io.Bytes;
-import haxe.io.BytesBuffer;
-import haxe.ds.StringMap;
 import fonthx.model.font.IFont;
 import fonthx.opentype.writers.ITrueTypeWriter;
+import haxe.ds.StringMap;
+import haxe.io.Bytes;
 using fonthx.opentype.options.OptionMapTools;
 
 class Charstrings {
@@ -27,6 +26,11 @@ class Charstrings {
         for (g in f.glyphs) {
             var charstring = new Charstring(useFixed);
             g.walkContours(charstring);
+//            if (charstring.subpaths.length == 0) {
+//                trace("don’t write charstrings for empty glyphs?");
+//                continue;
+//            }
+
             charstrings.push(charstring);
         }
 
@@ -64,12 +68,9 @@ class Charstrings {
 
         // write index of charstrings
         var charstringBlocks:Array<Bytes> = new Array();
+
         for (charstring in charstrings) {
-            var buffer:BytesBuffer = new BytesBuffer();
-            for (subpath in charstring.subpaths) {
-                buffer.addBytes(subpath.bytes, 0, subpath.bytes.length);
-            }
-            charstringBlocks.push(buffer.getBytes());
+            charstringBlocks.push(charstring.bytes);
 
         }
         tt.writeByteBlockIndex(charstringBlocks);

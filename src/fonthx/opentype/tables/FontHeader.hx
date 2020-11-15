@@ -13,8 +13,6 @@ import fonthx.opentype.writers.ITrueTypeWriter;
 class FontHeader extends Table {
 
     private var format:FontFileFormat;
-    private var tableVersionMajor:Int;
-    private var tableVersionMinor:Int;
     private var unitsPerEm:Int;
     private var flags:Int;
     private var created:Int64;
@@ -27,6 +25,7 @@ class FontHeader extends Table {
     private var lowestRecPPEM:Int;
     private var fontDirectionHint:Int;
     private var indexToLocFormat:Int;
+    private var version:String;
 
     /**
 	 * Construct a new Font Header
@@ -34,8 +33,7 @@ class FontHeader extends Table {
     public function new() {
         super(Table.HEAD);
         format = FontFileFormat.TrueType;
-        tableVersionMajor = 1;
-        tableVersionMinor = 0;
+        version = '1.0';
         unitsPerEm = 1024;
         // todo: fully implement flags
         flags = 0 << 15 |   // Bit 0: Baseline for font at y=0;
@@ -68,13 +66,8 @@ class FontHeader extends Table {
     }
 
     override public function write(tt:ITrueTypeWriter) {
-        if (format == FontFileFormat.CFF) {
-            tt.writeTag('OTTO');
-        } else {
-            tt.writeULONG(0x00010000);
-        }
-        tt
-        .writeVersion(tableVersionMajor, tableVersionMinor)
+        tt.writeVersion(1, 0) // TT header version 1.0
+        .writeFixed(Std.parseFloat(version))
         .writeULONG(0) // will be rewritten
         .writeULONG(0x5F0F3CF5)
         .writeUSHORT(flags)
@@ -115,12 +108,9 @@ class FontHeader extends Table {
 
     /**
 	 * Set Manufacturer Font revision
-	 * @param mantissa whole number part of version, e.g. the 1 in 1.0
-	 * @param fraction floating point part of version,  e.g. the 0 in 1.0
 	 */
-    public function setFontRevision(mantissa:Int, fraction:Int):FontHeader {
-        tableVersionMajor = mantissa;
-        tableVersionMinor = fraction;
+    public function setVersion(version:String):FontHeader {
+        this.version = version;
         return this;
     }
 

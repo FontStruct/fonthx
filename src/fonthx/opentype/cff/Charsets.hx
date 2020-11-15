@@ -8,36 +8,40 @@ class Charsets {
 
     public static function write(tt:ITrueTypeWriter, f:IFont, strings:Strings) {
         var notdef = '.notdef';
+
+        // range calculation based on fonttools implementation
         var ranges = new Array<SIDRange>();
-        var currRange = new SIDRange();
-        ranges.push(currRange);
+        var first = -1;
+        var end = 0;
         for (g in f.glyphs) {
             if (g.name == notdef) continue;
             var sid = strings.sid(g.name);
             if (sid != -1) {
-                if (currRange.isNew()) {
-                    currRange.first = sid;
-                } else if (currRange.continuesWith(sid)) {
-                    currRange.extend(sid);
-                } else {
-                    currRange = new SIDRange(sid);
-                    ranges.push(currRange);
+                if (first == -1) {
+                    first = sid;
+                } else if (sid != end + 1) {
+                    ranges.push(new SIDRange(first, end - first));
+                    first = sid;
                 }
+                end = sid;
             }
         }
-        var maxRange = ranges.fold(function(r:SIDRange, acc:Int) {
-            if (r.length() > acc) {
-                acc = r.length();
-            }
-            return acc;
-        }, 0);
+        if (end > 0) {
+            ranges.push(new SIDRange(first, end - first));
+        }
 
         // choose format
         var format:Int = 0;
-        // if the number of ranges is less than 90% of the number of glyphs then we will use ranges
+        // if the number of ranges is less than 90% of the number of glyphs, then we will use ranges
         if (ranges.length < (f.glyphs.length * 0.9)) {
             format = 1;
-            if (maxRange > 256) {
+            var maxRange = ranges.fold(function(r:SIDRange, acc:Int) {
+                if (r.length() > acc) {
+                    acc = r.length();
+                }
+                return acc;
+            }, 0);
+            if (maxRange > 255) {
                 format = 2;
             }
         }
@@ -54,7 +58,6 @@ class Charsets {
         } else {
             for (r in ranges) {
                 tt.writeUINT16(r.first);
-                trace(r.first, r.remaining);
                 if (format == 1) {
                     tt.writeCard8(r.remaining);
                 } else {
@@ -67,40 +70,18 @@ class Charsets {
 }
 
 private class SIDRange {
-    public var first(default, set):Int;
-    public var remaining(get, null):Int;
-    var last:Int;
+    public var first:Int;
+    public var remaining:Int;
 
-    public function new(first:Int = -1) {
+    public function new(first:Int, remaining:Int) {
         this.first = first;
-        remaining = 0;
-    }
-
-    function set_first(value:Int):Int {
-        last = value;
-        return first = value;
-    }
-
-    public function continuesWith(sid:Int):Bool {
-        return sid - 1 == last;
-    }
-
-    public function extend(sid) {
-        remaining++;
-        last = sid;
+        this.remaining = remaining;
     }
 
     public function length() {
-        return remaining + 1;
+        return this.remaining;
     }
 
-    public function isNew() {
-        return first == -1;
-    }
-
-    function get_remaining():Int {
-        return remaining;
-    }
 }
 
 

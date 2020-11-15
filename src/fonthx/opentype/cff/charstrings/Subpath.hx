@@ -9,7 +9,6 @@ using Lambda;
 class Subpath {
 
     var ops:Array<IOperation>;
-    public var lastOp(get, never):IOperation;
     public var bytes(get, never):Bytes;
 
     public function new() {
@@ -30,10 +29,6 @@ class Subpath {
     }
 
 
-    function get_lastOp():IOperation {
-        return ops.length > 0 ? ops[ops.length - 1] : null;
-    }
-
     public function replaceWithGlobalSubroutine(subrIdx:Int) {
         ops = new Array();
         addOperation(new IntegerOperation(CharstringOp.callgsubr, [subrIdx]));
@@ -50,5 +45,7 @@ class Subpath {
         return _bytes;
     }
 }
+
+
 
 

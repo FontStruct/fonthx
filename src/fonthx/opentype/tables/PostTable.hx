@@ -21,7 +21,7 @@ class PostTable extends Table {
 	
 	/**
 	 * This is the version required by TrueType-based fonts to be used on Windows.
-	 * And the default
+	 * And the default. A version 2.0 'post' table can be used in fonts with TrueType or CFF version 2 outlines.
 	 */
     public static var VERSION_2_0 = 0x00020000;
 	

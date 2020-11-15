@@ -103,7 +103,6 @@ class CFF extends Table {
             //trace(baseOffset + topDictOffsetsLength);
             //trace(baseOffset + topDictOffsetsLength + sections.get(CHARSETS).length);
         } while (topDictOffsetsLength - lastOffsetsLength != 0);
-        trace(baseOffset + topDictOffsetsLength, baseOffset + topDictOffsetsLength + sections.get(CHARSETS).length);
         var topDictOffsetBytes = topDictOffsets.bytes.getBytes();
         topDict.bytes.addBytes(topDictOffsetBytes, 0, topDictOffsetBytes.length);
         var tdiw = new TrueTypeFileWriter();
@@ -142,7 +141,7 @@ class CFF extends Table {
 
     public function createTopDict() {
         var topDict = new Dictionary();
-        topDict.addInt(version, strings.require(font.version));
+        topDict.addInt(version, strings.require(Std.string(font.version)));
         if (font.description.length > 0) {
             topDict.addInt(Notice, strings.require(font.description));
         }
@@ -183,7 +182,7 @@ class CFF extends Table {
         // For compatibility with client software, such as PostScript interpreters and Acrobat®, font names should be
         // no longer than 127 characters and should not contain any of the following ASCII characters:
         // [, ], (, ), {, }, <, >, /, %, null (NUL), space, tab, carriage return, line feed, form feed.
-        var name = ~/[\[\]\(\)\{\}\/<>%\s]+/g.replace(font.name, '').substr(0, 126);
+        var name = ~/[\[\]\(\)\{\}\/<>%\s]+/g.replace(font.postscriptName, '').substr(0, 126);
         tt.writeStringsIndex([name]);
         length += tt.getPosition();
         sections.set(NAME_INDEX, tt.getBytes());

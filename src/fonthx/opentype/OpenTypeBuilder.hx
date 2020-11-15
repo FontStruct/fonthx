@@ -1,5 +1,6 @@
 package fonthx.opentype;
 
+import fonthx.opentype.tables.DSIGTable;
 import fonthx.opentype.cff.CFF;
 import fonthx.opentype.codepage.OS2Codepage;
 import fonthx.opentype.constants.MacintoshEncoding;
@@ -97,7 +98,8 @@ class OpenTypeBuilder {
             ttf.addTable(new LocationTable(glyphTable));
         }
 
-        ttf.addTable(new SnftTable(ttf.getNumTables()));
+        ttf.addTable(new DSIGTable());
+        ttf.addTable(new SnftTable(ttf.getNumTables(), format));
 
         var bytes = writeToBytes(ttf);
 
@@ -173,7 +175,7 @@ class OpenTypeBuilder {
         head.setFormat(format)
             .setCreated(Utils.getMillisSince1904(now))
             .setModified(Utils.getMillisSince1904(now))
-            .setFontRevision(1, 0)
+            .setVersion(fnt.version)
             .setEmSquare(fnt.emSquare)
         ;
         // calculate bounds
@@ -195,7 +197,7 @@ class OpenTypeBuilder {
             .setMacStyle(MacStyle.REGULAR) // todo: parameterize
             .setFontDirectionHint(2) // todo: make constants for this
             .setLongOffsetFormat(true)
-            .setSmallestReadablePixelSize(8)
+            .setSmallestReadablePixelSize(8) // todo: parameterize
         ;
         return head;
     }
@@ -272,8 +274,8 @@ class OpenTypeBuilder {
     private static function createMaximumProfileTable(fnt:IFont):MaximumProfileTable {
         var table = new MaximumProfileTable();
         table
-        .setVersion(MaximumProfileTable.TRUETYPE_OUTLINES)
-        .setNumGlyphs(fnt.glyphs.length);
+            .setVersion(MaximumProfileTable.TRUETYPE_OUTLINES)
+            .setNumGlyphs(fnt.glyphs.length);
         var maxPoints = 0;
         var maxContours = 0;
         for (g in fnt.glyphs) {
@@ -348,21 +350,21 @@ class OpenTypeBuilder {
         var table = new OS2Table();
         var halfEM = Std.int(font.emSquare / 2);
         table
-        .setVersion(0x0002)
-        .setAvgCharWidth(calculateAvgCharWidth(font))
-        .setWeightClass(OS2Weight.NORMAL)
-        .setWidthClass(OS2Width.NORMAL)
-        .setEmbedding(OS2Embeddable.PREVIEW_AND_PRINT)
-        .setYSubscriptXSize(halfEM)
-        .setYSubscriptYSize(halfEM)
-        .setYSubscriptXOffset(0)
-        .setYSubscriptYOffset(Std.int(font.idealDescender / 2))
-        .setYSuperscriptXSize(halfEM)
-        .setYSuperscriptYSize(halfEM)
-        .setYSuperscriptXOffset(0)
-        .setYSuperscriptYOffset(halfEM)
-        .setStrikeoutSize(Std.int(font.emSquare / 20))
-        .setStrikeoutPosition(Std.int(font.emSquare / 5))
+            .setVersion(0x0002)
+            .setAvgCharWidth(calculateAvgCharWidth(font))
+            .setWeightClass(OS2Weight.NORMAL)
+            .setWidthClass(OS2Width.NORMAL)
+            .setEmbedding(OS2Embeddable.PREVIEW_AND_PRINT)
+            .setYSubscriptXSize(halfEM)
+            .setYSubscriptYSize(halfEM)
+            .setYSubscriptXOffset(0)
+            .setYSubscriptYOffset(Std.int(font.idealDescender / 2))
+            .setYSuperscriptXSize(halfEM)
+            .setYSuperscriptYSize(halfEM)
+            .setYSuperscriptXOffset(0)
+            .setYSuperscriptYOffset(halfEM)
+            .setStrikeoutSize(Std.int(font.emSquare / 20))
+            .setStrikeoutPosition(Std.int(font.emSquare / 5))
         ;
         var codepoints:Array<Int> = new Array<Int>();
         for (g in font.glyphs) {

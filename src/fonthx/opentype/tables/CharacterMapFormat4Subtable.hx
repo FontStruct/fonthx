@@ -27,10 +27,6 @@ class CharacterMapFormat4Subtable extends CharacterMapSubtable {
             prepareSegments();
             var numGlyphs = codepoints.length;
             length = 16 + (segCount * 8) + (numGlyphs * 2);
-//            var over = length % 4;
-//            if (over != 0) {
-//               length += (4 - over);
-//            }
         }
         return length;
     }

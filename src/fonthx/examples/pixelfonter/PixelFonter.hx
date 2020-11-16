@@ -58,7 +58,7 @@ class PixelFonter {
         font.prepareForExport();
 
         var buildOptions = new BuildOptions();
-        buildOptions.useSubroutinesInCFF = true;
+        buildOptions.useSubroutinesInCFF = false;
         var bytes = OpenTypeBuilder.build(font, opts.format == 'ttf' ? TrueType : CFF, buildOptions);
 
         ExecutionTimer.end('PixelFonter::generate');

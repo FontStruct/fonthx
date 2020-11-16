@@ -8,7 +8,7 @@ class SimpleGlyphDescription {
 	private var points:Array<ContourPoint> ;
 	private var bounds:Rectangle;
 	private var numContours:Int;
-	private var lastPoint:ContourPoint;
+	public var lastPoint:ContourPoint;
 	private var simpleFlags:Bool = true;
 
 	public function new() {
@@ -190,6 +190,7 @@ class SimpleGlyphDescription {
 	public function getPoints() {
 		return points;
 	}
+
 
 
 

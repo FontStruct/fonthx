@@ -11,16 +11,15 @@ function regenerateFont(srcImage) {
 		return;
 	}
 	const ttf = haveWASM? Module.generate(srcImage) : fonthx.examples.pixelfonter.PixelFonterBrowserApp.generate(srcImage);
+
 	const css = window.document.styleSheets[1];
-
-	downloadTTFLink.href = 'data:font/truetype;base64,' + ttf;
-
 	css.insertRule("@font-face {font-family: 'pixelfont'; src:url(data:font/truetype;base64," + ttf + ") format('truetype');}", css.cssRules.length);
 	if (css.rules.length > 1) {
 		css.deleteRule(0);
 	}
 
-  var otf = fonthx.examples.pixelfonter.PixelFonterBrowserApp.generate(srcImage, 'otf');
+  downloadTTFLink.href = 'data:font/truetype;base64,' + ttf;
+  const otf = fonthx.examples.pixelfonter.PixelFonterBrowserApp.generate(srcImage, 'otf');
   downloadOTFLink.href = 'data:font/opentype;base64,' + otf;
 
 }

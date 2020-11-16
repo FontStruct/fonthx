@@ -76,7 +76,7 @@ class Charstring extends AbstractContourConsumer implements IContourConsumer {
     override public function cubicTo(x1:Float, y1:Float, x2:Float, y2:Float, x3:Float, y3:Float) {
         var x0 = pen.x;
         var y0 = pen.y;
-        subpath.addOperation(createOperation(rrcurveto, [x1 - x0, y1 - y0, x2 - x0, y2 - y0, x3 - x0, y3 - y0]));
+        subpath.addOperation(createOperation(rrcurveto, [x1 - x0, y1 - y0, x2 - x1 , y2 - y1, x3 - x2, y3 - y2]));
         pen = new Point(x3, y3);
     }
 

@@ -119,4 +119,6 @@ abstract CharstringOp(Int) to Int {
 
     var callgsubr = 29;
 
+    var returnop = 11;
+
 }

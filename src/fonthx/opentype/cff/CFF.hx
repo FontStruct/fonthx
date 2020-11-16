@@ -1,4 +1,6 @@
 package fonthx.opentype.cff;
+import fonthx.opentype.cff.charstrings.IntegerOperation;
+import fonthx.opentype.cff.operators.CharstringOp;
 import fonthx.model.font.IFont;
 import fonthx.opentype.cff.charstrings.Charstrings;
 import fonthx.opentype.cff.charstrings.Subpath;
@@ -191,7 +193,8 @@ class CFF extends Table {
     public function createGlobalSubrsIndex() {
         var tt = createWriter();
         tt.writeByteBlockIndex(charstrings.subrs.map(function(s:Subpath) {
-            return s.bytes;
+            s.addOperation(new IntegerOperation(CharstringOp.returnop));
+            return s.getBytes(false).getBytes();
         }));
         length += tt.getPosition();
         sections.set(GLOBAL_SUBR_INDEX, tt.getBytes());

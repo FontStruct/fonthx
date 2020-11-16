@@ -2,7 +2,8 @@
 
 const srcCanvas = document.querySelector('#canvas');
 let imageLoaded = false;
-const downloadLink = document.querySelector('#download');
+const downloadTTFLink = document.querySelector('#downloadTTF');
+const downloadOTFLink = document.querySelector('#downloadOTF');
 
 function regenerateFont(srcImage) {
 	const haveWASM = typeof(Module) !== 'undefined' && typeof(Module.generate) !== 'undefined';
@@ -12,12 +13,16 @@ function regenerateFont(srcImage) {
 	const ttf = haveWASM? Module.generate(srcImage) : fonthx.examples.pixelfonter.PixelFonterBrowserApp.generate(srcImage);
 	const css = window.document.styleSheets[1];
 
-	downloadLink.href = 'data:font/truetype;base64,' + ttf;
+	downloadTTFLink.href = 'data:font/truetype;base64,' + ttf;
 
 	css.insertRule("@font-face {font-family: 'pixelfont'; src:url(data:font/truetype;base64," + ttf + ") format('truetype');}", css.cssRules.length);
 	if (css.rules.length > 1) {
 		css.deleteRule(0);
 	}
+
+  var otf = fonthx.examples.pixelfonter.PixelFonterBrowserApp.generate(srcImage, 'otf');
+  downloadOTFLink.href = 'data:font/opentype;base64,' + otf;
+
 }
 
 function ready() {

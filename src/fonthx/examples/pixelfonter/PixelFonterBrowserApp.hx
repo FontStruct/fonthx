@@ -49,7 +49,7 @@ class PixelFonterBrowserApp {
         #end
     }
 
-    public static function generate(imageData:String) {
+    public static function generate(imageData:String, format:String = 'ttf') {
         var o:PixelFonterParams = {
             imagePath: 'pixel-font-5x5.png',
             glyphWidth: 5,
@@ -57,7 +57,7 @@ class PixelFonterBrowserApp {
             codepointString: '65-90,33-58',
             name: 'Pixel Font',
             outputPath: '',
-            format: 'ttf'
+            format: format
         }
         var bytes = Base64.decode(imageData.split(',')[1]);
         var handle = new BytesInput(bytes);

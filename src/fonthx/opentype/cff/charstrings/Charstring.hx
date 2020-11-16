@@ -5,9 +5,9 @@ import fonthx.opentype.cff.operators.CharstringOp;
 import fonthx.model.font.IContourConsumer;
 import fonthx.model.font.AbstractContourConsumer;
 import fonthx.model.geom.Point;
+using fonthx.opentype.postscript.Encoder;
 
 // w? {hs* vs* cm* hm* mt subpath}? {mt subpath}* endchar
-// we do not support widths (w?)
 // we do not support hints (hs* vs* cm* hm*)
 // Charstrings may contain subr and gsubr calls as desired at any point
 // endchar
@@ -17,10 +17,12 @@ class Charstring extends AbstractContourConsumer implements IContourConsumer {
     public var subpaths:Array<Subpath>;
     private var subpath:Subpath;
     private var useFixed:Bool;
+    private var width:Float;
     private var pen:Point;
     public var bytes(get, never):Bytes;
 
-    public function new(useFixed) {
+    public function new(width:Float, useFixed:Bool = false) {
+        this.width = width;
         this.useFixed = useFixed;
         subpaths = new Array();
     }
@@ -96,9 +98,13 @@ class Charstring extends AbstractContourConsumer implements IContourConsumer {
         return useFixed ? new FixedOperation(op, values) : new IntegerOperation(op, values);
     }
 
-    private var _bytes:Bytes;
     function get_bytes() {
         var buffer:BytesBuffer = new BytesBuffer();
+        if (useFixed) {
+            buffer.encodeFixed(width);
+        } else {
+            buffer.encodeInt(Std.int(width));
+        }
         for (subpath in subpaths) {
             var bytes = subpath.bytes;
             buffer.addBytes(bytes, 0, bytes.length);

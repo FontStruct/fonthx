@@ -8,7 +8,7 @@ using fonthx.opentype.postscript.Encoder;
 
 class AbstractOperation implements IOperation {
 
-    var op:CharstringOp;
+    public var op:CharstringOp;
     public var bytes(get, never):Bytes;
     private var values:Array<Float>;
     public var lastPoint(get, never):Array<Float>;

@@ -432,4 +432,8 @@ class Strings {
     public function custom() {
         return strings.slice(Strings.standards.length);
     }
+
+    public function toString() {
+        return strings.toString();
+    }
 }

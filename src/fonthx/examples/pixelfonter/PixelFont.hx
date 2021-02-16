@@ -67,9 +67,7 @@ class PixelFont implements IFont extends AbstractFont {
         var space = addGlyph(0x20);
         space.bounds = new Rectangle(0, 0, pixelSize * 2, emSquare);
 
-
-
-        // sort glyphs by codepoint
+       // sort glyphs by codepoint
         glyphs.sort(function(a:IContourGlyph, b:IContourGlyph) {
             return a.codepoint - b.codepoint;
         });

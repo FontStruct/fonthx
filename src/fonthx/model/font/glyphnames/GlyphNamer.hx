@@ -9,7 +9,7 @@ class GlyphNamer {
         var idx = 0;
         for (g in glyphs) {
             if (g.name != null) {
-                continue;
+                continue; // already named
             }
             if (g.codepoint > 0) {
                 if (AGLFN.uvToGlyphName.exists(g.codepoint)) {

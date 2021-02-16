@@ -10,11 +10,14 @@ class AbstractContourGlyph implements IContourGlyph {
     @:isVar public var advancedWidth(get, null):Float;
     @:isVar public var lsb(get, set):Float;
     @:isVar public var rsb(get, set):Float;
+    @:isVar public var name(get, set):String;
+
     public var unmapped:Bool;
 
-    public function new(codepoint:Int) {
+    public function new(codepoint:Int = 0, name:String = null) {
         this.codepoint = codepoint;
-        unmapped = false;
+        this.name = name;
+        unmapped = codepoint < 1;
     }
 
     public function getBounds():Rectangle {
@@ -55,6 +58,15 @@ class AbstractContourGlyph implements IContourGlyph {
 
     function get_codepoint():Int {
         return codepoint;
+    }
+
+    function set_name(value:String):String {
+        return this.name = value;
+    }
+
+    function get_name():String {
+        // AGL?
+        return name;
     }
 
     public function walkContours(consumer:IContourConsumer):Void {

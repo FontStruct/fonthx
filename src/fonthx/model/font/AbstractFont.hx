@@ -2,26 +2,24 @@ package fonthx.model.font;
 
 import fonthx.model.font.features.Layout;
 import fonthx.model.font.features.lookups.pairadjustment.PositioningPair;
-import haxe.ds.IntMap;
 using Lambda;
 
 class AbstractFont implements IFont {
 
-
-    @:isVar public var glyphs(get, null):Array<IContourGlyph>;
+    public var glyphs(get, null):Array<IContourGlyph>;
     @:isVar public var name(get, set):String;
+    @:isVar public var emSquare(get, set):Int;
     @:isVar public var style(get, set):String;
     @:isVar public var sampleText(get, set):String;
-    @:isVar public var emSquare(get, set):Int;
     @:isVar public var idealAscender(get, set):Float;
     @:isVar public var idealDescender(get, set):Float;
     @:isVar public var realAscender(get, set):Float;
     @:isVar public var realDescender(get, set):Float;
     @:isVar public var typoLineGap(get, set):Float;
-    @:isVar public var layout(get, null):Layout;
+    public var layout(get, null):Layout;
     public var copyright(get, null):String;
     public var creationDate(get, null):String;
-    public var author(get, null): String;
+    public var author(get, null):String;
     public var description(get, null):String;
     public var uniqueFamilyName(get, null):String;
     public var fullName(get, null):String;
@@ -35,22 +33,20 @@ class AbstractFont implements IFont {
     public var license(get, null):String;
     public var licenseURL(get, null):String;
     public var styleModifiers(get, null):String;
-    public var extraNamingRecords(get, null):IntMap<String>;
 
     public function new() {
         glyphs = new Array();
+        name = 'Unnamed';
         layout = new Layout();
-        extraNamingRecords = new IntMap();
+        version = '1.0';
+        style = "Regular";
+        copyright = '';
+        description = '';
+        emSquare = 1000;
     }
 
     public function getGlyphForCodepoint(cp:Int):IContourGlyph {
-        var found = glyphs.filter(function(g:IContourGlyph) {
-            return g.codepoint == cp;
-        });
-        if (found.length == 1) {
-            return found[0];
-        }
-        return null;
+        return glyphs.find(function(g) { return g.codepoint == cp; });
     }
 
     function get_name():String {
@@ -118,7 +114,7 @@ class AbstractFont implements IFont {
     }
 
     function get_version():String {
-        return version;
+        return '1.0';
     }
 
     function set_version(value:String) {
@@ -254,10 +250,6 @@ class AbstractFont implements IFont {
         return layout;
     }
 
-    function get_extraNamingRecords():IntMap<String> {
-        return extraNamingRecords;
-    }
-
     function get_glyphs():Array<IContourGlyph> {
         return glyphs;
     }
@@ -278,6 +270,19 @@ class AbstractFont implements IFont {
         return null;
     }
 
+    public function isFixedPitch() {
+        return false;
+    }
 
+    public function getItalicAngle():Float {
+        return 0;
+    }
 
+    public function getUnderlinePosition():Int {
+        return Std.int(emSquare / 10);
+    }
+
+    public function getUnderlineThickness():Int {
+        return Std.int(emSquare / 20);
+    }
 }

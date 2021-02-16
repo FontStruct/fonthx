@@ -15,6 +15,8 @@ class PixelGlyph extends AbstractContourGlyph implements IContourGlyph {
     public var bounds:Rectangle;
     public var gridBounds:Rectangle;
 
+    public static var useCircles:Bool = false;
+
     public function new(codepoint:Int) {
         super(codepoint);
         pixels = new Array();
@@ -54,15 +56,33 @@ class PixelGlyph extends AbstractContourGlyph implements IContourGlyph {
             consumer.startShape();
             consumer.startGroup();
             consumer.startPath();
-            var x1 = p.x * pixelSize;
-            var y1 = p.y * pixelSize;
-            var x2 = x1 + pixelSize;
-            var y2 = y1 + pixelSize;
-            consumer.moveTo(x1, y1);
-            consumer.lineTo(x2, y1);
-            consumer.lineTo(x2, y2);
-            consumer.lineTo(x1, y2);
-            consumer.lineTo(x1, y1);
+            if (true) {
+                var r:Float = pixelSize / 2;
+                var c = 0.552284749831 * r;
+                var x0:Float = p.x * pixelSize;
+                var y0:Float = p.y * pixelSize;
+                var x1:Float = x0 + r;
+                var y1:Float = y0 + r;
+                var x2:Float = x1 + r;
+                var y2:Float = y1 - r;
+                var x3:Float = x2 - r;
+                var y3:Float = y2 - r;
+                consumer.moveTo(x0, y0);
+                consumer.cubicTo(x0, y0 + c, x1 - c, y1, x1, y1);
+                consumer.cubicTo(x1 + c, y1, x2, y2 + c, x2, y2);
+                consumer.cubicTo(x2, y2 - c, x3 + c, y3, x3, y3);
+                consumer.cubicTo(x3 - c, y3, x0, y0 - c, x0, y0);
+            } else {
+                var x1 = p.x * pixelSize;
+                var y1 = p.y * pixelSize;
+                var x2 = x1 + pixelSize;
+                var y2 = y1 + pixelSize;
+                consumer.moveTo(x1, y1);
+                consumer.lineTo(x2, y1);
+                consumer.lineTo(x2, y2);
+                consumer.lineTo(x1, y2);
+                consumer.lineTo(x1, y1);
+            }
             consumer.endPath();
             consumer.endGroup();
             consumer.endShape();

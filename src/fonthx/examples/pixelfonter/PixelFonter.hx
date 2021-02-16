@@ -1,8 +1,9 @@
 package fonthx.examples.pixelfonter;
 
+import fonthx.opentype.BuildOptions;
 import fonthx.utils.ExecutionTimer;
-import fonthx.formats.tt.FontFileFormat;
-import fonthx.formats.tt.TrueTypeBuilder;
+import fonthx.opentype.FontFileFormat;
+import fonthx.opentype.OpenTypeBuilder;
 import haxe.io.Bytes;
 
 using StringTools;
@@ -49,13 +50,16 @@ class PixelFonter {
                     var idx = ((y * opts.imageWidth) + x) * 4;
                     var colour = opts.pixelData.get(idx);
                     if (colour != 0) continue;
-                    glyph.addPixel(dx, opts.glyphHeight - dy); // note inverted y axis
+                    glyph.addPixel(dx, opts.glyphHeight - (dy + 1)); // note inverted y axis
                 }
             }
         }
 
         font.prepareForExport();
-        var bytes = TrueTypeBuilder.build(font, TrueType);
+
+        var buildOptions = new BuildOptions();
+        buildOptions.useSubroutinesInCFF = false;
+        var bytes = OpenTypeBuilder.build(font, opts.format == 'ttf' ? TrueType : CFF, buildOptions);
 
         ExecutionTimer.end('PixelFonter::generate');
 

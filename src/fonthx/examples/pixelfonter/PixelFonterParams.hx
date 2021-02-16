@@ -8,6 +8,7 @@ typedef PixelFonterParams = {
     glyphHeight:Int,
     codepointString:String,
     name:String,
+    format:String,
     outputPath:String,
     ?imageWidth: Int,
     ?imageHeight: Int,

@@ -46,6 +46,10 @@ Run:
 
     java -jar dist/examples/pixelfonter/java/PixelFonterApp.jar -i build/examples/pixelfonter/pixel-font-5x5.png -c65-91 -o tmp/pixelfont.ttf
     
+Or, for a font with CFF outlines:
+
+    java -jar dist/examples/pixelfonter/java/PixelFonterApp.jar -i build/examples/pixelfonter/pixel-font-5x5.png -c65-91 -o tmp/pixelfont.otf -f otf    
+    
 ## Try the same thing for native C++
 
 Build:
@@ -117,6 +121,6 @@ You need to:
 1. create a font class implementing [IFont](src/fonthx/model/font/IFont.hx) (optionally extending [AbstractFont](src/fonthx/model/font/AbstractFont.hx))
 1. create a glyph class implementing [IContourGlyph](src/fonthx/model/font/IContourGlyph.hx) (optionally extending [AbstractContourGlyph](src/fonthx/model/font/AbstractContourGlyph.hx))
 1. instantiate your font class, add some glyphs to it, then
-1. get your TrueType bytes using [TrueTypeBuilder](src/fonthx/formats/tt/TrueTypeBuilder.hx)
+1. get your TrueType bytes using [TrueTypeBuilder](src/fonthx/tt/TrueTypeBuilder.hx)
 
     

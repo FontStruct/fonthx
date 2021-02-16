@@ -24,12 +24,14 @@ using StringTools;
 class PixelFont implements IFont extends AbstractFont {
 
     private var pixelSize:Int;
+    private var shape:Int;
 
-    public function new(name:String, emSquare:Int, pixelSize:Int) {
+    public function new(name:String, emSquare:Int, pixelSize:Int, shape:Int = 1) {
         super();
         this.name = name;
         this.emSquare = emSquare;
         this.pixelSize = pixelSize;
+        this.shape = shape;
         idealAscender = emSquare + (pixelSize * 2);
         idealDescender = 0;
         realAscender = emSquare + (pixelSize * 2);
@@ -40,6 +42,7 @@ class PixelFont implements IFont extends AbstractFont {
     public function addGlyph(cp:Int):PixelGlyph {
         var glyph = new PixelGlyph(cp);
         glyph.pixelSize = pixelSize;
+        glyph.shape = shape;
         this.glyphs.push(glyph);
         return glyph;
     }

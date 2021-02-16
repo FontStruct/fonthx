@@ -11,6 +11,7 @@ class PixelGlyph extends AbstractContourGlyph implements IContourGlyph {
 
     /** Pixel width and height in em units */
     public var pixelSize:Int;
+    public var shape:Int;
 
     public var bounds:Rectangle;
     public var gridBounds:Rectangle;
@@ -56,7 +57,8 @@ class PixelGlyph extends AbstractContourGlyph implements IContourGlyph {
             consumer.startShape();
             consumer.startGroup();
             consumer.startPath();
-            if (true) {
+            if (shape == 2) {
+                // dots
                 var r:Float = pixelSize / 2;
                 var c = 0.552284749831 * r;
                 var x0:Float = p.x * pixelSize;
@@ -73,6 +75,7 @@ class PixelGlyph extends AbstractContourGlyph implements IContourGlyph {
                 consumer.cubicTo(x2, y2 - c, x3 + c, y3, x3, y3);
                 consumer.cubicTo(x3 - c, y3, x0, y0 - c, x0, y0);
             } else {
+                // pixels
                 var x1 = p.x * pixelSize;
                 var y1 = p.y * pixelSize;
                 var x2 = x1 + pixelSize;

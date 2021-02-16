@@ -34,7 +34,7 @@ class PixelFonter {
         var pixelSize = Std.int(em / opts.glyphWidth);
 
         // create the font with an emSquare
-        var font = new PixelFont(opts.name, em, pixelSize);
+        var font = new PixelFont(opts.name, em, pixelSize, opts.shape);
 
         // build the glyph data
         var numRows = opts.imageHeight / opts.glyphHeight;

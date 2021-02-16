@@ -26,6 +26,7 @@ class PixelFonterApp {
             trace('-c string charmap of the glyphs in the image, from left to right, in comma separated blocks e.g. 65-90,96-120 (defaults to 65-90,33-58)');
             trace('-n string name for the output font (defaults to “Pixel Font”)');
             trace('-o string full path for the output font including the filename and suffix (defaults to “output.ttf”)');
+            trace('-s int 1=pixels, 2=dots');
             trace('-f format ttf|otf (defaults to “ttf”)');
             return 0;
         }
@@ -37,6 +38,7 @@ class PixelFonterApp {
             codepointString: args.has('c') ? args.get('c').value : '65-90,33-58',
             name: args.has('n') ? args.get('n').value : 'Pixel Font',
             outputPath: args.has('o') ? args.get('o').value : 'output.ttf',
+            shape: args.has('s') ? Std.parseInt(args.get('s').value) : 1,
             format: args.has('f') ? args.get('f').value : 'ttf'
         }
 

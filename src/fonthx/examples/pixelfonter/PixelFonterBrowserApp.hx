@@ -57,6 +57,7 @@ class PixelFonterBrowserApp {
             codepointString: '65-90,33-58',
             name: 'Pixel Font',
             outputPath: '',
+            shape: 2,
             format: format
         }
         var bytes = Base64.decode(imageData.split(',')[1]);

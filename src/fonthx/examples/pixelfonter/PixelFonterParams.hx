@@ -10,6 +10,7 @@ typedef PixelFonterParams = {
     name:String,
     format:String,
     outputPath:String,
+    shape:Int,
     ?imageWidth: Int,
     ?imageHeight: Int,
     ?pixelData: Bytes

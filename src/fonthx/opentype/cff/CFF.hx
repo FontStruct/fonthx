@@ -53,8 +53,6 @@ class CFF extends Table {
         // GLOBAL SUBR INDEX (needs to happen after charstring creation)
         createGlobalSubrsIndex();
 
-        // CHARSETS
-        createCharsets();
 
         // PRIVATE DICT
         createPrivateDict();
@@ -67,6 +65,9 @@ class CFF extends Table {
 
         // STRING INDEX
         createStringsIndex();
+
+        // CHARSETS
+        createCharsets();
 
         // HEADER
         // calculate offSize
@@ -102,8 +103,6 @@ class CFF extends Table {
             topDictOffsets.addInt(charset, baseOffset + topDictOffsetsLength + 1);
             topDictOffsets.addInt(TopDictOp.CharStrings, baseOffset + topDictOffsetsLength + sections.get(CHARSETS).length + 1);
             topDictOffsetsLength = topDictOffsets.bytes.length;
-            //trace(baseOffset + topDictOffsetsLength);
-            //trace(baseOffset + topDictOffsetsLength + sections.get(CHARSETS).length);
         } while (topDictOffsetsLength - lastOffsetsLength != 0);
         var topDictOffsetBytes = topDictOffsets.bytes.getBytes();
         topDict.bytes.addBytes(topDictOffsetBytes, 0, topDictOffsetBytes.length);
@@ -225,7 +224,6 @@ class CFF extends Table {
         var tt = createWriter();
         // we need to add any custom glyph names to our string index
         for (g in font.glyphs) {
-            if (g.codepoint == 0) continue;
             strings.require(g.name);
         }
         tt.writeStringsIndex(strings.custom());

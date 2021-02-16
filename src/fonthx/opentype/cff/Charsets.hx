@@ -10,6 +10,8 @@ class Charsets {
         var notdef = '.notdef';
 
         // range calculation based on fonttools implementation
+        // https://rsms.me/fonttools-docs/_modules/fontTools/cffLib.html#packEncoding1
+        // see also https://github.com/fontforge/fontforge/blob/db455c1e90b3a578afe3c6c438c9962e58d06423/fontforge/tottf.c#L1749
         var ranges = new Array<SIDRange>();
         var first = -1;
         var end = 0;
@@ -24,6 +26,8 @@ class Charsets {
                     first = sid;
                 }
                 end = sid;
+            } else {
+                trace("SID not found");
             }
         }
         if (end > 0) {
@@ -46,7 +50,6 @@ class Charsets {
             }
         }
         tt.writeCard8(format);
-
         if (format == 0) {
             for (g in f.glyphs) {
                 if (g.name == notdef) continue;
@@ -80,6 +83,10 @@ private class SIDRange {
 
     public function length() {
         return this.remaining;
+    }
+
+    public function toString() {
+        return 'SID Range ${first},${remaining}';
     }
 
 }

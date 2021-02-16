@@ -50,7 +50,7 @@ using fonthx.opentype.options.OptionMapTools;
 class OpenTypeBuilder {
 
     /**
-    * Given an IFont, generate a Font File for it in the specified format (only TrueType supported)
+    * Given an IFont, generate a Font File for it in the specified format (TrueType or OpenType)
     **/
     public static function build(
         font:IFont,
@@ -70,7 +70,7 @@ class OpenTypeBuilder {
 
         GlyphNamer.nameGlyphs(font.glyphs);
 
-        ExecutionTimer.start('TrueType.build');
+        ExecutionTimer.start('OpenTypeBuilder.build');
 
         var tdir = new TableDirectory();
         var ttf = new OpenTypeFont(tdir);
@@ -103,7 +103,7 @@ class OpenTypeBuilder {
 
         var bytes = writeToBytes(ttf);
 
-        ExecutionTimer.end('Mortar.build');
+        ExecutionTimer.end('OpenTypeBuilder.build');
 
         return bytes;
 

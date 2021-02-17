@@ -1,5 +1,6 @@
 package fonthx.opentype;
 
+import fonthx.opentype.FontFileFormat;
 import fonthx.opentype.tables.DSIGTable;
 import fonthx.opentype.cff.CFF;
 import fonthx.opentype.codepage.OS2Codepage;
@@ -85,7 +86,7 @@ class OpenTypeBuilder {
             ttf.addTable(createGPOSTable(font));
         }
 
-        ttf.addTable(createMaximumProfileTable(font));
+        ttf.addTable(createMaximumProfileTable(font, format));
         ttf.addTable(createNamingTable(font, options));
         ttf.addTable(createOS2Table(font));
         ttf.addTable(new PostTable(font, PostTable.VERSION_3_0));
@@ -271,26 +272,29 @@ class OpenTypeBuilder {
         return table;
     }
 
-    private static function createMaximumProfileTable(fnt:IFont):MaximumProfileTable {
+    private static function createMaximumProfileTable(fnt:IFont, format:FontFileFormat):MaximumProfileTable {
         var table = new MaximumProfileTable();
+        var isTT = format == FontFileFormat.TrueType;
         table
-            .setVersion(MaximumProfileTable.TRUETYPE_OUTLINES)
+            .setVersion(isTT? MaximumProfileTable.TRUETYPE_OUTLINES : MaximumProfileTable.CFF_OUTLINES)
             .setNumGlyphs(fnt.glyphs.length);
-        var maxPoints = 0;
-        var maxContours = 0;
-        for (g in fnt.glyphs) {
-            var numPoints = g.numPoints;
-            if (numPoints > maxPoints) {
-                maxPoints = numPoints;
+        if (isTT) {
+            var maxPoints = 0;
+            var maxContours = 0;
+            for (g in fnt.glyphs) {
+                var numPoints = g.numPoints;
+                if (numPoints > maxPoints) {
+                    maxPoints = numPoints;
+                }
+                var numContours = g.numContours;
+                if (numContours > maxContours) {
+                    maxContours = numContours;
+                }
             }
-            var numContours = g.numContours;
-            if (numContours > maxContours) {
-                maxContours = numContours;
-            }
+            table
+                .setMaxPoints(maxPoints)
+                .setMaxContours(maxContours);
         }
-        table
-        .setMaxPoints(maxPoints)
-        .setMaxContours(maxContours);
         return table;
     }
 

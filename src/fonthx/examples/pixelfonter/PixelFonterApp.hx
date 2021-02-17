@@ -27,6 +27,7 @@ class PixelFonterApp {
             trace('-n string name for the output font (defaults to “Pixel Font”)');
             trace('-o string full path for the output font including the filename and suffix (defaults to “output.ttf”)');
             trace('-s int 1=pixels, 2=dots');
+            trace('-d use floating point coordinates in CFF table');
             trace('-f format ttf|otf (defaults to “ttf”)');
             return 0;
         }
@@ -38,6 +39,7 @@ class PixelFonterApp {
             codepointString: args.has('c') ? args.get('c').value : '65-90,33-58',
             name: args.has('n') ? args.get('n').value : 'Pixel Font',
             outputPath: args.has('o') ? args.get('o').value : 'output.ttf',
+            floatingPointCoords: args.has('d') ? true: false,
             shape: args.has('s') ? Std.parseInt(args.get('s').value) : 1,
             format: args.has('f') ? args.get('f').value : 'ttf'
         }

@@ -16,7 +16,9 @@ https://fontstruct.github.io/fonthx/
 
         git clone git@github.com:FontStruct/fonthx.git
 
-1. Install Haxe, e.g. from https://haxe.org/download/       
+1. Install Haxe, e.g. from https://haxe.org/download/   
+Currently only supports 3.4.  
+    
     
 1. Install Haxe dependencies (anyone installing with haxelib should check [this issue](https://github.com/FontStruct/fonthx/issues/4) first)
 

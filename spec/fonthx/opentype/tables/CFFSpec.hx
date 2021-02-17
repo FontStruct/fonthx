@@ -73,7 +73,6 @@ class CFFSpec extends buddy.BuddySuite {
             GlyphNamer.nameGlyphs(f.glyphs);
         });
 
-        @include
         describe("CFF", function() {
             it("generates", function() {
                 var cff:CFF = new CFF(f, new BuildOptions());
@@ -156,14 +155,11 @@ class CFFSpec extends buddy.BuddySuite {
 //                trace(closingOffset);
 
                 // CHARSETS
-                trace(idx);
                 nextByte().should.be(1); // charsets format 1
 
 
                 // CHARSTRINGS_INDEX
                 // PRIVATE_DICT
-
-                trace(bytes);
             });
         });
     }

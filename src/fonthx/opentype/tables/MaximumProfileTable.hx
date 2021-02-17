@@ -122,19 +122,21 @@ class MaximumProfileTable extends Table
 	override public function write(tt:ITrueTypeWriter) {
 		tt.writeULONG(version);
 		tt.writeUSHORT(numGlyphs);
-		tt.writeUSHORT(maxPoints);
-		tt.writeUSHORT(maxContours);
-		tt.writeUSHORT(maxCompositePoints);
-		tt.writeUSHORT(maxCompositeContours);
-		tt.writeUSHORT(maxZones);
-		tt.writeUSHORT(maxTwilightPoints);
-		tt.writeUSHORT(maxStorage);
-		tt.writeUSHORT(maxFunctionDefs);
-		tt.writeUSHORT(maxInstructionDefs);
-		tt.writeUSHORT(maxStackElements);
-		tt.writeUSHORT(maxSizeOfInstructions);
-		tt.writeUSHORT(maxComponentElements);
-		tt.writeUSHORT(maxComponentDepth);
+        if (version == TRUETYPE_OUTLINES) {
+            tt.writeUSHORT(maxPoints);
+            tt.writeUSHORT(maxContours);
+            tt.writeUSHORT(maxCompositePoints);
+            tt.writeUSHORT(maxCompositeContours);
+            tt.writeUSHORT(maxZones);
+            tt.writeUSHORT(maxTwilightPoints);
+            tt.writeUSHORT(maxStorage);
+            tt.writeUSHORT(maxFunctionDefs);
+            tt.writeUSHORT(maxInstructionDefs);
+            tt.writeUSHORT(maxStackElements);
+            tt.writeUSHORT(maxSizeOfInstructions);
+            tt.writeUSHORT(maxComponentElements);
+            tt.writeUSHORT(maxComponentDepth);
+        }
 	}
 
 	/**

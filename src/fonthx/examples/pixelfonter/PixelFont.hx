@@ -56,6 +56,7 @@ class PixelFont implements IFont extends AbstractFont {
 
         // add .notdef glyph
         var notdef = addGlyph(0);
+        notdef.name = '.notdef';
         notdef.unmapped = true;
         //NotDefGlyph.draw(notdef, 500);
 

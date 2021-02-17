@@ -57,6 +57,7 @@ class PixelFonterBrowserApp {
             codepointString: '65-90,33-58',
             name: 'Pixel Font',
             outputPath: '',
+            floatingPointCoords: false,
             shape: 2,
             format: format
         }

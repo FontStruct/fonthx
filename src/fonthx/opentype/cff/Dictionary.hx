@@ -42,7 +42,7 @@ class Dictionary {
     }
 
     public function addReal(k:Int, f:Float) {
-        bytes.encodeFixed(f);
+        bytes.encodeFloat(f);
         bytes.encodeOperator(k);
     }
 

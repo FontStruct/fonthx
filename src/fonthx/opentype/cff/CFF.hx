@@ -224,6 +224,7 @@ class CFF extends Table {
         var tt = createWriter();
         // we need to add any custom glyph names to our string index
         for (g in font.glyphs) {
+            if (g.codepoint == 0) continue; // todo hmmm
             strings.require(g.name);
         }
         tt.writeStringsIndex(strings.custom());

@@ -11,7 +11,6 @@ class Charstrings {
     var subrLookup:StringMap<Int>;
     var charstrings:Array<Charstring>;
     var current:Charstring;
-    var useFixed:Bool;
 
     public function new() {
         charstrings = new Array();
@@ -22,9 +21,8 @@ class Charstrings {
     // https://github.com/caryll/otfcc/blob/4c4f7993024068bcab672471cc7563e3998d3ad4/lib/libcff/charstring-il.c
     // https://github.com/opentypejs/opentype.js/blob/ea4009e6d44678322cf34bb39b95cb47be1787ba/src/tables/cff.js#L1154
     public function write(tt:ITrueTypeWriter, f:IFont, options:BuildOptions) {
-        useFixed = options.useFixedCoordinatesInCFF;
         for (g in f.glyphs) {
-            var charstring = new Charstring(g.advancedWidth, useFixed);
+            var charstring = new Charstring(g.advancedWidth, options.useFixedCoordinatesInCFF);
             g.walkContours(charstring);
             charstrings.push(charstring);
         }

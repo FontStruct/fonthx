@@ -100,11 +100,7 @@ class Charstring extends AbstractContourConsumer implements IContourConsumer {
 
     function get_bytes() {
         var buffer:BytesBuffer = new BytesBuffer();
-        if (useFixed) {
-            buffer.encodeFixed(width);
-        } else {
-            buffer.encodeInt(Std.int(width));
-        }
+        buffer.encodeInt(Std.int(width));
         for (subpath in subpaths) {
             var bytes = subpath.bytes;
             buffer.addBytes(bytes, 0, bytes.length);

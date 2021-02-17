@@ -6,7 +6,8 @@ class Specs implements Buddy<[
     fonthx.opentype.tables.CFFSpec,
     fonthx.model.geom.RectangleSpec,
     fonthx.utils.StringEncoderSpec,
-    fonthx.opentype.utils.UtilsSpec
+    fonthx.opentype.utils.UtilsSpec,
+    fonthx.opentype.postscript.EncoderSpec
 ]> {
 
 }

@@ -58,7 +58,8 @@ class PixelFonter {
         font.prepareForExport();
 
         var buildOptions = new BuildOptions();
-        buildOptions.useSubroutinesInCFF = false;
+        buildOptions.useSubroutinesInCFF = true;
+        buildOptions.useFixedCoordinatesInCFF = opts.floatingPointCoords;
         var bytes = OpenTypeBuilder.build(font, opts.format == 'ttf' ? TrueType : CFF, buildOptions);
 
         ExecutionTimer.end('PixelFonter::generate');

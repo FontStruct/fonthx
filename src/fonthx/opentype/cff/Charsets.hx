@@ -27,7 +27,7 @@ class Charsets {
                 }
                 end = sid;
             } else {
-                trace("SID not found");
+                trace("SID not found for " + g.name);
             }
         }
         if (end > 0) {

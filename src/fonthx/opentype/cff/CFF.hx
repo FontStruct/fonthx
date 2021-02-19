@@ -71,7 +71,7 @@ class CFF extends Table {
 
         // HEADER
         // calculate offSize
-        // I don’t really understand the purpose of this value in the header
+        // todo try and understand the purpose of this value in the header
         offSize = 4;
         length += 4; // for the header
         length += 64; // for the topDict (overestimation);

@@ -29,7 +29,7 @@ class Charstrings {
 
         if (options.useSubroutinesInCFF) {
             // find subpaths which are used multiple times and record these as subroutines
-            // this is very basic
+            // todo this is VERY basic – at least transform to 0,0 first
             var subpathCounts = new StringMap<Int>();
             for (charstring in charstrings) {
                 for (subpath in charstring.subpaths) {
@@ -51,14 +51,17 @@ class Charstrings {
             if (subrs.length < 1240) {
                 bias = 107;
             }
+            var subCount = 0;
             for (charstring in charstrings) {
                 for (subpath in charstring.subpaths) {
                     var hash = subpath.getHash();
                     if (subrLookup.exists(hash)) {
+                        subCount++;
                         subpath.replaceWithGlobalSubroutine(subrLookup.get(hash) - bias);
                     }
                 }
             }
+            trace('${subCount} subroutine calls');
         }
 
         // write index of charstrings

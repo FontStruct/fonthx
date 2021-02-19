@@ -40,11 +40,15 @@ class Charstring extends AbstractContourConsumer implements IContourConsumer {
     }
 
     override public function moveTo(x:Float, y:Float) {
+        if (!useFixed) {
+            x = Math.round(x);
+            y = Math.round(y);
+        }
         if (pen != null) {
             var dx = x - pen.x;
             var dy = y - pen.y;
             if (pen.x == x) {
-                subpath.addOperation(createOperation(vmoveto, [dy])); // need to record dx to on last point
+                subpath.addOperation(createOperation(vmoveto, [dy]));
             } else if (pen.y == y) {
                 subpath.addOperation(createOperation(hmoveto, [dx]));
             } else {
@@ -57,13 +61,17 @@ class Charstring extends AbstractContourConsumer implements IContourConsumer {
     }
 
     override public function lineTo(x:Float, y:Float) {
+        if (!useFixed) {
+            x = Math.round(x);
+            y = Math.round(y);
+        }
         if (pen != null) {
             var dx = x - pen.x;
             var dy = y - pen.y;
             if (pen.x == x) {
                 subpath.addOperation(createOperation(vlineto, [dy]));
             } else if (pen.y == y) {
-               subpath.addOperation(createOperation(hlineto, [dx]));
+                subpath.addOperation(createOperation(hlineto, [dx]));
             } else {
                 subpath.addOperation(createOperation(rlineto, [dx, dy]));
             }
@@ -74,13 +82,27 @@ class Charstring extends AbstractContourConsumer implements IContourConsumer {
     }
 
     override public function cubicTo(x1:Float, y1:Float, x2:Float, y2:Float, x3:Float, y3:Float) {
+        if (!useFixed) {
+            x1 = Math.round(x1);
+            y1 = Math.round(y1);
+            x2 = Math.round(x2);
+            y2 = Math.round(y2);
+            x3 = Math.round(x3);
+            y3 = Math.round(y3);
+        }
         var x0 = pen.x;
         var y0 = pen.y;
-        subpath.addOperation(createOperation(rrcurveto, [x1 - x0, y1 - y0, x2 - x1 , y2 - y1, x3 - x2, y3 - y2]));
+        subpath.addOperation(createOperation(rrcurveto, [x1 - x0, y1 - y0, x2 - x1, y2 - y1, x3 - x2, y3 - y2]));
         pen = new Point(x3, y3);
     }
 
     override public function quadTo(x1:Float, y1:Float, x2:Float, y2:Float) {
+        if (!useFixed) {
+            x1 = Math.round(x1);
+            y1 = Math.round(y1);
+            x2 = Math.round(x2);
+            y2 = Math.round(y2);
+        }
         var x0 = pen.x;
         var y0 = pen.y;
         cubicTo(

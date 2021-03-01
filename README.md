@@ -1,6 +1,6 @@
 # fonthx: Simple TrueType Generation for Haxe
 
-* A very basic font generation library (currently TrueType only) written in [Haxe](https://haxe.org)
+* A very basic font generation library (OpenType with TrueType/CFF outlines) written in [Haxe](https://haxe.org)
 * The core of the font generation module used by [FontStruct](https://fontstruct.com) 
 * Aimed at Haxe (or other) developers who wish to create font generation tools
 * Should work with nodejs, js, cpp, c# and java targets. WASM too if you’re lucky.

@@ -44,10 +44,13 @@ class Charstring extends AbstractContourConsumer implements IContourConsumer {
             x = Math.round(x);
             y = Math.round(y);
         }
+        //trace('moveTo(${x}, ${y})');
         if (pen != null) {
             var dx = x - pen.x;
             var dy = y - pen.y;
-            if (pen.x == x) {
+            if (pen.x == x && pen.y == y) {
+                // if the pen does not move, do not add a path
+            } if (pen.x == x) {
                 subpath.addOperation(createOperation(vmoveto, [dy]));
             } else if (pen.y == y) {
                 subpath.addOperation(createOperation(hmoveto, [dx]));
@@ -65,10 +68,13 @@ class Charstring extends AbstractContourConsumer implements IContourConsumer {
             x = Math.round(x);
             y = Math.round(y);
         }
+        //trace('lineTo(${x}, ${y})');
         if (pen != null) {
             var dx = x - pen.x;
             var dy = y - pen.y;
-            if (pen.x == x) {
+            if (pen.x == x && pen.y == y) {
+                // if the pen does not move, do not add a path
+            } else if (pen.x == x) {
                 subpath.addOperation(createOperation(vlineto, [dy]));
             } else if (pen.y == y) {
                 subpath.addOperation(createOperation(hlineto, [dx]));
@@ -90,6 +96,7 @@ class Charstring extends AbstractContourConsumer implements IContourConsumer {
             x3 = Math.round(x3);
             y3 = Math.round(y3);
         }
+        //trace('cubicTo(${x1}, ${y1}, ${x2}, ${y2}, ${x3}, ${y3})');
         var x0 = pen.x;
         var y0 = pen.y;
         subpath.addOperation(createOperation(rrcurveto, [x1 - x0, y1 - y0, x2 - x1, y2 - y1, x3 - x2, y3 - y2]));
@@ -103,6 +110,7 @@ class Charstring extends AbstractContourConsumer implements IContourConsumer {
             x2 = Math.round(x2);
             y2 = Math.round(y2);
         }
+        //trace('quadTo(${x1}, ${y1}, ${x2}, ${y2})');
         var x0 = pen.x;
         var y0 = pen.y;
         cubicTo(

@@ -33,7 +33,10 @@ class SimpleGlyphDescription {
 	}
 	
 	public function addPoint(x:Int, y:Int, onCurve:Bool) {
-		var p = new ContourPoint(x, y, onCurve? ContourPoint.ON_CURVE : ContourPoint.OFF_CURVE);
+        var p = new ContourPoint(x, y, onCurve? ContourPoint.ON_CURVE : ContourPoint.OFF_CURVE);
+        if (lastPoint != null && lastPoint.equals(p)) {
+            return;
+        }
 		p.previous = lastPoint;
 		if (!simpleFlags) {
 			if (p.x > -256 && p.x < 256) {

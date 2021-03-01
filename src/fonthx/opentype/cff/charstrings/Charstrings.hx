@@ -29,7 +29,7 @@ class Charstrings {
 
         if (options.useSubroutinesInCFF) {
             // find subpaths which are used multiple times and record these as subroutines
-            // todo this is VERY basic – at least transform to 0,0 first
+            // todo this is VERY basic – could one exclude initial movetos?
             var subpathCounts = new StringMap<Int>();
             for (charstring in charstrings) {
                 for (subpath in charstring.subpaths) {

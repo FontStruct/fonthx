@@ -12,6 +12,7 @@ class Charsets {
         // range calculation based on fonttools implementation
         // https://rsms.me/fonttools-docs/_modules/fontTools/cffLib.html#packEncoding1
         // see also https://github.com/fontforge/fontforge/blob/db455c1e90b3a578afe3c6c438c9962e58d06423/fontforge/tottf.c#L1749
+        // and https://github.com/caryll/otfcc/blob/235d1bd6fb81c8daeaa5232aa840c1e37f07fa86/lib/libcff/cff-charset.c#L82
         var ranges = new Array<SIDRange>();
         var first = -1;
         var end = 0;
@@ -49,6 +50,7 @@ class Charsets {
                 format = 2;
             }
         }
+
         tt.writeCard8(format);
         if (format == 0) {
             for (g in f.glyphs) {
@@ -60,7 +62,7 @@ class Charsets {
             }
         } else {
             for (r in ranges) {
-                tt.writeUINT16(r.first);
+                tt.writeCard16(r.first);
                 if (format == 1) {
                     tt.writeCard8(r.remaining);
                 } else {
@@ -86,7 +88,7 @@ private class SIDRange {
     }
 
     public function toString() {
-        return 'SID Range ${first},${remaining}';
+        return '${first}…${remaining}';
     }
 
 }

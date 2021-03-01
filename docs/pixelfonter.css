@@ -2,6 +2,11 @@ section {
     margin: 30px 0;
 }
 
+canvas {
+    -moz-image-rendering: crisp-edges;
+    image-rendering: crisp-edges;
+}
+
 #cells {
     display: flex;
     flex-wrap: wrap;

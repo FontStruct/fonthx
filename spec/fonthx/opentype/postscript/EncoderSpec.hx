@@ -9,7 +9,6 @@ class EncoderSpec extends buddy.BuddySuite {
 
     public function new() {
 
-        @include
         describe("Encoder", function() {
             it("encodesFloats", function() {
                 var bytes = new BytesBuffer();

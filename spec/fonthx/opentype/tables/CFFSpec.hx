@@ -11,9 +11,9 @@ import fonthx.examples.pixelfonter.PixelFont;
 import fonthx.opentype.cff.CFF;
 
 using buddy.Should;
+using StringTools;
 
 class CFFSpec extends buddy.BuddySuite {
-
 
     private var idx = 0;
     private var bytes:Array<Int>;
@@ -36,7 +36,7 @@ class CFFSpec extends buddy.BuddySuite {
     private function twoByteOperand() {
         var b0 = nextByte();
         var b1 = nextByte();
-        return (b0 - 247) * 256+ b1 + 108;
+        return (b0 - 247) * 256 + b1 + 108;
     }
 
     private function oneByteOperand() {
@@ -44,6 +44,7 @@ class CFFSpec extends buddy.BuddySuite {
     }
 
     private function nextByte() {
+//        trace(bytes[idx+1].hex());
         return bytes[idx++];
     }
 
@@ -74,6 +75,7 @@ class CFFSpec extends buddy.BuddySuite {
         });
 
         describe("CFF", function() {
+            @include
             it("generates", function() {
                 var cff:CFF = new CFF(f, new BuildOptions());
                 bytes = getTableAsArray(cff);
@@ -87,11 +89,12 @@ class CFFSpec extends buddy.BuddySuite {
 
                 // name index
                 nextByte().should.be(0);
-                nextByte().should.be(1); // 1 string in the name idx
+                nextByte().should.be(1); // 1 string in the name idx (2 bytes)
+
                 nextByte().should.be(1); // offsize
                 nextByte().should.be(1); // first offset
-                nextByte().should.be(1 + 'pixelfont'.length); // closing offset
-                nextStringBytesShouldBe('pixelfont');
+                nextByte().should.be(1 + f.postscriptName.length); // closing offset
+                nextStringBytesShouldBe(f.postscriptName);
 
                 // top dict index
                 nextByte().should.be(0);
@@ -124,9 +127,9 @@ class CFFSpec extends buddy.BuddySuite {
                 oneByteOperand().should.be(0);
                 oneByteOperand().should.be(0);
                 nextByte().should.be(TopDictOp.Private);
-                twoByteOperand().should.be(130);
+                twoByteOperand().should.be(133);
                 nextByte().should.be(TopDictOp.charset);
-                twoByteOperand().should.be(134);
+                twoByteOperand().should.be(137);
                 nextByte().should.be(TopDictOp.CharStrings);
 
                 var topDictEndIdx = idx + 1;
@@ -141,21 +144,21 @@ class CFFSpec extends buddy.BuddySuite {
                     nextByte(); // additional offsets
                 }
                 var closingOffset = nextByte();
-                closingOffset.should.be(1 + 'Version 0.0PixelFonterpixelfont RegularPixelFonterpixelfont'.length);
-                nextStringBytesShouldBe('Version 0.0');
-                nextStringBytesShouldBe('PixelFonterpixelfont Regular');
-                nextStringBytesShouldBe('PixelFonterpixelfont');
+                closingOffset.should.be(1 + '${f.version}${f.fullName}${f.postscriptName}'.length);
+                nextStringBytesShouldBe(f.version);
+                nextStringBytesShouldBe(f.fullName);
+                nextStringBytesShouldBe(f.postscriptName);
 
                 // GLOBAL_SUBR_INDEX
                 nextByte().should.be(0);
                 nextByte().should.be(0); // no global subroutines yet
-//                nextByte().should.be(1); // offsize
+                nextByte().should.be(1); // offsize
 //                nextByte().should.be(1); // first offset
 //                var closingOffset = nextByte();
 //                trace(closingOffset);
-
-                // CHARSETS
-                nextByte().should.be(1); // charsets format 1
+//
+//                // CHARSETS
+//                nextByte().should.be(1); // charsets format 1
 
 
                 // CHARSTRINGS_INDEX

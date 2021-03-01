@@ -6,8 +6,8 @@
     "font", "truetype", "font-generator"
   ],
   "description": "Font Generation for Haxe",
-  "version": "0.0.2",
-  "releasenote": "Added support for GPOS Pair Adjustment Positioning Subtable (e.g. kerning)",
+  "version": "0.0.3",
+  "releasenote": "Added support for CFF outlines in OpenType fonts",
   "contributors": ["FontStruct"],
   "classPath": "src/",
   "dependencies": {

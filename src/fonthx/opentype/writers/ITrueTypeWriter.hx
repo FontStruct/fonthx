@@ -27,6 +27,11 @@ interface ITrueTypeWriter {
     public function writeOffset16(b:Int):ITrueTypeWriter;
 
     /**
+	* append a 32-bit unsigned integer – alias for writeULONG
+	*/
+    public function writeOffset32(b:Int):ITrueTypeWriter;
+
+    /**
 	* append a 16-bit signed integer.
 	*/
     public function writeSHORT(b:Int):ITrueTypeWriter;

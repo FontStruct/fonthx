@@ -66,6 +66,14 @@ class TrueTypeFileWriter implements ITrueTypeWriter {
     }
 
     /**
+	* append a 32-bit unsigned integer – alias for writeULONG
+	 */
+    public function writeOffset32(b:Int):ITrueTypeWriter {
+        writeULONG(b);
+        return this;
+    }
+
+    /**
 	* append a 16-bit signed integer.
 	*/
 

@@ -60,6 +60,7 @@ class PixelFonter {
         var buildOptions = new BuildOptions();
         buildOptions.useSubroutinesInCFF = true;
         buildOptions.useFixedCoordinatesInCFF = opts.floatingPointCoords;
+        buildOptions.includeSVG = opts.includeSVG;
         var bytes = OpenTypeBuilder.build(font, opts.format == 'ttf' ? TrueType : CFF, buildOptions);
 
         ExecutionTimer.end('PixelFonter::generate');

@@ -5,6 +5,7 @@ class BuildOptions {
 
     public var useFixedCoordinatesInCFF:Bool = false;
     public var useSubroutinesInCFF:Bool = false;
+    public var includeSVG:Bool = false;
     public var extraNamingRecords:IntMap<String>;
     public function new() {
         extraNamingRecords = new IntMap();

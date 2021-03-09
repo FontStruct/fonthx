@@ -39,6 +39,7 @@ class PixelFonterApp {
             codepointString: args.has('c') ? args.get('c').value : '65-90,33-58',
             name: args.has('n') ? args.get('n').value : 'Pixel Font',
             outputPath: args.has('o') ? args.get('o').value : 'output.ttf',
+            includeSVG: args.has('v') ? true: false,
             floatingPointCoords: args.has('d') ? true: false,
             shape: args.has('s') ? Std.parseInt(args.get('s').value) : 1,
             format: args.has('f') ? args.get('f').value : 'ttf'

@@ -1,5 +1,6 @@
 package fonthx.opentype;
 
+import fonthx.opentype.svg.SVGTable;
 import fonthx.opentype.FontFileFormat;
 import fonthx.opentype.tables.DSIGTable;
 import fonthx.opentype.cff.CFF;
@@ -97,6 +98,11 @@ class OpenTypeBuilder {
             var glyphTable = new GlyphTable(font);
             ttf.addTable(glyphTable);
             ttf.addTable(new LocationTable(glyphTable));
+        }
+
+        if (options.includeSVG) {
+            var svgTable = new SVGTable(font);
+            ttf.addTable(svgTable);
         }
 
         ttf.addTable(new DSIGTable());

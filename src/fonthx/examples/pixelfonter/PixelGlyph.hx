@@ -1,5 +1,6 @@
 package fonthx.examples.pixelfonter;
 
+import fonthx.model.font.PathProperties;
 import fonthx.model.font.AbstractContourGlyph;
 import fonthx.model.geom.Rectangle;
 import fonthx.model.font.IContourConsumer;
@@ -53,10 +54,12 @@ class PixelGlyph extends AbstractContourGlyph implements IContourGlyph {
     **/
     override public function walkContours(consumer:IContourConsumer) {
         consumer.start();
+        var props:PathProperties = new PathProperties();
         for (p in pixels) {
+            props.fill = p.color;
             consumer.startShape();
             consumer.startGroup();
-            consumer.startPath();
+            consumer.startPath(props);
             if (shape == 2) {
                 // dots
                 var r:Float = pixelSize / 2;
@@ -123,13 +126,15 @@ class Pixel {
 
     public var x:Int;
     public var y:Int;
+    public var color:String;
 
-    public function new(x, y) {
+    public function new(x, y, color = 'FF0000') {
         this.x = x;
         this.y = y;
+        this.color = color;
     }
 
     public function toString():String {
-        return '(${x}, ${y})';
+        return '(${x}, ${y}) ${color}';
     }
 }

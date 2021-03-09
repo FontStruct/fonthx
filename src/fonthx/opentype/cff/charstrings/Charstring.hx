@@ -1,4 +1,5 @@
 package fonthx.opentype.cff.charstrings;
+import fonthx.model.font.PathProperties;
 import haxe.io.BytesBuffer;
 import haxe.io.Bytes;
 import fonthx.opentype.cff.operators.CharstringOp;
@@ -31,7 +32,7 @@ class Charstring extends AbstractContourConsumer implements IContourConsumer {
         pen = null;
     }
 
-    override public function startPath() {
+    override public function startPath(props:PathProperties = null) {
         subpath = new Subpath();
     }
 

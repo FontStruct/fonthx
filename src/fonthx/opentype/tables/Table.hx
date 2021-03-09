@@ -1,5 +1,6 @@
 package fonthx.opentype.tables;
 
+import fonthx.svg.SVG;
 import fonthx.opentype.writers.ITrueTypeWriter;
 
 class Table {
@@ -17,6 +18,7 @@ class Table {
     public static var GLYF = "glyf";
     public static var LOCA = "loca";
     public static var CFF = "CFF ";
+    public static var SVG = "SVG ";
     public static var KERN = "kern";
     public static var GPOS = "GPOS";
     public static var DSIG = "DSIG";
@@ -34,10 +36,10 @@ class Table {
     // "sfnt", "tdir",
 
     public static var compileOrder = [HEAD, HHEA, MAXP, OS2, HMTX, CMAP, GLYF, LOCA,
-        CFF, KERN, NAME, POST, GPOS, DSIG];
+        CFF, KERN, NAME, POST, GPOS, SVG, DSIG];
 
     public static var optimalOrder = [HEAD, HHEA, MAXP, OS2, HMTX, CMAP, LOCA, GLYF,
-        CFF, KERN, NAME, POST, GPOS, DSIG];
+        CFF, KERN, NAME, POST, GPOS, SVG, DSIG];
 
     public var tag:String;
     public var offset:Int;

@@ -7,31 +7,41 @@ class SVGBuilder {
 
     }
 
-    public function build(font:IFont) {
-        var svg = new Xml();
-        Xml.createDocType();
+    public function build(font:IFont, options:SVGOptions = null) {
+        if (options == null) {
+            options = new SVGOptions();
+        }
+        var offset:Float = 0;
+        if (options.asSheet) {
+            options.perRow = Std.int(Math.ceil(Math.sqrt(font.glyphs.length)));
+            offset = options.gap + options.emSquare;
+            options.sheetW = options.sheetH = options.perRow * offset;
+        }
+
+        var svg = new SVG(options);
+        svg.open();
+
+        var idx = 0;
         for (g in font.glyphs) {
-            idx++;
             if (g.name == '.notdef') {
                 continue;
             }
-            // SVGDocumentRecord
-            var svg = new SVG(font.emSquare);
-            g.walkContours(svg);
-            // we only support one svg = one glyph
-            tt.writeUINT16(idx); // startGlyphID 	The first glyph ID for the range covered by this record.
-            tt.writeUINT16(idx); // endGlyphID 	    The last glyph ID for the range covered by this record.
-            tt.writeOffset32(offset);
-            var bytes:Bytes = Bytes.ofString(svg.getString());
-            #if sys
-              var compress = new Compress(9);
-              compress.setFlushMode(FlushMode.FINISH);
-              var buffer = haxe.io.Bytes.alloc(bytes.length);
-              var r = compress.execute(bytes,0,buffer,0);
-              compress.close();
-              bytes= buffer.sub(0,r.write);
-            #end
-            tt.writeBytes(bytes);
+            idx++;
+            var svgGlyph = new SVGGlyph(idx, options);
+            if (options.asSheet) {
+                if (idx % options.perRow == 0) {
+                    options.offsetX = 0;
+                    options.offsetY += offset;
+                } else {
+                    options.offsetX += offset;
+                }
+            }
+            g.walkContours(svgGlyph);
+            svg.add(svgGlyph.toString());
+
         }
+        svg.close();
+        trace(svg.toString());
+        return svg.toString();
     }
 }

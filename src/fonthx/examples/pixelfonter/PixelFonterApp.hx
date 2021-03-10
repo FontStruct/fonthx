@@ -29,6 +29,7 @@ class PixelFonterApp {
             trace('-s int 1=pixels, 2=dots');
             trace('-d use floating point coordinates in CFF table');
             trace('-f format ttf|otf (defaults to “ttf”)');
+            trace('-svg include SVG table');
             return 0;
         }
 
@@ -39,7 +40,7 @@ class PixelFonterApp {
             codepointString: args.has('c') ? args.get('c').value : '65-90,33-58',
             name: args.has('n') ? args.get('n').value : 'Pixel Font',
             outputPath: args.has('o') ? args.get('o').value : 'output.ttf',
-            includeSVG: args.has('v') ? true: false,
+            includeSVG: args.has('svg') ? true: false,
             floatingPointCoords: args.has('d') ? true: false,
             shape: args.has('s') ? Std.parseInt(args.get('s').value) : 1,
             format: args.has('f') ? args.get('f').value : 'ttf'

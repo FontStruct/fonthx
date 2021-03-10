@@ -5,7 +5,7 @@ class PathProperties {
     public var stroke:String;
 
     public function new() {
-        fill = '000000';
+        fill = '#000000';
         stroke = null;
     }
 }

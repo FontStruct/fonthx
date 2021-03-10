@@ -128,7 +128,7 @@ class Pixel {
     public var y:Int;
     public var color:String;
 
-    public function new(x, y, color = 'FF0000') {
+    public function new(x, y, color = '#FF0000') {
         this.x = x;
         this.y = y;
         this.color = color;

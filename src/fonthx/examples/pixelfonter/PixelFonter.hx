@@ -48,9 +48,9 @@ class PixelFonter {
                     x = x % opts.imageWidth;
                     var y = dy + (row * opts.glyphHeight);
                     var idx = ((y * opts.imageWidth) + x) * 4;
-                    var colour = opts.pixelData.get(idx);
-                    if (colour != 0) continue;
-                    glyph.addPixel(dx, opts.glyphHeight - (dy + 1)); // note inverted y axis
+                    var color = opts.pixelData.get(idx);
+                    if (color != 0) continue;
+                    glyph.addPixel(dx, opts.glyphHeight - (dy + 1), dy > (opts.glyphHeight / 2) ? '#CC0000' : '#0099CC'); // note inverted y axis
                 }
             }
         }

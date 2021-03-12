@@ -26,8 +26,8 @@ class PixelGlyph extends AbstractContourGlyph implements IContourGlyph {
         gridBounds = null;
     }
 
-    public function addPixel(x:Int, y:Int) {
-        pixels.push(new Pixel(x, y));
+    public function addPixel(x:Int, y:Int, color:String = '#FF0000') {
+        pixels.push(new Pixel(x, y, color));
         if (gridBounds == null) {
             gridBounds = new Rectangle(x, y, 1, 1);
         } else {
@@ -127,14 +127,16 @@ class Pixel {
     public var x:Int;
     public var y:Int;
     public var color:String;
+    public var opacity:Float;
 
-    public function new(x, y, color = '#FF0000') {
+    public function new(x, y, color = '#FF0000', opacity = 1) {
         this.x = x;
         this.y = y;
         this.color = color;
+        this.opacity = opacity;
     }
 
     public function toString():String {
-        return '(${x}, ${y}) ${color}';
+        return '(${x}, ${y}) ${color} ${opacity}';
     }
 }

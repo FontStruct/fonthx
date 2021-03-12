@@ -19,12 +19,17 @@ class SVGGlyph extends AbstractContourConsumer implements IContourConsumer {
     }
 
     private function offset() {
-        if (!options.asSheet) return '';
+        if (options.offsetX == 0 && options.offsetY == 0) return '';
         return ' transform="translate(${options.offsetX},${options.offsetY})"';
     }
 
+    private function getId() {
+        if (!options.idsInGlyphs) return '';
+        return ' id="glyph${id}"';
+    }
+
     override public function start() {
-        s.add('<g id="glyph${id}"${offset()}>');
+        s.add('<g${getId()}${offset()}>');
     }
 
     override public function startPath(props:PathProperties = null) {
@@ -38,7 +43,10 @@ class SVGGlyph extends AbstractContourConsumer implements IContourConsumer {
             s.add('fill="${props.fill}" ');
         }
         if (props.stroke != null) {
-            s.add('fill="${props.stroke}" ');
+            s.add('stroke="${props.stroke}" ');
+        }
+        if (props.opacity != 1) {
+            s.add('opacity="${props.opacity}" ');
         }
         s.add('d="');
     }
@@ -72,7 +80,7 @@ class SVGGlyph extends AbstractContourConsumer implements IContourConsumer {
     // the positive y-axis points downward, rather than usual convention for OpenType of the positive y-axis pointing
     // upward
     private function m(y:Float) {
-        return options.emSquare - y;
+        return options.height - y;
     }
 
     public function toString() {

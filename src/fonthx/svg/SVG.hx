@@ -8,12 +8,12 @@ class SVG {
     public function new(options:SVGOptions) {
         this.options = options;
         s = new StringBuf();
-       // s.add('<?xml version="1.0" encoding="UTF-8"?>');
     }
 
     public function open() {
         // The size of the initial viewport for the SVG document is the em square: height and width both equal to head.unitsPerEm
-        s.add('<svg version="1.1" xmlns="http://www.w3.org/2000/svg"${dimensions()}>');
+        var id = options.id > -1? ' id="glyph${options.id}"' : '';
+        s.add('<svg xmlns="http://www.w3.org/2000/svg"${viewBox()}${id}>');
     }
 
     public function add(s:String) {
@@ -24,9 +24,9 @@ class SVG {
         s.add('</svg>');
     }
 
-    private function dimensions() {
-        if (!options.asSheet) return '';
-        return ' width="${options.sheetW}" height="${options.sheetH}"';
+    private function viewBox() {
+        if (options.width == 0) return '';
+        return ' viewBox=" 0 ${options.height} ${options.width} ${options.height}"';
     }
 
     public function toString():String {

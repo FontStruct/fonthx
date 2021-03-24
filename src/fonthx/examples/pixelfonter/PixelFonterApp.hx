@@ -30,6 +30,7 @@ class PixelFonterApp {
             trace('-d use floating point coordinates in CFF table');
             trace('-f format ttf|otf (defaults to “ttf”)');
             trace('-svg include SVG table');
+            trace('-sheet export font as a single SVG');
             return 0;
         }
 
@@ -41,6 +42,7 @@ class PixelFonterApp {
             name: args.has('n') ? args.get('n').value : 'Pixel Font',
             outputPath: args.has('o') ? args.get('o').value : 'output.ttf',
             includeSVG: args.has('svg') ? true: false,
+            svgSheet: args.has('sheet') ? true: false,
             floatingPointCoords: args.has('d') ? true: false,
             shape: args.has('s') ? Std.parseInt(args.get('s').value) : 1,
             format: args.has('f') ? args.get('f').value : 'ttf'

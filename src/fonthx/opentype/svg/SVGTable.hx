@@ -48,8 +48,7 @@ class SVGTable extends Table {
             tt.writeOffset32(offset);               // svgDocOffset 	Offset from the beginning of the SVGDocumentList to an SVG document. Must be non-zero.
             var svgOptions = new SVGOptions();
             svgOptions.id = idx;
-            svgOptions.width = font.emSquare;
-            svgOptions.height = font.emSquare;
+            svgOptions.boxSize = font.emSquare;
             var builder = new SVGBuilder();
             var svg = builder.buildGlyph(idx, font.glyphs[idx], svgOptions);
             var bytes:Bytes = Bytes.ofString(svg);

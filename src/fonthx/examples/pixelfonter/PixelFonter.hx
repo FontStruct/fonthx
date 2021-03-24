@@ -1,5 +1,6 @@
 package fonthx.examples.pixelfonter;
 
+import fonthx.svg.SVGBuilder;
 import fonthx.opentype.BuildOptions;
 import fonthx.utils.ExecutionTimer;
 import fonthx.opentype.FontFileFormat;
@@ -40,7 +41,6 @@ class PixelFonter {
         var numRows = opts.imageHeight / opts.glyphHeight;
         for (idx in 0 ... codepoints.length) {
             var glyph = font.addGlyph(codepoints[idx]);
-            //trace('Creating glyph at codepoint ${glyph.codepoint}');
             for (dy in 0 ... opts.glyphHeight) {
                 for (dx in 0 ... opts.glyphWidth) {
                     var x = (idx * opts.glyphWidth + dx);
@@ -50,9 +50,16 @@ class PixelFonter {
                     var idx = ((y * opts.imageWidth) + x) * 4;
                     var color = opts.pixelData.get(idx);
                     if (color != 0) continue;
-                    glyph.addPixel(dx, opts.glyphHeight - (dy + 1), dy > (opts.glyphHeight / 2) ? '#CC0000' : '#0099CC'); // note inverted y axis
+                    glyph.addPixel(dx, opts.glyphHeight - (dy + 1), dy > Math.floor((opts.glyphHeight - 3) / 2) ? '#0099CC' : '#CC0000'); // note inverted y axis
                 }
             }
+        }
+
+        if (opts.svgSheet) {
+            var svgBuilder = new SVGBuilder();
+            var svg = svgBuilder.buildSheet(font.glyphs);
+            ExecutionTimer.end('PixelFonter::generate');
+            return Bytes.ofString(svg);
         }
 
         font.prepareForExport();

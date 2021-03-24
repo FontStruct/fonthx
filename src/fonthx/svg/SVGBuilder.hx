@@ -23,25 +23,29 @@ class SVGBuilder {
         return svg.toString();
     }
 
-    public function buildSheet(glyphs:Array<IContourGlyph>, options:SVGOptions = null) {
+    public function buildSheet(glyphs:Array<IContourGlyph>, options:SVGOptions = null, sheetConfig:SVGSheetConfig = null) {
         if (options == null) {
             options = new SVGOptions();
         }
+        if (sheetConfig == null) {
+            sheetConfig = new SVGSheetConfig();
+        }
         var offset:Float = 0;
-        options.width = 1000;
-        options.height = 1000;
-        options.perRow = Std.int(Math.ceil(Math.sqrt(glyphs.length)));
-        offset = options.gap + options.width;
-        options.width = options.height = options.perRow * offset;
+        sheetConfig.perRow = Std.int(Math.ceil(Math.sqrt(glyphs.length)));
+        offset = sheetConfig.gap + options.boxSize;
 
+        var boxSize = options.boxSize;
+        options.boxSize = sheetConfig.perRow * offset;
+        options.isGlyph = false;
         var svg = new SVG(options);
         svg.open();
+        options.boxSize = boxSize;
 
         var idx = 0;
         for (g in glyphs) {
             idx++;
             var svgGlyph = new SVGGlyph(idx, options);
-            if (idx % options.perRow == 0) {
+            if (idx % sheetConfig.perRow == 0) {
                 options.offsetX = 0;
                 options.offsetY += offset;
             } else {

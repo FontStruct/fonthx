@@ -60,6 +60,7 @@ class PixelFonterBrowserApp {
             floatingPointCoords: false,
             shape: 2,
             includeSVG: includeSVG,
+            svgSheet: false,
             format: format
         }
         var bytes = Base64.decode(imageData.split(',')[1]);

@@ -10,6 +10,9 @@ import haxe.io.Bytes;
 import haxe.zip.Compress;
 import haxe.zip.FlushMode;
 #end
+#if java
+import java.StdTypes;
+#end
 
 /**
 * https://docs.microsoft.com/en-us/typography/opentype/spec/svg
@@ -44,24 +47,32 @@ class SVGTable extends Table {
         for (idx in 2...font.glyphs.length) {
             // SVGDocumentRecord
             tt.writeUINT16(idx);                      // startGlyphID 	The first glyph ID for the range covered by this record.
-            tt.writeUINT16(idx);                      // endGlyphID 	    The last glyph ID for the range covered by this record.
-            tt.writeOffset32(offset);               // svgDocOffset 	Offset from the beginning of the SVGDocumentList to an SVG document. Must be non-zero.
+            tt.writeUINT16(idx);                      // endGlyphID 	The last glyph ID for the range covered by this record.
+            tt.writeOffset32(offset);                 // svgDocOffset 	Offset from the beginning of the SVGDocumentList to an SVG document. Must be non-zero.
             var svgOptions = new SVGOptions();
             svgOptions.id = idx;
             svgOptions.boxSize = font.emSquare;
             var builder = new SVGBuilder();
             var svg = builder.buildGlyph(idx, font.glyphs[idx], svgOptions);
             var bytes:Bytes = Bytes.ofString(svg);
-            #if sys
-                  var compress = new Compress(9);
-                  compress.setFlushMode(FlushMode.FINISH);
-                  var buffer = haxe.io.Bytes.alloc(bytes.length);
-                  var r = compress.execute(bytes,0,buffer,0);
-                  compress.close();
-                  bytes= buffer.sub(0,r.write);
+            #if java
+                var outputStream = new java.io.ByteArrayOutputStream(bytes.length);
+                var gzipper = new java.util.zip.GZIPOutputStream(outputStream);
+                gzipper.write(bytes.getData());
+                gzipper.close();
+                outputStream.close();
+                bytes = Bytes.ofData(outputStream.toByteArray());
+            #elseif sys
+                // todo check this – does it really perform GZIP as required?
+                var compress = new Compress(9);
+                compress.setFlushMode(FlushMode.FINISH);
+                var buffer = haxe.io.Bytes.alloc(bytes.length);
+                var r = compress.execute(bytes,0,buffer,0);
+                compress.close();
+                bytes= buffer.sub(0,r.write);
             #end
             offset += bytes.length;
-            tt.writeULONG(bytes.length);            // svgDocLength 	Length of the SVG document data. Must be non-zero.
+            tt.writeULONG(bytes.length);            // svgDocLength Length of the SVG document data. Must be non-zero.
             svgBytes.push(bytes);
         }
         for (svg in svgBytes) {

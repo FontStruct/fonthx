@@ -69,7 +69,7 @@ class AbstractContourGlyph implements IContourGlyph {
         return name;
     }
 
-    public function walkContours(consumer:IContourConsumer):Void {
+    public function walkContours(consumer:IContourConsumer, options:ContourOptions = null):Void {
 
     }
 

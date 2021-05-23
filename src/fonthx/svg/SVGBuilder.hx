@@ -1,11 +1,11 @@
 package fonthx.svg;
 
+import fonthx.model.font.ContourOptions;
 import fonthx.model.font.IContourGlyph;
 
 class SVGBuilder {
 
     public function new() {
-
     }
 
     public function buildGlyph(idx:Int, glyph:IContourGlyph, options:SVGOptions = null) {
@@ -16,7 +16,9 @@ class SVGBuilder {
         svg.open();
 
         var svgGlyph = new SVGGlyph(idx, options);
-        glyph.walkContours(svgGlyph);
+
+        var walkOptions = new ContourOptions(ContourOptions.MERGED_LAYERED);
+        glyph.walkContours(svgGlyph, walkOptions);
         svg.add(svgGlyph.toString());
 
         svg.close();
@@ -42,6 +44,7 @@ class SVGBuilder {
         options.boxSize = boxSize;
 
         var idx = 0;
+        var walkOptions = new ContourOptions(ContourOptions.MERGED_LAYERED);
         for (g in glyphs) {
             idx++;
             var svgGlyph = new SVGGlyph(idx, options);
@@ -51,7 +54,7 @@ class SVGBuilder {
             } else {
                 options.offsetX += offset;
             }
-            g.walkContours(svgGlyph);
+            g.walkContours(svgGlyph, walkOptions);
             svg.add(svgGlyph.toString());
 
         }

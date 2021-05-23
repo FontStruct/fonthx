@@ -1,5 +1,6 @@
 package fonthx.examples.pixelfonter;
 
+import fonthx.model.font.ContourOptions;
 import fonthx.model.font.PathProperties;
 import fonthx.model.font.AbstractContourGlyph;
 import fonthx.model.geom.Rectangle;
@@ -52,7 +53,7 @@ class PixelGlyph extends AbstractContourGlyph implements IContourGlyph {
     /**
     * @inherit
     **/
-    override public function walkContours(consumer:IContourConsumer) {
+    override public function walkContours(consumer:IContourConsumer, options:ContourOptions = null) {
         consumer.start();
         var props:PathProperties = new PathProperties();
         for (p in pixels) {

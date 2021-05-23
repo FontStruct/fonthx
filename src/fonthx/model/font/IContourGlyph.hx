@@ -56,7 +56,8 @@ interface IContourGlyph {
     /**
     * Plot the glyph contours using the IContourConsumer interface
     * Used, for example, for recording the glyph contours into glyph descriptions in the TrueType GLYF table
+    * @param options For specifying contour type e.g. merged if the implementation supports merging
     **/
-    function walkContours(consumer:IContourConsumer):Void;
+    function walkContours(consumer:IContourConsumer, options:ContourOptions = null):Void;
 
 }

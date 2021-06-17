@@ -4,6 +4,7 @@ const srcCanvas = document.querySelector('#canvas');
 let imageLoaded = false;
 const downloadTTFLink = document.querySelector('#downloadTTF');
 const downloadOTFLink = document.querySelector('#downloadOTF');
+const downloadSVGLink = document.querySelector('#downloadTTFSVG');
 
 function regenerateFont(srcImage) {
 	const haveWASM = typeof(Module) !== 'undefined' && typeof(Module.generate) !== 'undefined';
@@ -21,6 +22,8 @@ function regenerateFont(srcImage) {
   downloadTTFLink.href = 'data:font/truetype;base64,' + ttf;
   const otf = fonthx.examples.pixelfonter.PixelFonterBrowserApp.generate(srcImage, 'otf');
   downloadOTFLink.href = 'data:font/opentype;base64,' + otf;
+  const svgOtf = fonthx.examples.pixelfonter.PixelFonterBrowserApp.generate(srcImage, 'ttf', true);
+  downloadSVGLink.href = 'data:font/opentype;base64,' + svgOtf;
 
 }
 

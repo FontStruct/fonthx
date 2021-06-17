@@ -17,7 +17,7 @@ class SVGBuilder {
 
         var svgGlyph = new SVGGlyph(idx, options);
 
-        var walkOptions = new ContourOptions(ContourOptions.MERGED_LAYERED);
+        var walkOptions = new ContourOptions(ContourOptions.LAYERED_CONTOURS);
         glyph.walkContours(svgGlyph, walkOptions);
         svg.add(svgGlyph.toString());
 
@@ -44,7 +44,7 @@ class SVGBuilder {
         options.boxSize = boxSize;
 
         var idx = 0;
-        var walkOptions = new ContourOptions(ContourOptions.MERGED_LAYERED);
+        var walkOptions = new ContourOptions(ContourOptions.LAYERED_CONTOURS);
         for (g in glyphs) {
             idx++;
             var svgGlyph = new SVGGlyph(idx, options);

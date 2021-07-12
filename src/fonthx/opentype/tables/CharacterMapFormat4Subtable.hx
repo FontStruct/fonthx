@@ -3,22 +3,16 @@ package fonthx.opentype.tables;
 import fonthx.opentype.writers.ITrueTypeWriter;
 
 /**
- * @see https://docs.microsoft.com/en-us/typography/opentype/spec/cmap
+ * @see https://docs.microsoft.com/en-us/typography/opentype/spec/cmap#format-4-segment-mapping-to-delta-values
  */
 class CharacterMapFormat4Subtable extends CharacterMapSubtable {
 
-    private var segStarts:Array<Int> ; // array of segment start codes
-    private var segEnds:Array<Int> ; // array of segment end codes
-    private var segCount:Int;
+    private var segments:Array<Segment>;
     private var prepared:Bool;
 
-    /**
-	 * Construct a new CharacterMapFormat4Subtable
-	 */
     public function new(platformID:Int, encodingID:Int, languageID:Int) {
         super(platformID, encodingID, languageID);
-        segStarts = new Array();
-        segEnds = new Array();
+        segments = new Array();
         prepared = false;
     }
 
@@ -26,7 +20,7 @@ class CharacterMapFormat4Subtable extends CharacterMapSubtable {
         if (length == 0) {
             prepareSegments();
             var numGlyphs = codepoints.length;
-            length = 16 + (segCount * 8) + (numGlyphs * 2);
+            length = 16 + (segments.length * 8) + (numGlyphs * 2);
         }
         return length;
     }
@@ -36,37 +30,32 @@ class CharacterMapFormat4Subtable extends CharacterMapSubtable {
             return;
         }
         var numGlyphs = codepoints.length;
-        segCount = 1;
         var prevCode = codepoints[0];
-        segStarts.push(prevCode);
-        segEnds.push(0);
+        segments.push(new Segment(prevCode, 0));
         var currCode = 0;
         // work out number of segments
         for (i in 1...numGlyphs) {
             currCode = codepoints[i];
             if (currCode != (prevCode + 1)) {
-                segEnds[segCount - 1] = prevCode;
-                segStarts.push(currCode);
-                segEnds.push(0);
-                segCount++;
+                segments[segments.length - 1].end = prevCode;
+                segments.push(new Segment(currCode, 0));
             }
             prevCode = currCode;
         }
         // closing segment
-        segEnds[segCount - 1] = currCode;
-        segEnds.push(0xFFFF);
-        segStarts.push(0xFFFF);
-        segCount++;
+        segments[segments.length - 1].end = currCode;
+        segments.push(new Segment(0xFFFF, 0xFFFF));
         prepared = true;
     }
 
     override public function write(tt:ITrueTypeWriter) {
         prepareSegments();
         var numGlyphs = codepoints.length;
+        var segCount = segments.length;
         tt.writeUSHORT(4); // Format number is set to 4.
         tt.writeUSHORT(calculateLength()); // This is the length in bytes of the subtable.
         tt.writeUSHORT(0); // language 0 if not for mac.
-        tt.writeUSHORT(segCount * 2); // segCountX2 2 x segCount.
+        tt.writeUSHORT(segCount * 2); // 2 x segCount.
         var searchRange = Std.int(2 * (Math.pow(2, Math.floor(Math.log(segCount)
         / Math.log(2))))); // searchRange 2 x
         // (2**floor(log2(segCount)))
@@ -77,34 +66,28 @@ class CharacterMapFormat4Subtable extends CharacterMapSubtable {
         // searchRange
 
         // write ends
-        for (code in segEnds) {
+        for (seg in segments) {
             // endCount[segCount] End characterCode for each segment,
             // last=0xFFFF.
-            tt.writeUSHORT(code);
+            tt.writeUSHORT(seg.end);
         }
         tt.writeUSHORT(0); // reservedPad Set to 0.
 
         // write starts
-
-        for (code in segStarts) {
+        for (seg in segments) {
             // startCount[segCount] Start character code for each segment.
-            tt.writeUSHORT(code);
+            tt.writeUSHORT(seg.start);
         }
 
         // write deltas
         var charsSoFar = 0;
-        for (i in 0...segCount) {
-            var start = segStarts[i];
+        for (seg in segments) {
             var delta = -0xFFFF;
-            if (start != 0xFFFF) {
-                delta = getUnmapped() - (start - charsSoFar);
+            if (seg.start != 0xFFFF) {
+                delta = getUnmapped() - (seg.start - charsSoFar);
             }
             tt.writeSHORT(delta);
-            var end = segEnds[i];
-
-            //trace("Segment " + start + "-" + end + " Delta " + delta + " chars previous " + charsSoFar);
-
-            charsSoFar += ((end - start) + 1);
+            charsSoFar += ((seg.end - seg.start) + 1);
         }
 
         // write indexOffsets
@@ -120,6 +103,15 @@ class CharacterMapFormat4Subtable extends CharacterMapSubtable {
 
     }
 
+}
+
+class Segment {
+    public var start:Int;
+    public var end:Int;
+    public function new(start:Int, end:Int) {
+        this.start = start;
+        this.end = end;
+    }
 }
 
 

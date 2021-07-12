@@ -54,7 +54,7 @@ class PixelFonterBrowserApp {
             imagePath: 'pixel-font-5x5.png',
             glyphWidth: 5,
             glyphHeight: 5,
-            codepointString: '65-90,33-58',
+            codepointString: '65-90,33-58,65799-65804',
             name: 'Pixel Font',
             outputPath: '',
             floatingPointCoords: false,

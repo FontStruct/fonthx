@@ -1,5 +1,6 @@
 package fonthx.opentype;
 
+import fonthx.opentype.tables.CharacterMapFormat12Subtable;
 import fonthx.opentype.svg.SVGTable;
 import fonthx.opentype.FontFileFormat;
 import fonthx.opentype.tables.DSIGTable;
@@ -210,9 +211,31 @@ class OpenTypeBuilder {
     }
 
     private static function createCmap(fnt:IFont):CharacterMapTable {
+        // https://docs.microsoft.com/en-us/typography/opentype/spec/recom#cmap-table
+        /*
+        1) If the font supports only characters in the Unicode Basic Multilingual Plane (U+0000 to U+FFFF):
+        either platform 3, encoding 1; or platform 0, encoding 3. With either encoding, use a format 4 subtable.
+        2) If the font supports any characters in a Unicode supplementary plane (U+10000 to U+10FFFF):
+        either platform 3, encoding 10; or platform 0, encoding 4.
+        With either encoding, use a format 12 subtable.
+        */
+
+        var hasSMP = false;
+        for (g in fnt.glyphs) {
+            if (g.codepoint > 0xFFFF) {
+                hasSMP = true;
+                trace('Font has encodings in SMP');
+                break;
+            }
+        }
+
         var cmap = new CharacterMapTable();
-        cmap.addSubtable(new CharacterMapFormat4Subtable(0, 3, 0)); // unicode 2
-        cmap.addSubtable(new CharacterMapFormat4Subtable(3, 1, 0)); // ms unicode
+        if (hasSMP) {
+            cmap.addSubtable(new CharacterMapFormat12Subtable(0, 3, 0));
+        } else {
+            cmap.addSubtable(new CharacterMapFormat4Subtable(0, 3, 0));  // unicode 2
+            cmap.addSubtable(new CharacterMapFormat4Subtable(3, 1, 0));  // ms unicode
+        }
         for (sub in cmap.getSubtables()) {
             // iterate over glyphs adding mappings
             for (g in fnt.glyphs) {

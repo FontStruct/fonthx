@@ -37,8 +37,8 @@ class CharacterMapTable extends Table {
 		// subtable entries
 		var subtableOffset = 4 + (numTables * 8);
 		for (t in subtables) {
-			tt.writeUSHORT(t.getPlatformID()) // platform id
-			.writeUSHORT(t.getEncodingID()) // encoding id
+			tt.writeUSHORT(t.platformID) // platform id
+			.writeUSHORT(t.encodingID) // encoding id
 			.writeULONG(subtableOffset); // offset to subtable from start of this table, fill later
 			subtableOffset += t.calculateLength();
 		}

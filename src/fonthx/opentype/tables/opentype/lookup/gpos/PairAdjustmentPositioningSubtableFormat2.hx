@@ -19,8 +19,6 @@ class PairAdjustmentPositioningSubtableFormat2 implements ILookupSubtable {
     public var length(get, never):Int;
     private var subLookup:ClassPairAdjustmentPositioningSubLookup;
 
-
-
     public function new(subLookup:ClassPairAdjustmentPositioningSubLookup) {
         this.subLookup = subLookup;
     }

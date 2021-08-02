@@ -1,7 +1,7 @@
 package fonthx.opentype.tables.opentype;
+import fonthx.opentype.tables.Table;
 import fonthx.model.font.features.Layout;
 import fonthx.opentype.writers.ITrueTypeWriter;
-import fonthx.model.font.features.Feature;
 import fonthx.opentype.tables.opentype.lookup.LookupListTable;
 import fonthx.opentype.tables.opentype.feature.FeatureListTable;
 import fonthx.opentype.tables.opentype.script.ScriptListTable;
@@ -24,9 +24,9 @@ class LayoutTable extends Table {
     }
 
     public function setLayout(layout:Layout) {
-        scriptList.setLayout(layout);
-        featureList.setLayout(layout);
-        lookupList.setLayout(layout);
+        scriptList.setScripts(layout.scripts);
+        featureList.setFeatures(tag == Table.GSUB? layout.subFeatures : layout.posFeatures);
+        lookupList.setLookups(tag == Table.GSUB? layout.subLookups : layout.posLookups);
     }
 
     override public function write(tt:ITrueTypeWriter) {

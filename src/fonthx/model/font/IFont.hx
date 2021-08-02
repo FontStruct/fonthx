@@ -1,11 +1,6 @@
 package fonthx.model.font;
 
-import fonthx.opentype.types.Fixed;
 import fonthx.model.font.features.Layout;
-import fonthx.model.font.features.Script;
-import fonthx.model.font.features.FeatureTag;
-import fonthx.model.font.features.Feature;
-import haxe.ds.IntMap;
 import fonthx.model.font.features.lookups.pairadjustment.PositioningPair;
 
 /**
@@ -16,15 +11,12 @@ interface IFont {
 
     var glyphs(get, null):Array<IContourGlyph>;
     var name(get, null):String;
-    var author(get, null): String;
+    var author(get, null):String;
     var style(get, null):String;
     var creationDate(get, null):String;
     var version(get, null):String;
     var layout(get, null):Layout;
     var emSquare(get, null):Int;
-
-    function getGlyphForCodepoint(cp:Int):IContourGlyph;
-    function getKerningPairs():Array<PositioningPair>;
 
     // todo put following in IExportableFont or IOpenTypable (and IPostscriptable)?
     var description(get, null):String;
@@ -48,11 +40,13 @@ interface IFont {
     var realDescender(get, null):Float;
     var typoLineGap(get, null):Float;
 
+    function getGlyphForCodepoint(cp:Int):IContourGlyph;
+    function getGlyphIndexForCodepoint(cp:Int):Int;
+    function getGlyphIndexForName(name:String):Int;
+    function getKerningPairs():Array<PositioningPair>;
     function getLineGap():Int;
     function getNumberOfHMetrics():Int;
     function hasKerning():Bool;
-
-    // postscript table/CFF specific
     function isFixedPitch():Bool;
     function getItalicAngle():Float;
     function getUnderlinePosition():Int;

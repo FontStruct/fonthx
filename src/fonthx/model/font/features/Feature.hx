@@ -11,10 +11,12 @@ class Feature {
     public var tag:FeatureTag;
     public var idx:Int;
     public var lookups:Array<Lookup>;
+    public var isPos:Bool;
 
-    public function new(tag:FeatureTag) {
+    public function new(tag:FeatureTag, isPos:Bool = false) {
         this.tag = tag;
-        this.idx = 0;
+        this.isPos = isPos;
+        idx = 0;
         lookups = new Array();
     }
 

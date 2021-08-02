@@ -10,6 +10,7 @@ typedef PixelFonterParams = {
     name:String,
     format:String,
     outputPath:String,
+    features:Dynamic,
     shape:Int,
     includeSVG:Bool,
     svgSheet:Bool,

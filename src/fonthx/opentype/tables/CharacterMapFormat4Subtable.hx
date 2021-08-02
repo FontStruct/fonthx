@@ -8,12 +8,10 @@ import fonthx.opentype.writers.ITrueTypeWriter;
 class CharacterMapFormat4Subtable extends CharacterMapSubtable {
 
     private var segments:Array<Segment>;
-    private var prepared:Bool;
 
     public function new(platformID:Int, encodingID:Int, languageID:Int) {
         super(platformID, encodingID, languageID);
         segments = new Array();
-        prepared = false;
     }
 
     override public function calculateLength():Int {
@@ -26,31 +24,40 @@ class CharacterMapFormat4Subtable extends CharacterMapSubtable {
     }
 
     private function prepareSegments() {
-        if (prepared) {
+        if (segments.length > 0) {
             return;
         }
-        var numGlyphs = codepoints.length;
-        var prevCode = codepoints[0];
-        segments.push(new Segment(prevCode, 0));
+        var prevCode = -100;
         var currCode = 0;
-        // work out number of segments
-        for (i in 1...numGlyphs) {
+        var currSeg:Segment = null;
+        for (i in 0...codepoints.length) {
             currCode = codepoints[i];
-            if (currCode != (prevCode + 1)) {
-                segments[segments.length - 1].end = prevCode;
-                segments.push(new Segment(currCode, 0));
+            var mappable = currCode > 0;
+            var consecutive = currCode == (prevCode + 1);
+            if (!consecutive) {
+                if (currSeg != null) {
+                    currSeg.end  = prevCode;
+                    segments.push(currSeg);
+                }
+                if (mappable) {
+                    currSeg = new Segment(currCode, 0, i - currCode);
+                }
             }
-            prevCode = currCode;
+            if (mappable) {
+                prevCode = currCode;
+            }
         }
-        // closing segment
-        segments[segments.length - 1].end = currCode;
+        // closing last segment
+        if (currSeg != null && currCode > 0) {
+            currSeg.end = currCode;
+            segments.push(currSeg);
+        }
         segments.push(new Segment(0xFFFF, 0xFFFF));
-        prepared = true;
+        //trace(groups);
     }
 
     override public function write(tt:ITrueTypeWriter) {
         prepareSegments();
-        var numGlyphs = codepoints.length;
         var segCount = segments.length;
         tt.writeUSHORT(4); // Format number is set to 4.
         tt.writeUSHORT(calculateLength()); // This is the length in bytes of the subtable.
@@ -80,22 +87,19 @@ class CharacterMapFormat4Subtable extends CharacterMapSubtable {
         }
 
         // write deltas
-        var charsSoFar = 0;
         for (seg in segments) {
-            var delta = -0xFFFF;
-            if (seg.start != 0xFFFF) {
-                delta = getUnmapped() - (seg.start - charsSoFar);
-            }
-            tt.writeSHORT(delta);
-            charsSoFar += ((seg.end - seg.start) + 1);
+            tt.writeSHORT(seg.idDelta);
         }
 
         // write indexOffsets
-        for (code in 0...segCount) {
+        for (code in 0...segments.length) {
             // idRangeOffset[segCount] Offsets into glyphIdArray or 0
             tt.writeUSHORT(0);
         }
 
+        var numGlyphs = codepoints.filter(function(cp:Int) {
+            return cp > 0;
+        }).length;
         for (i in 0...numGlyphs) {
             // Glyph index array (arbitrary length)
             tt.writeUSHORT(0);
@@ -108,9 +112,11 @@ class CharacterMapFormat4Subtable extends CharacterMapSubtable {
 class Segment {
     public var start:Int;
     public var end:Int;
-    public function new(start:Int, end:Int) {
+    public var idDelta:Int;
+    public function new(start:Int, end:Int, idDelta:Int = 1) {
         this.start = start;
         this.end = end;
+        this.idDelta = idDelta;
     }
 }
 

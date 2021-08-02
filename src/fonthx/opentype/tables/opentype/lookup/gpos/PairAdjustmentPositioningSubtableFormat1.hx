@@ -98,6 +98,7 @@ class PairAdjustmentPositioningSubtableFormat1 implements ILookupSubtable {
             }
             return acc;
         }, new Array<Int>());
+        // todo maybe put sort into helper
         coverage.sort(function(a, b) {
             return a - b;
         });

@@ -16,7 +16,7 @@ class AbstractFont implements IFont {
     @:isVar public var realAscender(get, set):Float;
     @:isVar public var realDescender(get, set):Float;
     @:isVar public var typoLineGap(get, set):Float;
-    public var layout(get, null):Layout;
+    @:isVar public var layout(get, null):Layout;
     public var copyright(get, null):String;
     public var creationDate(get, null):String;
     public var author(get, null):String;
@@ -37,7 +37,6 @@ class AbstractFont implements IFont {
     public function new() {
         glyphs = new Array();
         name = 'Unnamed';
-        layout = new Layout();
         version = '1.0';
         style = "Regular";
         copyright = '';
@@ -47,6 +46,24 @@ class AbstractFont implements IFont {
 
     public function getGlyphForCodepoint(cp:Int):IContourGlyph {
         return glyphs.find(function(g) { return g.codepoint == cp; });
+    }
+
+    public function getGlyphIndexForCodepoint(cp:Int):Int {
+        for (i in 0...glyphs.length) {
+            if (glyphs[i].codepoint ==cp) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public function getGlyphIndexForName(name:String):Int {
+        for (i in 0...glyphs.length) {
+            if (glyphs[i].name ==name) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     function get_name():String {

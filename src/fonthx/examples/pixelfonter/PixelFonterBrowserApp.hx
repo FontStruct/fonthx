@@ -1,5 +1,9 @@
 package fonthx.examples.pixelfonter;
 
+import fonthx.model.font.features.lookups.LookupType;
+import fonthx.model.font.features.LanguageTag;
+import fonthx.model.font.features.ScriptTag;
+import fonthx.model.font.features.FeatureTag;
 import haxe.io.BytesInput;
 import haxe.crypto.Base64;
 using format.png.Tools;
@@ -54,7 +58,38 @@ class PixelFonterBrowserApp {
             imagePath: 'pixel-font-5x5.png',
             glyphWidth: 5,
             glyphHeight: 5,
-            codepointString: '65-90,33-58,65799-65804',
+            codepointString: '65-90,33-58,65799-65804,' + [for (c in 65...91) c].map(function(cp:Int) {
+                return String.fromCharCode(cp) + '.sc';
+            }).join(','),
+            features: {
+                // referencing http://adobe-type-tools.github.io/afdko/OpenTypeFeatureFileSpecification.html#4
+                // script have, langs, and langs have features, features have lookups
+                // (lookups belong to features belong to langs which belong to scripts)
+                // if not specified, will belong to a default lang and a default script (latin)
+                languageSystems: [
+                    {
+                        script: ScriptTag.DEFAULT,
+                        language: LanguageTag.DEFAULT
+                    }
+                ],
+                features: [{
+                    name: FeatureTag.FEAT_SMCP,
+                    lookups: [{
+                        // script: x,
+                        // language: x,
+                        // id:
+//                        rules: [
+//                            ['sub', 'A', 'A.sc']
+//                        ]
+                        type: LookupType.GSUB_SINGLE,
+                        rules: [for (cp in 65...91) cp].map(function(cp:Int) {
+                            var c = String.fromCharCode(cp);
+                            return [c, '${c}.sc'];
+                        })
+                    }]
+
+                }],
+            },
             name: 'Pixel Font',
             outputPath: '',
             floatingPointCoords: false,

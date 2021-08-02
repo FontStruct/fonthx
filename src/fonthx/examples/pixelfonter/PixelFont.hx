@@ -1,5 +1,6 @@
 package fonthx.examples.pixelfonter;
 
+import fonthx.model.font.features.Layout;
 import fonthx.model.font.features.lookups.LookupType;
 import fonthx.model.font.features.lookups.Lookup;
 import fonthx.model.font.features.LanguageTag;
@@ -25,6 +26,7 @@ class PixelFont implements IFont extends AbstractFont {
 
     private var pixelSize:Int;
     private var shape:Int;
+    private var kerningSubLookup:PairAdjustmentPositioningSubLookup;
 
     public function new(name:String, emSquare:Int, pixelSize:Int, shape:Int = 1) {
         super();
@@ -37,10 +39,12 @@ class PixelFont implements IFont extends AbstractFont {
         realAscender = emSquare + (pixelSize * 2);
         realDescender = 0;
         typoLineGap = emSquare;
+        layout = new Layout();
+        kerningSubLookup = new PairAdjustmentPositioningSubLookup();
     }
 
-    public function addGlyph(cp:Int):PixelGlyph {
-        var glyph = new PixelGlyph(cp);
+    public function addGlyph(codepoint:Int, name:String = null):PixelGlyph {
+        var glyph = new PixelGlyph(codepoint, name);
         glyph.pixelSize = pixelSize;
         glyph.shape = shape;
         this.glyphs.push(glyph);
@@ -57,7 +61,6 @@ class PixelFont implements IFont extends AbstractFont {
         // add .notdef glyph
         var notdef = addGlyph(0);
         notdef.name = '.notdef';
-        notdef.unmapped = true;
         //NotDefGlyph.draw(notdef, 500);
 
 //        // add .nul glyph
@@ -76,13 +79,12 @@ class PixelFont implements IFont extends AbstractFont {
             return a.codepoint - b.codepoint;
         });
 
-
         var latinScript = new Script(LATIN);
         var defaultLang = new Language(DEFAULT);
         latinScript.defaultLangSys = defaultLang;
         latinScript.addLanguage(defaultLang);
 
-        var kerning = new Feature(FEAT_KERN);
+        var kerning = new Feature(FEAT_KERN, true);
         var kerningLookup = autoKern();
         kerning.addLookup(kerningLookup);
         defaultLang.addFeature(kerning);
@@ -128,15 +130,12 @@ class PixelFont implements IFont extends AbstractFont {
     }
 
     override public function getKerningPairs():Array<PositioningPair> {
-        return cast(layout.features[0].lookups[0].subLookups[0], PairAdjustmentPositioningSubLookup).pairs; // fixme hmmm
+        return kerningSubLookup.pairs;
     }
 
     private function autoKern():Lookup {
-
-        var lookup = new Lookup(LookupType.GPOS_PAIR_ADJUSTMENT);
-        var subLookup = new PairAdjustmentPositioningSubLookup();
-        lookup.addSubtable(subLookup);
-
+        var lookup = new Lookup(LookupType.GPOS_PAIR_ADJUSTMENT, true);
+        lookup.addSubLookup(kerningSubLookup);
         var leftId = 0;
         for (left in glyphs) {
             var rightId = 0;
@@ -144,7 +143,7 @@ class PixelFont implements IFont extends AbstractFont {
                 var kern = autoKernGlyphs(cast(left, PixelGlyph), cast(right, PixelGlyph));
                 if (kern != 0) {
                     kern = Std.int(kern * pixelSize);
-                    subLookup.addPair(new PositioningPair(leftId, rightId, kern));
+                    kerningSubLookup.addPair(new PositioningPair(leftId, rightId, kern));
                 }
                 rightId ++;
             }
@@ -154,11 +153,9 @@ class PixelFont implements IFont extends AbstractFont {
     }
 
     private static function autoKernGlyphs(left:PixelGlyph, right:PixelGlyph):Int {
-
         if (left.getPixels().length == 0 || right.getPixels().length == 0) {
             return 0;
         }
-
         var leftBounds:Rectangle = left.getGridBounds();
         var rightBounds:Rectangle = right.getGridBounds();
         var leftPixels:Array<Pixel> = left.getPixels();

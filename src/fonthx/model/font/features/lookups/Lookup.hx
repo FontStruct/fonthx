@@ -5,6 +5,7 @@ class Lookup {
     public var subLookups:Array<ISubLookup>;
     public var idx:Int = 0;
     public var type:LookupType = LookupType.UNDEFINED;
+    public var isPos:Bool;
 
     /*
     Type 	Name 	Description
@@ -19,13 +20,14 @@ class Lookup {
      */
     public var flags:Int = 0;
 
-    public function new(type:LookupType) {
+    public function new(type:LookupType, isPos:Bool = false) {
         this.subLookups = new Array();
         this.type = type;
+        this.isPos = isPos;
     }
 
-    public function addSubtable(subtable:ISubLookup) {
-        this.subLookups.push(subtable);
+    public function addSubLookup(subLookup:ISubLookup) {
+        this.subLookups.push(subLookup);
     }
 
 }

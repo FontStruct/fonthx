@@ -120,7 +120,7 @@ class GPOSSpec extends buddy.BuddySuite {
                 var kerning = new Feature(FeatureTag.FEAT_KERN);
                 var pairsLookup = new Lookup(LookupType.GPOS_PAIR_ADJUSTMENT);
                 var pairsSub = new PairAdjustmentPositioningSubLookup();
-                pairsLookup.addSubtable(pairsSub);
+                pairsLookup.addSubLookup(pairsSub);
                 kerning.addLookup(pairsLookup);
                 layout.addLookup(pairsLookup);
                 pairsSub.addPair(new PositioningPair(0, 1, 10));
@@ -133,7 +133,7 @@ class GPOSSpec extends buddy.BuddySuite {
                 pairsSub.addPair(new PositioningPair(7, 8, 80));
                 pairsSub.addPair(new PositioningPair(7, 9, 90));
                 latin.defaultLangSys.addFeature(kerning);
-                layout.addFeature(kerning);
+                layout.addFeature(kerning, false);
 
                 var bytes = getTableAsArray(gpos);
                 var featureTableBytes = bytes.slice(bytes[7]); // offset to feature list table is in byte 7 of GPOS (presuming < 256)

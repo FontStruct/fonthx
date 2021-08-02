@@ -1,5 +1,6 @@
 package fonthx.opentype;
 
+import fonthx.opentype.tables.opentype.GSUBTable;
 import fonthx.opentype.tables.CharacterMapFormat12Subtable;
 import fonthx.opentype.svg.SVGTable;
 import fonthx.opentype.FontFileFormat;
@@ -86,6 +87,10 @@ class OpenTypeBuilder {
         if (font.hasKerning()) {
             ttf.addTable(createKerningTable(font));
             ttf.addTable(createGPOSTable(font));
+        }
+
+        if (font.layout.subFeatures.length > 0) {
+            ttf.addTable(createGSUBTable(font));
         }
 
         ttf.addTable(createMaximumProfileTable(font, format));
@@ -239,12 +244,7 @@ class OpenTypeBuilder {
         for (sub in cmap.getSubtables()) {
             // iterate over glyphs adding mappings
             for (g in fnt.glyphs) {
-                // skip missing and null glyphs
-                if (g.unmapped) {
-                    sub.incrementUnmapped();
-                } else {
-                    sub.addCodepoint(g.codepoint);
-                }
+                sub.addCodepoint(g.codepoint);
             }
         }
         return cmap;
@@ -465,6 +465,12 @@ class OpenTypeBuilder {
         return table;
     }
 
+    private static function createGSUBTable(font:IFont):GSUBTable {
+        var table = new GSUBTable();
+        table.setLayout(font.layout);
+        return table;
+    }
+
     private static function createCFFTable(font:IFont, options:BuildOptions):CFF {
         var table = new CFF(font, options);
         return table;
@@ -519,10 +525,6 @@ class OpenTypeBuilder {
     }
 
     private static function calculateChecksum(bytes:Bytes):Int {
-        // todo: seems to work and validate but optimize and consider potential data loss!!!
-        // look at UInt ?
-        // We really want a 32-bit unsigned integer
-        // should the checksum field in tables be Int64?
         var checksum:Int64 = Int64.make(0, 0);
         var numBytes = bytes.length;
         var i = 0;

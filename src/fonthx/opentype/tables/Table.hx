@@ -21,6 +21,7 @@ class Table {
     public static var SVG = "SVG ";
     public static var KERN = "kern";
     public static var GPOS = "GPOS";
+    public static var GSUB = "GSUB";
     public static var DSIG = "DSIG";
 
     /**
@@ -36,10 +37,10 @@ class Table {
     // "sfnt", "tdir",
 
     public static var compileOrder = [HEAD, HHEA, MAXP, OS2, HMTX, CMAP, GLYF, LOCA,
-        CFF, KERN, NAME, POST, GPOS, SVG, DSIG];
+        CFF, KERN, NAME, POST, GPOS, GSUB, SVG, DSIG];
 
     public static var optimalOrder = [HEAD, HHEA, MAXP, OS2, HMTX, CMAP, LOCA, GLYF,
-        CFF, KERN, NAME, POST, GPOS, SVG, DSIG];
+        CFF, KERN, NAME, POST, GPOS, GSUB, SVG, DSIG];
 
     public var tag:String;
     public var offset:Int;

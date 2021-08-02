@@ -1,11 +1,14 @@
 package fonthx.examples.pixelfonter;
 
+import fonthx.model.font.glyphnames.GlyphNamer;
+import fonthx.services.FeatureSpecParser;
 import fonthx.svg.SVGBuilder;
 import fonthx.opentype.BuildOptions;
 import fonthx.utils.ExecutionTimer;
 import fonthx.opentype.FontFileFormat;
 import fonthx.opentype.OpenTypeBuilder;
 import haxe.io.Bytes;
+import fonthx.examples.pixelfonter.GlyphIdentifier;
 
 using StringTools;
 using Lambda;
@@ -22,14 +25,20 @@ class PixelFonter {
         // parse codepoint string
         var codepointSegments = opts.codepointString.split(',');
 
-        // assemble full list of codepoints
-        var codepoints:Array<Int> = codepointSegments.fold(function(segment:String, cps:Array<Int>) {
+        // assemble full list of codepoints & unencoded glyphs
+        var identifiers:Array<GlyphIdentifier> = codepointSegments.fold(function(segment:String, identifiers:Array<GlyphIdentifier>) {
             var extremes = segment.split('-');
-            for (i in Std.parseInt(extremes[0])...Std.parseInt(extremes[1]) + 1) {
-                cps.push(i);
+            if (extremes.length != 2) {
+                var identifier = new GlyphIdentifier();
+                identifier.name = segment;
+                identifiers.push(identifier);
+                return identifiers;
             }
-            return cps;
-        }, new Array<Int>());
+            for (i in Std.parseInt(extremes[0])...Std.parseInt(extremes[1]) + 1) {
+                identifiers.push(new GlyphIdentifier(i));
+            }
+            return identifiers;
+        }, new Array<GlyphIdentifier>());
 
         var em = 1024;
         var pixelSize = Std.int(em / opts.glyphWidth);
@@ -39,8 +48,8 @@ class PixelFonter {
 
         // build the glyph data
         var numRows = opts.imageHeight / opts.glyphHeight;
-        for (idx in 0 ... codepoints.length) {
-            var glyph = font.addGlyph(codepoints[idx]);
+        for (idx in 0 ... identifiers.length) {
+            var glyph = font.addGlyph(identifiers[idx].codepoint, identifiers[idx].name);
             for (dy in 0 ... opts.glyphHeight) {
                 for (dx in 0 ... opts.glyphWidth) {
                     var x = (idx * opts.glyphWidth + dx);
@@ -63,6 +72,10 @@ class PixelFonter {
         }
 
         font.prepareForExport();
+        // we need GlyphNamer here already so that we can use names more in the feature spec, todo hmm
+        GlyphNamer.nameGlyphs(font.glyphs);
+        var featureSpecParser = new FeatureSpecParser();
+        featureSpecParser.toLayout(opts.features, font);
 
         var buildOptions = new BuildOptions();
         buildOptions.useSubroutinesInCFF = true;

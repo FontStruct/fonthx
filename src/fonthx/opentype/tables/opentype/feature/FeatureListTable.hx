@@ -1,7 +1,7 @@
 package fonthx.opentype.tables.opentype.feature;
 
+import fonthx.model.font.features.Feature;
 import fonthx.opentype.writers.ITrueTypeWriter;
-import fonthx.model.font.features.Layout;
 
 using Lambda;
 
@@ -12,27 +12,27 @@ using Lambda;
  */
 class FeatureListTable {
 
-    private var layout:Layout;
+    public var features:Array<Feature>;
     public var length(get, never):Int;
 
     public function new() {
     }
 
-    public function setLayout(layout:Layout) {
-        this.layout = layout;
+    public function setFeatures(features:Array<Feature>) {
+        this.features = features;
     }
 
     public function write(tt:ITrueTypeWriter) {
-        tt.writeSHORT(layout.features.length); // uint16 featureCount
-        var offset = 2 + (6 * layout.features.length);
+        tt.writeSHORT(features.length); // uint16 featureCount
+        var offset = 2 + (6 * features.length);
         // FeatureRecord
-        for (feature in layout.features) {
+        for (feature in features) {
             tt.writeTag(feature.tag); // Tag featureTag
             tt.writeOffset16(offset); // Offset16 featureOffset, Offset to Feature table, from beginning of FeatureList
             offset += (4 + (feature.lookups.length * 2));
         }
         // Feature table
-        for (feature in layout.features) {
+        for (feature in features) {
             tt.writeOffset16(0); // Offset16 featureParams = NULL (reserved for offset to FeatureParams)
             tt.writeUINT16(feature.lookups.length); // uint16 lookupIndexCount Number of LookupList indices for this feature
             for (lookup in feature.lookups) {
@@ -43,8 +43,8 @@ class FeatureListTable {
     }
 
     function get_length():Int {
-        var l = 2 + layout.features.length * 6;
-        for (feature in layout.features) {
+        var l = 2 + features.length * 6;
+        for (feature in features) {
             l += (4 + (feature.lookups.length * 2));
         }
         return l;

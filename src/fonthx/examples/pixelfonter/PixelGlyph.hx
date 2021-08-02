@@ -20,8 +20,8 @@ class PixelGlyph extends AbstractContourGlyph implements IContourGlyph {
 
     public static var useCircles:Bool = false;
 
-    public function new(codepoint:Int) {
-        super(codepoint);
+    public function new(codepoint:Int, name = null) {
+        super(codepoint, name);
         pixels = new Array();
         bounds = new Rectangle();
         gridBounds = null;

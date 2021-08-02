@@ -26,21 +26,32 @@ class CharacterMapFormat12Subtable extends CharacterMapSubtable {
         if (groups.length > 0) {
             return;
         }
-        var numGlyphs = codepoints.length;
-        var prevCode = codepoints[0];
-        groups.push(new Group(prevCode, 0, 1));
+        var prevCode = -100;
         var currCode = 0;
-        // work out number of segments
-        for (i in 1...numGlyphs) {
+        var currGroup:Group = null;
+        for (i in 0...codepoints.length) {
             currCode = codepoints[i];
-            if (currCode != (prevCode + 1)) {
-                groups[groups.length - 1].end = prevCode;
-                groups.push(new Group(currCode, 0, i + 1));
+            var mappable = currCode > 0;
+            var consecutive = currCode == (prevCode + 1);
+            if (!consecutive) {
+                if (currGroup != null) {
+                    currGroup.end  = prevCode;
+                    groups.push(currGroup);
+                }
+                if (mappable) {
+                    currGroup = new Group(currCode, 0, i);
+                }
             }
-            prevCode = currCode;
+            if (mappable) {
+                prevCode = currCode;
+            }
         }
         // closing last group
-        groups[groups.length - 1].end = currCode;
+        if (currGroup != null && currCode > 0) {
+           currGroup.end = currCode;
+           groups.push(currGroup);
+        }
+        //trace(groups);
     }
 
     override public function write(tt:ITrueTypeWriter) {

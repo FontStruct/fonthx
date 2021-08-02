@@ -21,6 +21,10 @@ class CharacterMapSubtable extends Table {
 		return length;
 	}
 
+    public function addMapping(idx:Int, codepoint:Int) {
+
+    }
+
 	public function addCodepoint(codepoint:Int) {
 		codepoints.push(codepoint);
 	}

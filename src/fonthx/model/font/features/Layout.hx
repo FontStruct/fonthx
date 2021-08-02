@@ -12,13 +12,17 @@ using Lambda;
 class Layout {
 
     public var scripts:Array<Script>;
-    public var features:Array<Feature>;
-    public var lookups:Array<Lookup>;
+    public var posFeatures:Array<Feature>;
+    public var subFeatures:Array<Feature>;
+    public var posLookups:Array<Lookup>;
+    public var subLookups:Array<Lookup>;
 
     public function new() {
         scripts = new Array();
-        features = new Array();
-        lookups = new Array();
+        posFeatures = new Array();
+        subFeatures = new Array();
+        posLookups = new Array();
+        subLookups= new Array();
     }
 
     public function addScript(script:Script) {
@@ -32,6 +36,7 @@ class Layout {
     }
 
     public function addFeature(feature:Feature) {
+        var features = feature.isPos? posFeatures : subFeatures;
         features.push(feature);
         features.sort(function(a:Feature, b:Feature) {
             return (a.tag.toString() > b.tag.toString()) ? 1 : (b.tag.toString() > a.tag.toString()) ? -1 : 0;
@@ -43,6 +48,7 @@ class Layout {
     }
 
     public function addLookup(lookup:Lookup) {
+        var lookups = lookup.isPos? posLookups : subLookups;
         lookups.push(lookup);
         var idx = 0;
         for (lookup in lookups) {

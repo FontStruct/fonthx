@@ -2,7 +2,6 @@ package fonthx.opentype.tables.opentype.script;
 
 import fonthx.model.font.features.Script;
 import fonthx.opentype.writers.ITrueTypeWriter;
-import fonthx.model.font.features.Layout;
 import fonthx.model.font.features.ScriptTag;
 
 /**
@@ -10,27 +9,27 @@ import fonthx.model.font.features.ScriptTag;
  */
 class ScriptListTable {
 
-    private var layout:Layout;
     public var length(get, never):Int;
+    private var scripts:Array<Script>;
     private var scriptTables:Array<ScriptTable>;
 
     public function new() {
     }
 
-    public function setLayout(layout:Layout) {
-        this.layout = layout;
+    public function setScripts(scripts:Array<Script>) {
+        this.scripts = scripts;
     }
 
     private function initScriptTables() {
         scriptTables = new Array();
-        for (script in layout.scripts) {
+        for (script in scripts) {
             scriptTables.push(new ScriptTable(script));
         }
     }
 
     public function write(tt:ITrueTypeWriter) {
         initScriptTables();
-        tt.writeSHORT(layout.scripts.length); // uint16 scriptCount Number of ScriptRecords
+        tt.writeSHORT(scripts.length); // uint16 scriptCount Number of ScriptRecords
         var offset = headerToScriptTables();
         for (scriptTable in scriptTables) {
             var script = scriptTable.script;
@@ -63,7 +62,7 @@ class ScriptListTable {
     }
 
     function headerToScriptTables() {
-        return 2 + (layout.scripts.length * 6);
+        return 2 + (scripts.length * 6);
     }
 
 

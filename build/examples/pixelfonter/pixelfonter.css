@@ -1,5 +1,6 @@
-section {
-    margin: 30px 0;
+body {
+    font-family: 'Roboto', sans-serif;
+    padding: 20px;
 }
 
 canvas {
@@ -7,12 +8,40 @@ canvas {
     image-rendering: crisp-edges;
 }
 
-#cells {
+.pf-menu {
+    list-style: none;
+    padding: 0;
+}
+.pf-menu li {
+    display: inline;
+}
+.pf-menuButton {
+    border: 0;
+    background: #333;
+    transition: all 0.2s;
+    color: white;
+    padding: 8px 12px;
+    font: inherit;
+    cursor: pointer
+}
+.pf-menuButton--active {
+    cursor: default;
+}
+
+.pf-menuButton:hover, .pf-menuButton--active {
+    background: none;
+    color: #333;
+    outline: solid 1px #333;
+}
+
+
+
+.pf-cells {
     display: flex;
     flex-wrap: wrap;
 }
 
-#cells canvas {
+.pf-cells canvas {
     margin-bottom: 10px;
     margin-right: 10px;
     outline: 1px solid #eee;
@@ -20,20 +49,24 @@ canvas {
     cursor: crosshair;
 }
 
-.pf {
+.pf-text {
     font-family: pixelfont, sans-serif;
     text-transform: uppercase;
     font-kerning: normal;
 }
 
-.pf--unkerned {
+.pf-text--color {
+    font-family: pixelfontcolor, sans-serif;
+}
+
+.pf-text--unkerned {
     font-kerning: none !important;
 }
 
-.label {
+.pf-label {
     margin-bottom: 10px;
 }
 
-#canvas {
+.pf-canvas {
     display: none;
 }

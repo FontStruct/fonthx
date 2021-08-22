@@ -74,8 +74,10 @@ class PixelFonter {
         font.prepareForExport();
         // we need GlyphNamer here already so that we can use names more in the feature spec, todo hmm
         GlyphNamer.nameGlyphs(font.glyphs);
-        var featureSpecParser = new FeatureSpecParser();
-        featureSpecParser.toLayout(opts.features, font);
+        if (opts.features != null) {
+            var featureSpecParser = new FeatureSpecParser();
+            featureSpecParser.toLayout(opts.features, font);
+        }
 
         var buildOptions = new BuildOptions();
         buildOptions.useSubroutinesInCFF = true;

@@ -1,11 +1,7 @@
 package fonthx.examples.pixelfonter;
 
-import fonthx.model.font.features.lookups.LookupType;
-import fonthx.model.font.features.LanguageTag;
-import fonthx.model.font.features.ScriptTag;
-import fonthx.model.font.features.FeatureTag;
-import haxe.io.BytesInput;
 import haxe.crypto.Base64;
+import haxe.io.BytesInput;
 using format.png.Tools;
 
 @:buildXml('
@@ -13,11 +9,15 @@ using format.png.Tools;
     <flag value="--bind"/>
     <flag value="-s"/>
     <flag value="WASM=1"/>
-    <flag value="ALLOW_MEMORY_GROWTH=1"/>
     <flag value="-s"/>
-    <flag value="TOTAL_MEMORY=32MB"/>
+    <flag value="SAFE_HEAP=1"/>
     <flag value="-s"/>
-    <flag value="BINARYEN_TRAP_MODE=\'clamp\'"/>
+    <flag value="WARN_UNALIGNED=1"/>
+    <flag value="-s"/>
+    <flag value="ASSERTIONS=1"/>
+    <flag value="-s"/>
+    <flag value="TOTAL_MEMORY=512MB"/>
+    <flag value="-s"/>
     <flag value="--shell-file"/>
     <flag value="${HXCWD}/build/examples/pixelfonter/wasm.html"/>
 </linker>
@@ -30,9 +30,12 @@ using format.png.Tools;
 using namespace emscripten;
 
 EMSCRIPTEN_BINDINGS(my_module) {
-    function("generate", optional_override([] (const std::string s) {
+    function("generate", optional_override([] (const std::string s, const std::string format, const bool includeSVG) {
         ::String res = fonthx::examples::pixelfonter::PixelFonterBrowserApp_obj::generate(
-            ::String(s.c_str(), strlen(s.c_str())));
+            ::String(s.c_str(), strlen(s.c_str())),
+            ::String(format.c_str(), strlen(format.c_str())),
+            includeSVG
+         );
         return std::string(res.__s);
     }));
 }
@@ -52,52 +55,9 @@ class PixelFonterBrowserApp {
         ');
         #end
     }
-
-    public static function generate(imageData:String, format:String = 'ttf', includeSVG:Bool = false) {
-        var o:PixelFonterParams = {
-            imagePath: 'pixel-font-5x5.png',
-            glyphWidth: 5,
-            glyphHeight: 5,
-            codepointString: '65-90,33-58,65799-65804,' + [for (c in 65...91) c].map(function(cp:Int) {
-                return String.fromCharCode(cp) + '.sc';
-            }).join(','),
-            features: {
-                // referencing http://adobe-type-tools.github.io/afdko/OpenTypeFeatureFileSpecification.html#4
-                // script have, langs, and langs have features, features have lookups
-                // (lookups belong to features belong to langs which belong to scripts)
-                // if not specified, will belong to a default lang and a default script (latin)
-                languageSystems: [
-                    {
-                        script: ScriptTag.DEFAULT,
-                        language: LanguageTag.DEFAULT
-                    }
-                ],
-                features: [{
-                    name: FeatureTag.FEAT_SMCP,
-                    lookups: [{
-                        // script: x,
-                        // language: x,
-                        // id:
-//                        rules: [
-//                            ['sub', 'A', 'A.sc']
-//                        ]
-                        type: LookupType.GSUB_SINGLE,
-                        rules: [for (cp in 65...91) cp].map(function(cp:Int) {
-                            var c = String.fromCharCode(cp);
-                            return [c, '${c}.sc'];
-                        })
-                    }]
-
-                }],
-            },
-            name: 'Pixel Font',
-            outputPath: '',
-            floatingPointCoords: false,
-            shape: 2,
-            includeSVG: includeSVG,
-            svgSheet: false,
-            format: format
-        }
+    // todo drop wasm (for now)
+    public static function generate(imageData:String, options:Dynamic) {
+        var o = new PixelFonterParams(options);
         var bytes = Base64.decode(imageData.split(',')[1]);
         var handle = new BytesInput(bytes);
         var png = new format.png.Reader(handle).read();

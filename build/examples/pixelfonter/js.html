@@ -5,55 +5,81 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>PixelFonter JS</title>
     <link rel="stylesheet" href="pixelfonter.css"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 </head>
 <body>
 
 <style></style>
 
+<h1>Live Generation and Editing of a TrueType pixel font, from a bitmap image, on the client, in Javascript, and Haxe.</h1>
 
-<canvas id="canvas"></canvas>
+<ul class="pf-menu">
+    <li>
+        <button class="pf-menuButton" data-toggle="basic">Basic Example</button>
+    </li>
+    <li>
+        <button class="pf-menuButton" data-toggle="color">Color TTF</button>
+    </li>
+    <li>
+        <button class="pf-menuButton" data-toggle="smp">Open Type Substition</button>
+    </li>
+</ul>
 
-
-<!--<div class="pf"><h1>PixelFonter</h1></div>-->
-
-<section>
-    <h1>Live Generation and Editing of a TrueType pixel font, from a bitmap image, on the client, in Javascript (or WASM), and Haxe.</h1>
-</section>
-
-
-<section>
-    <div class="label">Source (Click to toggle pixels):</div>
-    <div id="cells"></div>
-</section>
-
-<section>
-    <div class="label">WebFont (Click to Edit Text):</div>
-    <div class="pf" contenteditable="true">
+<section class="pf-page" id="basic" data-image="pixel-font-basic.png">
+    <h2>Basic TTF and OTF Generation</h2>
+    <canvas class="pf-canvas"></canvas>
+    <div>Source (Click to toggle pixels):</div>
+    <div class="pf-cells"></div>
+    <div class="pf-label">WebFont (Click to Edit Text):</div>
+    <div class="pf-text pf-text--basic" contenteditable="true">
         <p>As you edit the font image above, this text, set in the WebFont, will change appearance accordingly.</p>
-
         <p>Built and rebuilt in real-time. Kerning for demonstration purposes is automatic (and awful!)
-
-
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-            magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+            magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+            commodo
             consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
+            est
             laborum.</p>
-
     </div>
-    <button onclick="document.querySelector('.pf').classList.toggle('pf--unkerned')">Toggle Kerning</button>
-
+    <button onclick="document.querySelector('.pf-text').classList.toggle('pf-text--unkerned')">Toggle Kerning</button>
+    <div>
+        <a class="pf-downloadTTF" download="PixelFont.ttf">Download TTF</a><br/>
+        <a class="pf-downloadOTF" download="PixelFont.otf">Download OTF (CFF Outlines)</a><br/>
+    </div>
 </section>
 
-<section>
-    <a id="downloadTTF" download="PixelFont.ttf">Download TTF</a><br/>
-    <a id="downloadOTF" download="PixelFont.otf">Download OTF (CFF Outlines)</a><br/>
-    <a id="downloadTTFSVG" download="PixelFont.svg.ttf">Download Color TTF</a><br/>
-    <a href="https://github.com/FontStruct/fonthx" target="_blank">Source on Github</a>
+<section class="pf-page" id="color" data-image="pixel-font-smp.png">
+    <h2>TTF with Color SVG Generation</h2>
+    <canvas class="pf-canvas"></canvas>
+    <div>Source (Click to toggle pixels):</div>
+    <div class="pf-cells"></div>
+    <div class="pf-label">WebFont (Click to Edit Text):</div>
+    <div class="pf-text pf-text--color" contenteditable="true">
+        <p>As you edit the font image above, this text, set in the WebFont, will change appearance accordingly.</p>
+        <p>Built and rebuilt in real-time. Kerning for demonstration purposes is automatic (and awful!)
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+            magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+            commodo
+            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
+            est
+            laborum.</p>
+    </div>
+    <button onclick="document.querySelector('.pf-text').classList.toggle('pf-text--unkerned')">Toggle Kerning</button>
+    <div>
+        <a class="pf-downloadTTF" download="PixelFont.ttf">Download TTF</a><br/>
+    </div>
 </section>
 
 <script src="PixelFonterBrowserApp.js"></script>
 <script src="pixelfonter.js"></script>
+
+<div>
+<a href="https://github.com/FontStruct/fonthx" target="_blank">Source on Github</a>
+</div>
 
 </body>
 </html>

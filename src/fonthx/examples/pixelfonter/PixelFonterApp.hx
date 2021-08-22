@@ -34,22 +34,25 @@ class PixelFonterApp {
             return 0;
         }
 
-        var o:PixelFonterParams = {
-            imagePath: args.get('i').value,
-            glyphWidth: args.has('w') ? Std.parseInt(args.get('w').value) : 5,
-            glyphHeight: args.has('h') ? Std.parseInt(args.get('h').value) : 5,
-            codepointString: args.has('c') ? args.get('c').value : '65-90,33-58',
-            name: args.has('n') ? args.get('n').value : 'Pixel Font',
-            outputPath: args.has('o') ? args.get('o').value : 'output.ttf',
-            includeSVG: args.has('svg') ? true: false,
-            svgSheet: args.has('sheet') ? true: false,
-            floatingPointCoords: args.has('d') ? true: false,
-            shape: args.has('s') ? Std.parseInt(args.get('s').value) : 1,
-            format: args.has('f') ? args.get('f').value : 'ttf'
+        if (!args.has('i')) {
+            trace('-i path to image required');
+            return 0;
         }
 
+        var o:PixelFonterParams = new PixelFonterParams();
+        o.glyphWidth = args.has('w') ? Std.parseInt(args.get('w').value) : 5;
+        o.glyphHeight = args.has('h') ? Std.parseInt(args.get('h').value) : 5;
+        o.codepointString = args.has('c') ? args.get('c').value : '65-90,33-58';
+        o.name = args.has('n') ? args.get('n').value : 'Pixel Font';
+        o.outputPath = args.has('o') ? args.get('o').value : 'output.ttf';
+        o.includeSVG = args.has('svg') ? true: false;
+        o.svgSheet = args.has('sheet') ? true: false;
+        o.floatingPointCoords = args.has('d') ? true: false;
+        o.shape = args.has('s') ? Std.parseInt(args.get('s').value) : 1;
+        o.format = args.has('f') ? args.get('f').value : 'ttf';
+
         // load the image
-        var handle = sys.io.File.read(o.imagePath, true);
+        var handle = sys.io.File.read(args.get('i').value, true);
         var png = new format.png.Reader(handle).read();
         o.imageWidth = png.getHeader().width;
         o.imageHeight = png.getHeader().height;

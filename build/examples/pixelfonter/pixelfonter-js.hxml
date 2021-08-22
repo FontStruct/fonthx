@@ -7,7 +7,9 @@ build/resources.hxml
 
 -js dist/examples/pixelfonter/js/PixelFonterBrowserApp.js
 
--cmd cp build/examples/pixelfonter/pixel-font-5x5.png dist/examples/pixelfonter/js/pixel-font-5x5.png
+-cmd cp build/examples/pixelfonter/pixel-font-basic.png dist/examples/pixelfonter/js/pixel-font-basic.png
+-cmd cp build/examples/pixelfonter/pixel-font-smcp.png dist/examples/pixelfonter/js/pixel-font-smcp.png
+-cmd cp build/examples/pixelfonter/pixel-font-smp.png dist/examples/pixelfonter/js/pixel-font-smp.png
 -cmd cp build/examples/pixelfonter/pixelfonter.js dist/examples/pixelfonter/js/pixelfonter.js
 -cmd cp build/examples/pixelfonter/pixelfonter.css dist/examples/pixelfonter/js/pixelfonter.css
 

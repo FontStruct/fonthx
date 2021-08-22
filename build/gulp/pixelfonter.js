@@ -17,65 +17,66 @@ const runPixelFonter = function(executable, params) {
 };
 
 gulp.task("pixelfonter-java", parameterized(function(cb, params) {
-	return haxe('build/examples/pixelfonter/pixelfonter-java.hxml', function() {
+	return haxe('build/examples/pixelfonter/pixelfonter-java.hxml', () => {
 		runPixelFonter(`java -jar dist/examples/pixelfonter/java/PixelFonterApp${c.isDev? '-Debug' : ''}.jar`, params);
 		cb();
 	});
 }));
 
 gulp.task("pixelfonter-node", parameterized(function(cb, params) {
-	return haxe('build/examples/pixelfonter/pixelfonter-node.hxml', function() {
+	return haxe('build/examples/pixelfonter/pixelfonter-node.hxml', () =>  {
 		runPixelFonter(`node dist/examples/pixelfonter/node/PixelFonterApp.js`, params);
 		cb();
 	});	
 }));
 
 gulp.task("pixelfonter-cpp", parameterized(function(cb, params) {
-	return haxe('build/examples/pixelfonter/pixelfonter-cpp.hxml', function() {
+	return haxe('build/examples/pixelfonter/pixelfonter-cpp.hxml', () =>  {
 		runPixelFonter(`mono dist/examples/pixelfonter/cpp/PixelFonterApp${c.isDev? '-Debug' : ''}`, params);
 		cb();
 	});
 }));
 
 gulp.task("pixelfonter-cs", parameterized(function(cb, params) {
-	return haxe('build/examples/pixelfonter/pixelfonter-cs.hxml', function() {
+	return haxe('build/examples/pixelfonter/pixelfonter-cs.hxml', () =>  {
 		runPixelFonter(`mono dist/examples/pixelfonter/cs/bin/PixelFonterApp${c.isDev? '-Debug' : ''}.exe`, params);
 		cb();
 	});
 }));
 
-gulp.task("pixelfonter-js", function(cb) {
-	return haxe('build/examples/pixelfonter/pixelfonter-js.hxml', function() {
-		livereload.reload();
-		cb();
-	});
+gulp.task("pixelfonter-cpp-watch", () => {
+	gulp.watch(["src/**/*.hx"], gulp.series(["pixelfonter-cpp"]));
 });
 
-gulp.task("pixelfonter-wasm", function(cb) {
-	return haxe('build/examples/pixelfonter/pixelfonter-wasm.hxml', function() {
-		livereload.reload();
-		cb();
-	});
+gulp.task("pixelfonter-java-watch",() => {
+	gulp.watch(["src/**/*.hx"], gulp.series(["pixelfonter-java"]));
 });
 
-gulp.task("pixelfonter-js-watch", function() {
+gulp.task("pixelfonter-wasm-watch", () => {
 	livereload.listen();
-	gulp.watch(["src/**/*.hx", "build/examples/pixelfonter/**/*.*"], ["pixelfonter-js"]);
+	gulp.watch(["src/**/*.hx"], gulp.series(["pixelfonter-wasm"]));
 });
 
-gulp.task("pixelfonter-cpp-watch", function() {
-	gulp.watch(["src/**/*.hx"], ["pixelfonter-cpp"]);
+gulp.task("pixelfonter-watch", done => {
+	gulp.watch(["src/**/*.hx"], gulp.series(["pixelfonter-node"]));
+	done();
 });
 
-gulp.task("pixelfonter-java-watch", function() {
-	gulp.watch(["src/**/*.hx"], ["pixelfonter-java"]);
+gulp.task("pixelfonter-js", done => {
+  return haxe('build/examples/pixelfonter/pixelfonter-js.hxml', () => {
+    livereload.reload();
+    done();
+  });
 });
 
-gulp.task("pixelfonter-wasm-watch", function() {
-	livereload.listen();
-	gulp.watch(["src/**/*.hx"], ["pixelfonter-wasm"]);
+gulp.task("pixelfonter-wasm", done => {
+  return haxe('build/examples/pixelfonter/pixelfonter-wasm.hxml', () => {
+    livereload.reload();
+    done();
+  });
 });
 
-gulp.task("pixelfonter-watch", function() {
-	gulp.watch(["src/**/*.hx"], ["pixelfonter-node"]);
+gulp.task("pixelfonter-js-watch", () => {
+  livereload.listen();
+  gulp.watch(["src/**/*.hx", "build/examples/pixelfonter/**/*.*"], gulp.series(["pixelfonter-js"]));
 });

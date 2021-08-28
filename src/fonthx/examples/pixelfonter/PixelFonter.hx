@@ -1,5 +1,9 @@
 package fonthx.examples.pixelfonter;
 
+import fonthx.model.font.features.LanguageTag;
+import fonthx.model.font.features.ScriptTag;
+import fonthx.model.font.features.Language;
+import fonthx.model.font.features.Script;
 import fonthx.model.font.glyphnames.GlyphNamer;
 import fonthx.services.FeatureSpecParser;
 import fonthx.svg.SVGBuilder;
@@ -30,7 +34,11 @@ class PixelFonter {
             var extremes = segment.split('-');
             if (extremes.length != 2) {
                 var identifier = new GlyphIdentifier();
-                identifier.name = segment;
+                if (Std.parseInt(segment) > 0) {
+                    identifier.codepoint = Std.parseInt(segment);
+                } else {
+                    identifier.name = segment;
+                }
                 identifiers.push(identifier);
                 return identifiers;
             }
@@ -59,7 +67,7 @@ class PixelFonter {
                     var idx = ((y * opts.imageWidth) + x) * 4;
                     var color = opts.pixelData.get(idx);
                     if (color != 0) continue;
-                    glyph.addPixel(dx, opts.glyphHeight - (dy + 1), dy > Math.floor((opts.glyphHeight - 3) / 2) ? '#0099CC' : '#CC0000'); // note inverted y axis
+                    glyph.addPixel(dx, opts.glyphHeight - (dy + 1), dy > Math.floor(opts.glyphHeight / 2) ? '#0099CC' : '#CC0000'); // note inverted y axis
                 }
             }
         }
@@ -70,6 +78,11 @@ class PixelFonter {
             ExecutionTimer.end('PixelFonter::generate');
             return Bytes.ofString(svg);
         }
+
+        // setup gsub layout – default script
+        font.gsubLayout.setDefaults(ScriptTag.LATIN);
+        // setup gpos layout – default script
+        font.gposLayout.setDefaults(ScriptTag.LATIN);
 
         font.prepareForExport();
         // we need GlyphNamer here already so that we can use names more in the feature spec, todo hmm

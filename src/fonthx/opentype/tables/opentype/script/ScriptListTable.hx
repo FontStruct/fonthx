@@ -14,6 +14,7 @@ class ScriptListTable {
     private var scriptTables:Array<ScriptTable>;
 
     public function new() {
+        scriptTables = new Array();
     }
 
     public function setScripts(scripts:Array<Script>) {
@@ -21,9 +22,10 @@ class ScriptListTable {
     }
 
     private function initScriptTables() {
-        scriptTables = new Array();
-        for (script in scripts) {
-            scriptTables.push(new ScriptTable(script));
+        if (scriptTables.length == 0) {
+            for (script in scripts) {
+                scriptTables.push(new ScriptTable(script));
+            }
         }
     }
 
@@ -40,7 +42,6 @@ class ScriptListTable {
                 offset += scriptTable.length;
             }
         }
-
         // Write Script Tables
         // https://docs.microsoft.com/en-us/typography/opentype/spec/chapter2#script-table-and-language-system-record
         for (scriptTable in scriptTables) {

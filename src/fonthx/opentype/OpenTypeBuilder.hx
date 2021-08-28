@@ -89,7 +89,7 @@ class OpenTypeBuilder {
             ttf.addTable(createGPOSTable(font));
         }
 
-        if (font.layout.subFeatures.length > 0) {
+        if (font.gsubLayout.features.length > 0) {
             ttf.addTable(createGSUBTable(font));
         }
 
@@ -461,13 +461,13 @@ class OpenTypeBuilder {
 
     private static function createGPOSTable(font:IFont):GPOSTable {
         var table = new GPOSTable();
-        table.setLayout(font.layout);
+        table.setLayout(font.gposLayout);
         return table;
     }
 
     private static function createGSUBTable(font:IFont):GSUBTable {
         var table = new GSUBTable();
-        table.setLayout(font.layout);
+        table.setLayout(font.gsubLayout);
         return table;
     }
 

@@ -25,7 +25,7 @@ class FeatureListTable {
     public function write(tt:ITrueTypeWriter) {
         tt.writeSHORT(features.length); // uint16 featureCount
         var offset = 2 + (6 * features.length);
-        // FeatureRecord
+        // FeatureRecords
         for (feature in features) {
             tt.writeTag(feature.tag); // Tag featureTag
             tt.writeOffset16(offset); // Offset16 featureOffset, Offset to Feature table, from beginning of FeatureList

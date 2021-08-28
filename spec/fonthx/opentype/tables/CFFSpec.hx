@@ -75,7 +75,6 @@ class CFFSpec extends buddy.BuddySuite {
         });
 
         describe("CFF", function() {
-            @include
             it("generates", function() {
                 var cff:CFF = new CFF(f, new BuildOptions());
                 bytes = getTableAsArray(cff);

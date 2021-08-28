@@ -1,5 +1,6 @@
 package fonthx.opentype.tables;
 
+import fonthx.opentype.writers.TrueTypeFileWriter;
 import fonthx.opentype.writers.ITrueTypeWriter;
 
 /**
@@ -46,7 +47,6 @@ class CharacterMapTable extends Table {
 		for (t in subtables) {
 			t.write(tt);
 		}
-		
 	}
 
 	public function addSubtable(sub:CharacterMapSubtable) {

@@ -25,9 +25,11 @@ class PixelFonterParams {
         imageHeight = 0;
         pixelData = null;
         features = null;
-        for (field in Type.getInstanceFields(PixelFonterParams)) {
-            if (Reflect.hasField(o, field)) {
-                Reflect.setProperty(this, field, Reflect.getProperty(o, field));
+        if (o != null) {
+            for (field in Type.getInstanceFields(PixelFonterParams)) {
+                if (Reflect.hasField(o, field)) {
+                    Reflect.setProperty(this, field, Reflect.getProperty(o, field));
+                }
             }
         }
     }

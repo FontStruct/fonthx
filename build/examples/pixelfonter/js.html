@@ -3,7 +3,10 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>PixelFonter JS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>PixelFonter (fonthx examples)</title>
+    <meta name="description" content="Live Generation and Editing of an OpenType pixel font, from a bitmap image, on the client, in Javascript, and
+        Haxe">
     <link rel="stylesheet" href="pixelfonter.css"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,29 +16,39 @@
 
 <style></style>
 
-<h1>Live Generation and Editing of a TrueType pixel font, from a bitmap image, on the client, in Javascript, and Haxe.</h1>
+<div class="pf-header">
+    <h1>Pixelfonter</h1>
+    <p>Live Generation and Editing of an OpenType pixel font, from a bitmap image, on the client, in Javascript, and
+        Haxe. Using <a href="https://github.com/FontStruct/fonthx" target="_blank">fonthx</a></p>
+</div>
 
-<ul class="pf-menu">
+<ul class="pf-menu pf-inlineList">
     <li>
-        <button class="pf-menuButton" data-toggle="basic">Basic Example</button>
+        <a href="#basic-example" class="pf-button pf-menuButton" data-toggle="basic">Basic Example</a>
     </li>
     <li>
-        <button class="pf-menuButton" data-toggle="color">Color TTF</button>
+        <a href="#color-example" class="pf-button pf-menuButton" data-toggle="color">Color TTF</a>
     </li>
     <li>
-        <button class="pf-menuButton" data-toggle="smp">Open Type Substition</button>
+        <a href="#smp-example" class="pf-button pf-menuButton" data-toggle="smp">Unicode Supplementary Multilingual
+            Plane</a>
+    </li>
+    <li>
+        <a href="#gsub-example" class="pf-button pf-menuButton" data-toggle="gsub">GSUB Features (smcp)</a>
     </li>
 </ul>
 
 <section class="pf-page" id="basic" data-image="pixel-font-basic.png">
-    <h2>Basic TTF and OTF Generation</h2>
+    <h2 class="pf-bottomBorder">Basic Example: TTF and OTF Generation</h2>
     <canvas class="pf-canvas"></canvas>
-    <div>Source (Click to toggle pixels):</div>
-    <div class="pf-cells"></div>
+    <div class="pf-label">Source (Click to toggle pixels):</div>
+    <div class="pf-cells pf-bottomBorder"></div>
     <div class="pf-label">WebFont (Click to Edit Text):</div>
-    <div class="pf-text pf-text--basic" contenteditable="true">
+    <div class="pf-text pf-text--basic pf-bottomBorder" contenteditable="true">
         <p>As you edit the font image above, this text, set in the WebFont, will change appearance accordingly.</p>
-        <p>Built and rebuilt in real-time. Kerning for demonstration purposes is automatic (and awful!)
+        <p>Built and rebuilt in real-time.
+        <p>
+        <p>Kerning for demonstration purposes is automatic (Yes I know, it’s awful!)</p>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
             magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
             commodo
@@ -43,23 +56,35 @@
             pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
             est
             laborum.</p>
+        <p>LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISCING ELIT, SED DO EIUSMOD TEMPOR INCIDIDUNT UT LABORE ET DOLORE
+            MAGNA ALIQUA. UT ENIM AD MINIM VENIAM, QUIS NOSTRUD EXERCITATION ULLAMCO LABORIS NISI UT ALIQUIP EX EA
+            COMMODO
+            CONSEQUAT. DUIS AUTE IRURE DOLOR IN REPREHENDERIT IN VOLUPTATE VELIT ESSE CILLUM DOLORE EU FUGIAT NULLA
+            PARIATUR. EXCEPTEUR SINT OCCAECAT CUPIDATAT NON PROIDENT, SUNT IN CULPA QUI OFFICIA DESERUNT MOLLIT ANIM ID
+            EST
+            LABORUM.</p>
     </div>
-    <button onclick="document.querySelector('.pf-text').classList.toggle('pf-text--unkerned')">Toggle Kerning</button>
-    <div>
-        <a class="pf-downloadTTF" download="PixelFont.ttf">Download TTF</a><br/>
-        <a class="pf-downloadOTF" download="PixelFont.otf">Download OTF (CFF Outlines)</a><br/>
-    </div>
+    <ul class="pf-inlineList">
+        <li>
+            <button class="pf-button"
+                    onclick="document.querySelector('.pf-text').classList.toggle('pf-text--unkerned')">Toggle
+                Kerning
+            </button>
+        </li>
+        <li><a class="pf-button pf-downloadTTF" download="PixelFont.ttf">Download TTF</a></li>
+        <li><a class="pf-button pf-downloadOTF" download="PixelFont.otf">Download OTF (CFF Outlines)</a></li>
+    </ul>
 </section>
 
-<section class="pf-page" id="color" data-image="pixel-font-smp.png">
+<section class="pf-page" id="color" data-image="pixel-font-basic.png">
     <h2>TTF with Color SVG Generation</h2>
     <canvas class="pf-canvas"></canvas>
-    <div>Source (Click to toggle pixels):</div>
+    <div class="pf-label">Source (Click to toggle pixels):</div>
     <div class="pf-cells"></div>
     <div class="pf-label">WebFont (Click to Edit Text):</div>
     <div class="pf-text pf-text--color" contenteditable="true">
         <p>As you edit the font image above, this text, set in the WebFont, will change appearance accordingly.</p>
-        <p>Built and rebuilt in real-time. Kerning for demonstration purposes is automatic (and awful!)
+        <p>Built and rebuilt in real-time.</p>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
             magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
             commodo
@@ -67,18 +92,94 @@
             pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
             est
             laborum.</p>
+        <p>LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISCING ELIT, SED DO EIUSMOD TEMPOR INCIDIDUNT UT LABORE ET DOLORE
+            MAGNA ALIQUA. UT ENIM AD MINIM VENIAM, QUIS NOSTRUD EXERCITATION ULLAMCO LABORIS NISI UT ALIQUIP EX EA
+            COMMODO
+            CONSEQUAT. DUIS AUTE IRURE DOLOR IN REPREHENDERIT IN VOLUPTATE VELIT ESSE CILLUM DOLORE EU FUGIAT NULLA
+            PARIATUR. EXCEPTEUR SINT OCCAECAT CUPIDATAT NON PROIDENT, SUNT IN CULPA QUI OFFICIA DESERUNT MOLLIT ANIM ID
+            EST
+            LABORUM.</p>
     </div>
-    <button onclick="document.querySelector('.pf-text').classList.toggle('pf-text--unkerned')">Toggle Kerning</button>
-    <div>
-        <a class="pf-downloadTTF" download="PixelFont.ttf">Download TTF</a><br/>
+    <ul class="pf-inlineList">
+        <li><a class="pf-button pf-downloadTTF" download="PixelFont.ttf">Download TTF (with color SVG)</a></li>
+    </ul>
+</section>
+
+<section class="pf-page" id="smp" data-image="pixel-font-smp.png">
+    <h2>TTF with characters in Supplementary Multingual Plane (codepoints > 0xFFFF)</h2>
+    <canvas class="pf-canvas"></canvas>
+    <div class="pf-label">Source (Click to toggle pixels):</div>
+    <div class="pf-cells"></div>
+    <div class="pf-label">WebFont (Click to Edit Text):</div>
+    <div class="pf-text pf-text--smp" contenteditable="true">
+        <p>As you edit the font image above, this text, set in the WebFont, will change appearance accordingly.</p>
+        <p>SMP characters: &#xFFFF;&#x10000;&#x10001;&#x10002;&#x10003;&#x10004;&#x10005;&#x10006;&#x10007;&#x10008;&#x10009;&#x1000A;&#x1000B;
+            &#x1000C;&#x1000D;&#x1000E;&#x1000F;&#x10010;&#x10011;&#x10012;&#x10013;&#x10014;&#x10015;&#x10016;&#x10017;&#x10018;</p>
+        <p>Built and rebuilt in real-time.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+            magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+            commodo
+            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
+            est
+            laborum.</p>
+        <p>LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISCING ELIT, SED DO EIUSMOD TEMPOR INCIDIDUNT UT LABORE ET DOLORE
+            MAGNA ALIQUA. UT ENIM AD MINIM VENIAM, QUIS NOSTRUD EXERCITATION ULLAMCO LABORIS NISI UT ALIQUIP EX EA
+            COMMODO
+            CONSEQUAT. DUIS AUTE IRURE DOLOR IN REPREHENDERIT IN VOLUPTATE VELIT ESSE CILLUM DOLORE EU FUGIAT NULLA
+            PARIATUR. EXCEPTEUR SINT OCCAECAT CUPIDATAT NON PROIDENT, SUNT IN CULPA QUI OFFICIA DESERUNT MOLLIT ANIM ID
+            EST
+            LABORUM.</p>
     </div>
+    <ul class="pf-inlineList">
+        <li><a class="pf-button pf-downloadTTF" download="PixelFont.ttf">Download TTF including SMP characters</a></li>
+    </ul>
+</section>
+
+<section class="pf-page" id="gsub" data-image="pixel-font-smcp.png">
+    <h2>TTF with GSUB features</h2>
+    <canvas class="pf-canvas"></canvas>
+    <div class="pf-label">Source (Click to toggle pixels):</div>
+    <div class="pf-cells"></div>
+    <div class="pf-label">WebFont (Click to Edit Text):</div>
+    <div class="pf-text pf-text--gsub" contenteditable="true" style="font-feature-settings: 'c2sc', 'smcp'">
+        <p>As you edit the font image above, this text, set in the WebFont, will change appearance accordingly.</p>
+        <p>Built and rebuilt in real-time.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+            magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+            commodo
+            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
+            est
+            laborum.</p>
+        <p>LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISCING ELIT, SED DO EIUSMOD TEMPOR INCIDIDUNT UT LABORE ET DOLORE
+            MAGNA ALIQUA. UT ENIM AD MINIM VENIAM, QUIS NOSTRUD EXERCITATION ULLAMCO LABORIS NISI UT ALIQUIP EX EA
+            COMMODO
+            CONSEQUAT. DUIS AUTE IRURE DOLOR IN REPREHENDERIT IN VOLUPTATE VELIT ESSE CILLUM DOLORE EU FUGIAT NULLA
+            PARIATUR. EXCEPTEUR SINT OCCAECAT CUPIDATAT NON PROIDENT, SUNT IN CULPA QUI OFFICIA DESERUNT MOLLIT ANIM ID
+            EST
+            LABORUM.</p>
+    </div>
+    <ul class="pf-inlineList">
+        <li>
+            <button class="pf-button" data-toggle-feature="c2sc" data-toggle-feature-target=".pf-text--gsub">Toggle
+                c2sc
+            </button>
+        </li>
+        <li>
+            <button class="pf-button" data-toggle-feature="smcp" data-toggle-feature-target=".pf-text--gsub">Toggle
+                smcp
+            </button>
+        </li>
+        <li><a class="pf-button pf-downloadTTF" download="PixelFont.ttf">Download TTF with GSUB features</a></li>
+    </ul>
 </section>
 
 <script src="PixelFonterBrowserApp.js"></script>
 <script src="pixelfonter.js"></script>
 
 <div>
-<a href="https://github.com/FontStruct/fonthx" target="_blank">Source on Github</a>
+    <a href="https://github.com/FontStruct/fonthx" target="_blank">Source on Github</a>
 </div>
 
 </body>

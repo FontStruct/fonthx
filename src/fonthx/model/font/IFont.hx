@@ -15,7 +15,8 @@ interface IFont {
     var style(get, null):String;
     var creationDate(get, null):String;
     var version(get, null):String;
-    var layout(get, null):Layout;
+    var gposLayout(get, null):Layout;
+    var gsubLayout(get, null):Layout;
     var emSquare(get, null):Int;
 
     // todo put following in IExportableFont or IOpenTypable (and IPostscriptable)?

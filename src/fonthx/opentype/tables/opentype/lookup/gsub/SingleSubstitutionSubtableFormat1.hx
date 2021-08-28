@@ -39,7 +39,7 @@ class SingleSubstitutionSubtableFormat1 implements ILookupSubtable {
     public function write(tt:ITrueTypeWriter):Void {
         var coverageTable = getCoverageTable();
         tt.writeUINT16(1); // uint16 	Format identifier
-        tt.writeOffset16(this.length - coverageTable.length); // Offset16 coverageOffset Offset to Coverage table, from beginning of this PairPos subtable
+        tt.writeOffset16(6); // Offset16 coverageOffset Offset to Coverage table, from beginning of this PairPos subtable
         tt.writeSHORT(subLookup.subs[0].getDelta());
         coverageTable.write(tt); // coverage table at the end
     }
@@ -54,7 +54,6 @@ class SingleSubstitutionSubtableFormat1 implements ILookupSubtable {
         if (_coverageTable != null) {
             return _coverageTable;
         }
-
         // coverage – each pairset needs a coverage idx
         var coverage = subLookup.subs.fold(function(p:SingleSubstitution, acc:Array<Int>) {
             if (acc.indexOf(p.fromId) == -1) {
@@ -65,8 +64,7 @@ class SingleSubstitutionSubtableFormat1 implements ILookupSubtable {
         coverage.sort(function(a, b) {
             return a - b;
         });
-        var _coverageTable = CoverageTableHelper.getCoverageTable(coverage);
-        return _coverageTable;
+        return CoverageTableHelper.getCoverageTable(coverage);
     }
 
 

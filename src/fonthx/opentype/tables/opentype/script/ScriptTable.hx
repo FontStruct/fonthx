@@ -1,4 +1,5 @@
 package fonthx.opentype.tables.opentype.script;
+import fonthx.model.font.features.ScriptTag;
 import fonthx.model.font.features.Language;
 import fonthx.opentype.tables.opentype.lookup.ICommonTable;
 import fonthx.opentype.writers.ITrueTypeWriter;
@@ -14,16 +15,17 @@ class ScriptTable implements ICommonTable {
     }
 
     public function write(tt:ITrueTypeWriter) {
-        if (script.tag == DEFAULT) {
+        if (script.tag == ScriptTag.DEFAULT) {
             return;
         }
+        var scriptTableOffset = 4 + (script.languages.length * 6);
+
         // Offset16 defaultLangSys Offset to default LangSys table, from beginning of this Script table — may be NULL
-        tt.writeOffset16((script.defaultLangSys == null) ? 0 : (4 + (script.languages.length * 6)));
+        tt.writeOffset16((script.defaultLangSys == null) ? 0 : scriptTableOffset);
         // uint16 langSysCount Number of LangSysRecords for this script — excluding the default LangSys
         tt.writeUINT16(script.languages.length);
 
         // Write LangSysRecords
-        var scriptTableOffset = 4 + (script.languages.length * 6);
         if (script.defaultLangSys != null) {
             scriptTableOffset += getLangSysTableLength(script.defaultLangSys);
         }
@@ -38,7 +40,7 @@ class ScriptTable implements ICommonTable {
         for (language in script.allLanguages) {
             tt.writeUINT16(0); // lookupOrder = NULL (reserved for an offset to a reordering table)
             tt.writeUINT16(0xFFFF); // requiredFeatureIndex – for now, no support for required features
-            tt.writeUINT16(language.features.length); // featureIndexCount
+            tt.writeUINT16(language.features.length); // featureIndexCount fixme GSUB/GPOS
             for (feature in language.features) {
                 tt.writeUINT16(feature.idx); // Array of indices into the FeatureList, in arbitrary order
             }

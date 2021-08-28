@@ -45,6 +45,8 @@ class CharacterMapFormat4Subtable extends CharacterMapSubtable {
             }
             if (mappable) {
                 prevCode = currCode;
+            } else {
+                this.incrementUnmapped();
             }
         }
         // closing last segment
@@ -53,7 +55,17 @@ class CharacterMapFormat4Subtable extends CharacterMapSubtable {
             segments.push(currSeg);
         }
         segments.push(new Segment(0xFFFF, 0xFFFF));
-        //trace(groups);
+
+        // prepare deltas
+        var charsSoFar = 0;
+        for (seg in segments) {
+            var delta = -0xFFFF;
+            if (seg.start != 0xFFFF) {
+                delta = getUnmapped() - (seg.start - charsSoFar);
+            }
+            seg.idDelta = delta;
+            charsSoFar += ((seg.end - seg.start) + 1);
+        }
     }
 
     override public function write(tt:ITrueTypeWriter) {
@@ -63,8 +75,7 @@ class CharacterMapFormat4Subtable extends CharacterMapSubtable {
         tt.writeUSHORT(calculateLength()); // This is the length in bytes of the subtable.
         tt.writeUSHORT(0); // language 0 if not for mac.
         tt.writeUSHORT(segCount * 2); // 2 x segCount.
-        var searchRange = Std.int(2 * (Math.pow(2, Math.floor(Math.log(segCount)
-        / Math.log(2))))); // searchRange 2 x
+        var searchRange = Std.int(2 * (Math.pow(2, Math.floor(Math.log(segCount) / Math.log(2))))); // searchRange 2 x
         // (2**floor(log2(segCount)))
         tt.writeUSHORT(searchRange);
         tt.writeUSHORT(Std.int(Math.log(searchRange / 2) / Math.log(2))); // entrySelector
@@ -92,14 +103,12 @@ class CharacterMapFormat4Subtable extends CharacterMapSubtable {
         }
 
         // write indexOffsets
-        for (code in 0...segments.length) {
+        for (code in 0...segCount) {
             // idRangeOffset[segCount] Offsets into glyphIdArray or 0
             tt.writeUSHORT(0);
         }
 
-        var numGlyphs = codepoints.filter(function(cp:Int) {
-            return cp > 0;
-        }).length;
+        var numGlyphs = codepoints.length;
         for (i in 0...numGlyphs) {
             // Glyph index array (arbitrary length)
             tt.writeUSHORT(0);

@@ -102,8 +102,7 @@ class PairAdjustmentPositioningSubtableFormat1 implements ILookupSubtable {
         coverage.sort(function(a, b) {
             return a - b;
         });
-        var _coverageTable = CoverageTableHelper.getCoverageTable(coverage);
-        return _coverageTable;
+        return CoverageTableHelper.getCoverageTable(coverage);
     }
 
     private var _grouped:Array<Array<PositioningPair>> = null;

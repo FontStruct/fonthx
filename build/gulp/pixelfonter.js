@@ -5,7 +5,7 @@ const haxe = require('./shared').haxe;
 const exec = require('child_process').exec;
 const c = require('./config');
 
-const runPixelFonter = function(executable, params) {
+const runPixelFonter = function(executable, params, cb) {
 	params = Object.assign({
 		i: 'build/examples/pixelfonter/pixel-font-5x5.png',
 		c: '65-91',
@@ -13,34 +13,34 @@ const runPixelFonter = function(executable, params) {
 	}, params);
 	const args = Object.keys(params).map((k) => `-${k} ${params[k]}`).join(' ');
 	const cmd = `${executable} ${args}`;
-	exec(cmd);
+	exec(cmd, function(err, stdout, stderr) {
+    console.log(stdout);
+    console.log(stderr);
+    cb(err);
+  });
 };
 
 gulp.task("pixelfonter-java", parameterized(function(cb, params) {
 	return haxe('build/examples/pixelfonter/pixelfonter-java.hxml', () => {
-		runPixelFonter(`java -jar dist/examples/pixelfonter/java/PixelFonterApp${c.isDev? '-Debug' : ''}.jar`, params);
-		cb();
+		runPixelFonter(`java -jar dist/examples/pixelfonter/java/PixelFonterApp${c.isDev? '-Debug' : ''}.jar`, params, cb);
 	});
 }));
 
 gulp.task("pixelfonter-node", parameterized(function(cb, params) {
 	return haxe('build/examples/pixelfonter/pixelfonter-node.hxml', () =>  {
-		runPixelFonter(`node dist/examples/pixelfonter/node/PixelFonterApp.js`, params);
-		cb();
-	});	
+		runPixelFonter(`node dist/examples/pixelfonter/node/PixelFonterApp.js`, params, cb);
+	});
 }));
 
 gulp.task("pixelfonter-cpp", parameterized(function(cb, params) {
 	return haxe('build/examples/pixelfonter/pixelfonter-cpp.hxml', () =>  {
-		runPixelFonter(`mono dist/examples/pixelfonter/cpp/PixelFonterApp${c.isDev? '-Debug' : ''}`, params);
-		cb();
+		runPixelFonter(`mono dist/examples/pixelfonter/cpp/PixelFonterApp${c.isDev? '-Debug' : ''}`, params, cb);
 	});
 }));
 
 gulp.task("pixelfonter-cs", parameterized(function(cb, params) {
 	return haxe('build/examples/pixelfonter/pixelfonter-cs.hxml', () =>  {
-		runPixelFonter(`mono dist/examples/pixelfonter/cs/bin/PixelFonterApp${c.isDev? '-Debug' : ''}.exe`, params);
-		cb();
+		runPixelFonter(`mono dist/examples/pixelfonter/cs/bin/PixelFonterApp${c.isDev? '-Debug' : ''}.exe`, params, cb);
 	});
 }));
 

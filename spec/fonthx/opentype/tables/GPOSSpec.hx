@@ -117,7 +117,7 @@ class GPOSSpec extends buddy.BuddySuite {
             });
             it("Can add a valid feature list table for kerning", function() {
                 // https://docs.microsoft.com/en-us/typography/opentype/spec/chapter2#flTbl
-                var kerning = new Feature(FeatureTag.FEAT_KERN);
+                var kerning = new Feature(FeatureTag.FEAT_KERN, true);
                 var pairsLookup = new Lookup(LookupType.GPOS_PAIR_ADJUSTMENT);
                 var pairsSub = new PairAdjustmentPositioningSubLookup();
                 pairsLookup.addSubLookup(pairsSub);
@@ -133,7 +133,7 @@ class GPOSSpec extends buddy.BuddySuite {
                 pairsSub.addPair(new PositioningPair(7, 8, 80));
                 pairsSub.addPair(new PositioningPair(7, 9, 90));
                 latin.defaultLangSys.addFeature(kerning);
-                layout.addFeature(kerning, false);
+                layout.addFeature(kerning);
 
                 var bytes = getTableAsArray(gpos);
                 var featureTableBytes = bytes.slice(bytes[7]); // offset to feature list table is in byte 7 of GPOS (presuming < 256)

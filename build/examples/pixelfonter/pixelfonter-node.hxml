@@ -3,5 +3,5 @@ build/examples/pixelfonter/shared.hxml
 -lib hxnodejs
 -D nodejs
 
-
+#-cmd /Applications/FontValidator -file ./tmp/pixelfont.ttf
 

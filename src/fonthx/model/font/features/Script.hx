@@ -1,5 +1,6 @@
 package fonthx.model.font.features;
 
+using Lambda;
 
 // example KERN lookups for cyrillic (russian, greek, serbian), latin (english, french, german)
 // example LIGA lookups for cyrillic (russian, greek, serbian), latin (english, french, german)
@@ -27,5 +28,11 @@ class Script {
             all.unshift(defaultLangSys);
         }
         return all;
+    }
+
+    public function getLanguage(tag:LanguageTag):Language {
+        return languages.find(function(l:Language) {
+            return l.tag == tag;
+        });
     }
 }

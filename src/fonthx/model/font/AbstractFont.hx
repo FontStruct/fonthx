@@ -16,7 +16,8 @@ class AbstractFont implements IFont {
     @:isVar public var realAscender(get, set):Float;
     @:isVar public var realDescender(get, set):Float;
     @:isVar public var typoLineGap(get, set):Float;
-    @:isVar public var layout(get, null):Layout;
+    @:isVar public var gposLayout(get, null):Layout;
+    @:isVar public var gsubLayout(get, null):Layout;
     public var copyright(get, null):String;
     public var creationDate(get, null):String;
     public var author(get, null):String;
@@ -42,6 +43,8 @@ class AbstractFont implements IFont {
         copyright = '';
         description = '';
         emSquare = 1000;
+        gposLayout = new Layout();
+        gsubLayout = new Layout();
     }
 
     public function getGlyphForCodepoint(cp:Int):IContourGlyph {
@@ -263,8 +266,13 @@ class AbstractFont implements IFont {
         return this.typoLineGap = value;
     }
 
-    public function get_layout():Layout {
-        return layout;
+    function get_gsubLayout():Layout {
+        return gsubLayout;
+    }
+
+
+    function get_gposLayout():Layout {
+        return gposLayout;
     }
 
     function get_glyphs():Array<IContourGlyph> {

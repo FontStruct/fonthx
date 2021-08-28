@@ -21,6 +21,10 @@ class LookupTable implements ICommonTable {
     public function new(lookup:Lookup) {
         this.lookup = lookup;
         subtables = new Array();
+        for (sublookup in lookup.subLookups) {
+            var subtable = LookupSubtableFactory.createSubtable(sublookup);
+            subtables.push(subtable);
+        }
     }
 
     public function write(tt:ITrueTypeWriter):Void {
@@ -28,9 +32,7 @@ class LookupTable implements ICommonTable {
         tt.writeUINT16(lookup.flags);                   // uint16 	lookupFlag 	Lookup qualifiers
         tt.writeUINT16(lookup.subLookups.length);       // uint16 	subTableCount 	Number of subtables for this lookup
         var offset = 6 + (2 * lookup.subLookups.length);
-        for (sublookup in lookup.subLookups) {
-            var subtable = LookupSubtableFactory.createSubtable(sublookup);
-            subtables.push(subtable);
+        for (subtable in subtables) {
             // Offset16 	subtableOffsets[subTableCount] 	Array of offsets to lookup subtables, from beginning of Lookup table
             tt.writeOffset16(offset); // Array of offsets to lookup subtables, from beginning of Lookup table
             offset += subtable.length;

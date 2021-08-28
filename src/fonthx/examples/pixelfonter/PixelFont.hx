@@ -39,7 +39,6 @@ class PixelFont implements IFont extends AbstractFont {
         realAscender = emSquare + (pixelSize * 2);
         realDescender = 0;
         typoLineGap = emSquare;
-        layout = new Layout();
         kerningSubLookup = new PairAdjustmentPositioningSubLookup();
     }
 
@@ -74,24 +73,20 @@ class PixelFont implements IFont extends AbstractFont {
         var space = addGlyph(0x20);
         space.bounds = new Rectangle(0, 0, pixelSize * 2, emSquare);
 
-       // sort glyphs by codepoint
+        // sort glyphs by codepoint
         glyphs.sort(function(a:IContourGlyph, b:IContourGlyph) {
             return a.codepoint - b.codepoint;
         });
 
-        var latinScript = new Script(LATIN);
-        var defaultLang = new Language(DEFAULT);
-        latinScript.defaultLangSys = defaultLang;
-        latinScript.addLanguage(defaultLang);
 
-        var kerning = new Feature(FEAT_KERN, true);
+
+
+        var kerning = new Feature(FeatureTag.FEAT_KERN, true);
+        gposLayout.addFeature(kerning, ScriptTag.LATIN);
         var kerningLookup = autoKern();
         kerning.addLookup(kerningLookup);
-        defaultLang.addFeature(kerning);
+        gposLayout.addLookup(kerningLookup);
 
-        layout.addFeature(kerning);
-        layout.addScript(latinScript);
-        layout.addLookup(kerningLookup);
 
     }
 
@@ -162,18 +157,18 @@ class PixelFont implements IFont extends AbstractFont {
         var rightPixels:Array<Pixel> = right.getPixels();
 
         // build an array of “rightmost” nodes on the left
-        var leadEdgePixels:Map<Int, Int> = new Map<Int, Int>();
+        var leftLeadEdgePixels:Map<Int, Int> = new Map<Int, Int>();
         for (px in leftPixels) {
-            if (!leadEdgePixels.exists(px.y) || px.x > leadEdgePixels[px.y]) {
-                leadEdgePixels[px.y] = px.x;
+            if (!leftLeadEdgePixels.exists(px.y) || px.x > leftLeadEdgePixels[px.y]) {
+                leftLeadEdgePixels[px.y] = px.x;
             }
         }
 
         // build an array of “leftmost” nodes on the right
-        var trailEdgePixels:Map<Int, Int> = new Map<Int, Int>();
+        var rightTrailEdgePixels:Map<Int, Int> = new Map<Int, Int>();
         for (px in rightPixels) {
-            if (!trailEdgePixels.exists(px.y) || px.x < trailEdgePixels[px.y]) {
-                trailEdgePixels[px.y] = px.x;
+            if (!rightTrailEdgePixels.exists(px.y) || px.x < rightTrailEdgePixels[px.y]) {
+                rightTrailEdgePixels[px.y] = px.x;
             }
         }
 
@@ -187,12 +182,12 @@ class PixelFont implements IFont extends AbstractFont {
         var y:Int;
         var trailingEdge:Int;
         while (!closeEnough) {
-            for (y in trailEdgePixels.keys()) {
-                trailingEdge = trailEdgePixels[y] + rightOffset + kern;
+            for (y in rightTrailEdgePixels.keys()) {
+                trailingEdge = rightTrailEdgePixels[y] + rightOffset + kern;
                 if (
-                (leadEdgePixels.exists(y) && trailingEdge == (leadEdgePixels[y] + leftOffset)) ||
-                (leadEdgePixels.exists(y + 1) && trailingEdge == (leadEdgePixels[y + 1] + leftOffset)) ||
-                (leadEdgePixels.exists(y - 1) && trailingEdge == (leadEdgePixels[y - 1] + leftOffset))) {
+                (leftLeadEdgePixels.exists(y) && trailingEdge == ((leftLeadEdgePixels[y] + leftOffset) + 1)) ||
+                (leftLeadEdgePixels.exists(y + 1) && trailingEdge == (leftLeadEdgePixels[y + 1] + leftOffset)) ||
+                (leftLeadEdgePixels.exists(y - 1) && trailingEdge == (leftLeadEdgePixels[y - 1] + leftOffset))) {
                     // we are touching!
                     closeEnough = true;
                     break;

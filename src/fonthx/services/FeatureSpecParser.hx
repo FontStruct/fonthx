@@ -1,5 +1,6 @@
 package fonthx.services;
 
+import fonthx.model.font.features.ScriptTag;
 import Reflect;
 import fonthx.model.font.features.Feature;
 import fonthx.model.font.features.Language;
@@ -28,7 +29,12 @@ class FeatureSpecParser {
             var featureSpecs:Array<Dynamic> = spec.features;
             for (featureSpec in featureSpecs) {
                 var feature = getFeature(featureSpec, font);
-                font.layout.addFeature(feature);
+                if (feature.isPos) {
+                    font.gposLayout.addFeature(feature);
+                } else {
+                    font.gsubLayout.addFeature(feature);
+                }
+               // font.layout.getScript(ScriptTag.DEFAULT).defaultLangSys.addFeature(feature); // fixme: no,see PixelFont lang & script management
             }
         }
     }
@@ -52,7 +58,11 @@ class FeatureSpecParser {
                             subLookup.addSubstitution(fromGlyph, toGlyph);
                         }
                     }
-                    font.layout.addLookup(lookup);
+                    if (feature.isPos) {
+                        font.gposLayout.addLookup(lookup);
+                    } else {
+                        font.gsubLayout.addLookup(lookup);
+                    }
                     feature.addLookup(lookup); // add feature ref to lookup
                 }
             }

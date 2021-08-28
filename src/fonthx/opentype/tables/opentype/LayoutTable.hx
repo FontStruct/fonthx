@@ -25,8 +25,8 @@ class LayoutTable extends Table {
 
     public function setLayout(layout:Layout) {
         scriptList.setScripts(layout.scripts);
-        featureList.setFeatures(tag == Table.GSUB? layout.subFeatures : layout.posFeatures);
-        lookupList.setLookups(tag == Table.GSUB? layout.subLookups : layout.posLookups);
+        featureList.setFeatures(layout.features);
+        lookupList.setLookups(layout.lookups);
     }
 
     override public function write(tt:ITrueTypeWriter) {

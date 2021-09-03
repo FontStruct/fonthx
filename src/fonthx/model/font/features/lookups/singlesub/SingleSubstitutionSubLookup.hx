@@ -12,8 +12,24 @@ class SingleSubstitutionSubLookup extends AbstractSubLookup implements ISubLooku
         subs = new Array();
     }
 
-    public function addSubstitution(fromId:Int, toId:Int) {
-        subs.push(new SingleSubstitution(fromId, toId));
+    public function addSubstitution(fromId:Int, toId:Int):SingleSubstitution {
+        var sub = new SingleSubstitution(fromId, toId);
+        subs.push(sub);
+        return sub;
+    }
+
+    /**
+    * Does this sublookup contain only substitutions with one common delta?
+    **/
+    public function simpleDeltaSubstitutions():Bool {
+        if (subs.length < 2) return true;
+        var delta = subs[0].toId - subs[0].fromId;
+        for (sub in subs) {
+            if (sub.toId - sub.fromId != delta) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private function get_subs() {

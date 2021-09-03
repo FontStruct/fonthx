@@ -14,6 +14,7 @@ import fonthx.opentype.writers.ITrueTypeWriter;
  * PairPos subtables can be either of two formats: one that identifies glyphs individually by index (Format 1), and one
  * that identifies glyphs by class (Format 2).
  **/
+// TODO implement !!!
 class PairAdjustmentPositioningSubtableFormat2 implements ILookupSubtable {
 
     public var length(get, never):Int;
@@ -30,7 +31,6 @@ class PairAdjustmentPositioningSubtableFormat2 implements ILookupSubtable {
         tt.writeUINT16(0);      // valueFormat2	Defines the types of data in valueRecord2 — for the second glyph in the pair (may be zero).
         tt.writeUINT16(0);      // pairSetCount	Number of PairSet tables
         // pairSetOffsets[pairSetCount]	Array of offsets to PairSet tables. Offsets are from beginning of PairPos subtable, ordered by Coverage Index.
-
     }
 
     public function get_length():Int {

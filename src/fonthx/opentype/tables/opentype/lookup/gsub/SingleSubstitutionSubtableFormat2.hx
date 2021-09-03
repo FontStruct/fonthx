@@ -2,35 +2,34 @@ package fonthx.opentype.tables.opentype.lookup.gsub;
 
 import fonthx.model.font.features.lookups.singlesub.SingleSubstitution;
 import fonthx.model.font.features.lookups.singlesub.SingleSubstitutionSubLookup;
-import fonthx.model.font.features.lookups.pairadjustment.PairAdjustmentPositioningSubLookup;
-import fonthx.model.font.features.lookups.pairadjustment.PositioningPair;
 import fonthx.opentype.tables.opentype.lookup.coverage.CoverageTableHelper;
 import fonthx.opentype.writers.ITrueTypeWriter;
 
 using Lambda;
 
 /**
-* https://docs.microsoft.com/en-us/typography/opentype/spec/gsub#11-single-substitution-format-1
+* https://docs.microsoft.com/en-us/typography/opentype/spec/gsub#12-single-substitution-format-2
 *
 * Single substitution (SingleSubst) subtables tell a client to replace a single glyph with another glyph.
 * The subtables can be either of two formats. Both formats require two distinct sets of glyph indices:
 * one that defines input glyphs (specified in the Coverage table), and one that defines the output glyphs.
 * Format 1 requires less space than Format 2, but it is less flexible.
 *
-* Format 1 calculates the indices of the output glyphs, which are not explicitly defined in the subtable.
-* To calculate an output glyph index, Format 1 adds a constant delta value to the input glyph index.
-* For the substitutions to occur properly, the glyph indices in the input and output ranges must be in the same order.
-* This format does not use the Coverage index that is returned from the Coverage table.
+* Format 2 is more flexible than Format 1, but requires more space. It provides an array of output glyph indices
+* (substituteGlyphIDs) explicitly matched to the input glyph indices specified in the Coverage table.
 *
-* The SingleSubstFormat1 subtable begins with a format identifier (substFormat) of 1.
-* An offset references a Coverage table that specifies the indices of the input glyphs.
-* The deltaGlyphID is a constant value added to each input glyph index to calculate the index of the corresponding
-* output glyph. Addition of deltaGlyphID is modulo 65536.
+* The SingleSubstFormat2 subtable specifies a format identifier (substFormat), an offset to a Coverage table that
+* defines the input glyph indices, a count of output glyph indices in the substituteGlyphIDs array (glyphCount), as
+* well as the list of the output glyph indices in the substitute array (substituteGlyphIDs).
+*
+* The substituteGlyphIDs array must contain the same number of glyph indices as the Coverage table. To locate the
+* corresponding output glyph index in the substituteGlyphIDs array, this format uses the Coverage index returned from
+* the Coverage table.
 *
 * e.g. smcp, c2sc, lnum, locl, onum, possibly frac
 *
 **/
-class SingleSubstitutionSubtableFormat1 implements ILookupSubtable {
+class SingleSubstitutionSubtableFormat2 implements ILookupSubtable {
 
     public var length(get, never):Int;
     private var subLookup:SingleSubstitutionSubLookup;
@@ -41,18 +40,21 @@ class SingleSubstitutionSubtableFormat1 implements ILookupSubtable {
 
     public function write(tt:ITrueTypeWriter):Void {
         var coverageTable = getCoverageTable();
-        tt.writeUINT16(1); // uint16 	Format identifier
-        tt.writeOffset16(6); // Offset16 coverageOffset Offset to Coverage table, from beginning of substitution subtable
-        tt.writeSHORT(subLookup.subs[0].getDelta());
+        tt.writeUINT16(2); // uint16 	Format identifier
+        tt.writeOffset16(6 + (2 * subLookup.subs.length)); // Offset16 coverageOffset Offset to Coverage table, from beginning of substitution subtable
+        tt.writeSHORT(subLookup.subs.length);
+        for (sub in subLookup.subs) {
+            tt.writeUINT16(sub.toId);
+        }
         coverageTable.write(tt); // coverage table at the end
     }
 
     public function get_length():Int {
-        return 6 + getCoverageTable().length;
+        return 6 + (2 * subLookup.subs.length) + this.getCoverageTable().length;
     }
 
+    // todo can this be shared with the format1 table
     private var _coverageTable:ICommonTable = null;
-
     private function getCoverageTable():ICommonTable {
         if (_coverageTable != null) {
             return _coverageTable;

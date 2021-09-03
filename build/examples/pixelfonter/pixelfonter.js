@@ -122,6 +122,32 @@ makeEditor('gsub', {
     }],
   }
 });
+makeEditor('liga', {
+  name: 'pixelfontliga',
+  codepointString: defaultOptions.codepointString + 'F_F,A_E,a_e,f_f,f_i,f_l',
+  features: {
+    languageSystems: [
+      {
+        script: 'DFLT',
+        language: 'DFLT'
+      }
+    ],
+    features: [{
+      name: 'liga',
+      lookups: [{
+        type: 4,
+        rules: [
+          [[['F', 'F']], 'F_F'],
+          [[['A', 'E']], 'A_E'],
+          [[['a', 'e']], 'a_e'],
+          [[['f', 'f']], 'f_f'],
+          [[['f', 'i']], 'f_i'],
+          [[['f', 'l']], 'f_l']
+        ]
+      }]
+    }],
+  }
+});
 
 const sections = document.querySelectorAll('.pf-page');
 const menuButtons = document.querySelectorAll('[data-toggle]');
@@ -154,20 +180,20 @@ featureToggles.forEach(el => {
   const targets = document.querySelectorAll(el.dataset.toggleFeatureTarget);
   el.addEventListener('click', () => {
     targets.forEach(targetEl => {
-        let currentSettings = targetEl.style.fontFeatureSettings;
-        currentSettings = currentSettings.split(',').map(f => f.replace(/[\s\\"]+/g, ''));
-        if (!currentSettings) {
-          currentSettings = [];
-        }
-        if (currentSettings.indexOf(featureTag) === -1) {
-          currentSettings.push(featureTag);
-        } else {
-          currentSettings = currentSettings.filter(f => f !== featureTag);
-        }
-        currentSettings = currentSettings.filter(f => f !== '');
-        currentSettings = currentSettings.map(f => '"' + f + '"').join(',');
-        targetEl.style.fontFeatureSettings = currentSettings;
-      });
+      let currentSettings = targetEl.style.fontFeatureSettings;
+      currentSettings = currentSettings.split(',').map(f => f.replace(/[\s\\"]+/g, ''));
+      if (!currentSettings) {
+        currentSettings = [];
+      }
+      if (currentSettings.indexOf(featureTag) === -1) {
+        currentSettings.push(featureTag);
+      } else {
+        currentSettings = currentSettings.filter(f => f !== featureTag);
+      }
+      currentSettings = currentSettings.filter(f => f !== '');
+      currentSettings = currentSettings.map(f => '"' + f + '"').join(',');
+      targetEl.style.fontFeatureSettings = currentSettings;
+    });
   });
 });
 

@@ -93,7 +93,11 @@ canvas {
 }
 
 .pf-text--gsub {
-    font-family: pixelfontgsub, sans-serif;
+     font-family: pixelfontgsub, sans-serif;
+ }
+
+.pf-text--liga {
+    font-family: pixelfontliga, sans-serif;
 }
 
 .pf-text--unkerned {

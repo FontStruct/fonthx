@@ -1,5 +1,7 @@
 package fonthx.opentype.tables.opentype.lookup.gsub;
 
+import haxe.ds.IntMap;
+import fonthx.model.font.features.lookups.ligasub.LigaSubstitution;
 import fonthx.model.font.features.lookups.ligasub.LigaSubstitutionSubLookup;
 import fonthx.model.font.features.lookups.singlesub.SingleSubstitution;
 import fonthx.model.font.features.lookups.singlesub.SingleSubstitutionSubLookup;
@@ -27,13 +29,59 @@ class LigatureSubstitutionSubtableFormat1 implements ILookupSubtable {
     }
 
     public function write(tt:ITrueTypeWriter):Void {
+        var ligatureSetCount = 0;
+        var ligatureSetMap = subLookup.subs.fold(function(p:LigaSubstitution, acc:IntMap<Array<LigaSubstitution>>) {
+            // The Coverage table specifies only the index of the first glyph component of each ligature set.
+            var leadingGlyph = p.componentGlyphIds[0];
+            if (!acc.exists(leadingGlyph)) {
+                acc.set(leadingGlyph, new Array<LigaSubstitution>());
+                ligatureSetCount++;
+            }
+            var subArray = acc.get(leadingGlyph);
+            subArray.push(p);
+            return acc;
+        }, new IntMap<Array<LigaSubstitution>>());
+
         var coverageTable = getCoverageTable();
+
         tt.writeUINT16(1); // uint16 	substFormat 	Format identifier: format = 1
-        tt.writeOffset16(6 + subLookup.subs.length * 2); // Offset to Coverage table, from beginning of substitution subtable
-        tt.writeSHORT(subLookup.subs.length); // uint16 	ligatureSetCount 	Number of LigatureSet tables
-        // Array of offsets to LigatureSet tables. Offsets are from beginning of substitution subtable, ordered by Coverage index
+        var covTableOffset = 6 + ligatureSetCount * 2;
+        tt.writeOffset16(covTableOffset); // Offset to Coverage table, from beginning of substitution subtable
+        tt.writeSHORT(ligatureSetCount); // uint16 	ligatureSetCount 	Number of LigatureSet tables
         // Offset16 	ligatureSetOffsets[ligatureSetCount]
+        // Array of offsets to LigatureSet tables. Offsets are from beginning of substitution subtable, ordered by Coverage index
+        var offset = covTableOffset + coverageTable.length;
+        var leadingGlyphIds = [for (i in ligatureSetMap.keys()) i];
+        leadingGlyphIds.sort(function(a, b) {
+            return a - b;
+        });
+        for (i in leadingGlyphIds) {
+            tt.writeOffset16(offset);
+            var set = ligatureSetMap.get(i);
+            offset += 2; // ligatureCount
+            for (ligaSub in set) {
+                offset += 2; // ligatureOffsets
+                offset += 2 + 2 + ((ligaSub.componentGlyphIds.length - 1) * 2); // ligatureGlyph, componentCount, componentGlyphIDs
+            }
+        }
         coverageTable.write(tt);
+        // write the ligature set tables themselves
+        for (i in leadingGlyphIds) {
+            var set = ligatureSetMap.get(i);
+            tt.writeUINT16(set.length); // ligatureCount
+            var offset = 2 + (set.length * 2);
+            for (ligaSub in set) {
+                tt.writeUINT16(offset); // ligatureOffset
+                offset += 2 + 2 + (ligaSub.componentGlyphIds.length - 1) * 2;
+            }
+            for (ligaSub in set) {
+                tt.writeUINT16(ligaSub.ligatureGlyphId); // ligatureGlyph
+                tt.writeUINT16(ligaSub.componentGlyphIds.length); // componentCount
+                for (i in 1...ligaSub.componentGlyphIds.length) {
+                    tt.writeUINT16(ligaSub.componentGlyphIds[i]); // componentGlyphIDs (apart from 1st)
+                }
+            }
+        }
     }
 
     public function get_length():Int {
@@ -46,16 +94,18 @@ class LigatureSubstitutionSubtableFormat1 implements ILookupSubtable {
         if (_coverageTable != null) {
             return _coverageTable;
         }
-        // coverage – each pairset needs a coverage idx
-        var coverage = subLookup.subs.fold(function(p:SingleSubstitution, acc:Array<Int>) {
-            if (acc.indexOf(p.fromId) == -1) {
-                acc.push(p.fromId);
+        var coverage:Array<Int> = subLookup.subs.fold(function(p:LigaSubstitution, acc:Array<Int>) {
+            // The Coverage table specifies only the index of the first glyph component of each ligature set.
+            var leadingGlyph = p.componentGlyphIds[0];
+            if (acc.indexOf(leadingGlyph) == -1) {
+                acc.push(leadingGlyph);
             }
             return acc;
         }, new Array<Int>());
         coverage.sort(function(a, b) {
             return a - b;
         });
+        trace(coverage);
         return CoverageTableHelper.getCoverageTable(coverage);
     }
 

@@ -1,42 +1,44 @@
 package fonthx.model.font.unicode;
 
 typedef Blocks = {
-    var start:Int;
-    var end:Int;
-    var name:String;
+var start:Int;
+var end:Int;
+var name:String;
 }
 
-class Unicode {
 
-    /*
-	Some blocks not yet included (todo FontStruct-specific issue)
-	CJK Compatibility Ideographs, 511
-	Unified Canadian Aboriginal Syllabics, 639
-	CJK Unified Ideographs Extension A, 6591
-	CJK Unified Ideographs, 20991
-	Yi Syllables, 1167
-	Hangul Syllables, 11183
-	High Surrogates, 895
-	Low Surrogates, 1023
-	Private Use Area, 6399
-	Arabic Presentation Forms-A, 687
-	Cuneiform, 1023
-	Egyptian Hieroglyphs, 1071
-	Bamum Supplement, 575
-	Mathematical Alphanumeric Symbols, 1023
-	Miscellaneous Symbols And Pictographs, 767
-	CJK Unified Ideographs Extension B, 42719
-	CJK Unified Ideographs Extension C, 4159
-	CJK Compatibility Ideographs Supplement, 543
-	Supplementary Private Use Area-A, 65535 (reduce)
-	Supplementary Private Use Area-B, 65535 (reduce)
-	*/
+
+class Unicode {
 
     public static var whitespace:Array<Int> = [0x20, 0xA0, 0x1160, 0x115F, 0x3000];
 
     public static function fromCharCode(c:Int):String {
-        // removed an old abstraction here – maybe it will return!
+        #if js
+        // todo we will use UnicodeString when we move to haxe 4
+        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/fromCharCode
+        return untyped String.fromCodePoint(c);
+        #end
         return String.fromCharCode(c);
+    }
+
+    public static function toCodepoints(s:String):Array<Int> {
+        #if js
+        // todo we will use UnicodeString when we move to haxe 4
+        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/codePointAt
+        untyped return Array.from(s).map(function(c) { return c.codePointAt(c); });
+        #end
+        return s.split('').map(function(c) {
+            return Unicode.charCodeAt(c, 0);
+        });
+    }
+
+    public static function charCodeAt(s:String, idx:Int):Int {
+        #if js
+        // todo we will use UnicodeString when we move to haxe 4
+        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/codePointAt
+        return untyped s.codePointAt(idx);
+        #end
+        return s.charCodeAt(idx);
     }
 
     public static var blocks:Array<Blocks> = [

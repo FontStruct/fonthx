@@ -78,6 +78,7 @@ class FeatureSpecParser {
                     if (feature.isPos) {
                         font.gposLayout.addLookup(lookup);
                     } else {
+                        trace('add lookup of type ' + type);
                         font.gsubLayout.addLookup(lookup);
                     }
                     feature.addLookup(lookup); // add feature ref to lookup

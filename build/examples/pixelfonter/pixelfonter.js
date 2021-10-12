@@ -124,7 +124,7 @@ makeEditor('gsub', {
 });
 makeEditor('liga', {
   name: 'pixelfontliga',
-  codepointString: defaultOptions.codepointString + 'F_F,A_E,a_e,f_f,f_i,f_l',
+  codepointString: defaultOptions.codepointString + ',F_F,A_E,a_e,f_f,f_i,f_l',
   features: {
     languageSystems: [
       {

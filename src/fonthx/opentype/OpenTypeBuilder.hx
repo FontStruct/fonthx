@@ -1,12 +1,13 @@
 package fonthx.opentype;
 
+import fonthx.opentype.os2.OS2Codepages;
 import fonthx.opentype.tables.opentype.GSUBTable;
 import fonthx.opentype.tables.CharacterMapFormat12Subtable;
 import fonthx.opentype.svg.SVGTable;
 import fonthx.opentype.FontFileFormat;
 import fonthx.opentype.tables.DSIGTable;
 import fonthx.opentype.cff.CFF;
-import fonthx.opentype.codepage.OS2Codepage;
+import fonthx.opentype.os2.OS2Codepage;
 import fonthx.opentype.constants.MacintoshEncoding;
 import fonthx.opentype.constants.MacintoshLanguages;
 import fonthx.opentype.constants.MacStyle;
@@ -40,7 +41,7 @@ import fonthx.opentype.writers.TrueTypeFileWriter;
 import fonthx.model.font.glyphnames.GlyphNamer;
 import fonthx.model.font.IContourGlyph;
 import fonthx.model.font.IFont;
-import fonthx.model.font.unicode.UnicodeRanges;
+import fonthx.opentype.os2.OS2Ranges;
 import fonthx.model.geom.Rectangle;
 import fonthx.utils.ExecutionTimer;
 import fonthx.utils.MathUtils;
@@ -236,7 +237,7 @@ class OpenTypeBuilder {
 
         var cmap = new CharacterMapTable();
         if (hasSMP) {
-            cmap.addSubtable(new CharacterMapFormat12Subtable(0, 3, 0));
+            cmap.addSubtable(new CharacterMapFormat12Subtable(0, 4, 0));
         } else {
             cmap.addSubtable(new CharacterMapFormat4Subtable(0, 3, 0));  // unicode 2
             cmap.addSubtable(new CharacterMapFormat4Subtable(3, 1, 0));  // ms unicode
@@ -402,7 +403,10 @@ class OpenTypeBuilder {
         var codepoints:Array<Int> = new Array<Int>();
         for (g in font.glyphs) {
             codepoints.push(g.codepoint);
-            table.addUnicodeRange(UnicodeRanges.getKeyForCodepoint(g.codepoint));
+        }
+        var os2Bits = OS2Ranges.getFunctionalRanges(codepoints);
+        for (bit in os2Bits) {
+            table.addUnicodeRange(bit);
         }
 
         table
@@ -434,21 +438,9 @@ class OpenTypeBuilder {
         .setDefaultChar(0)
         .setBreakChar(0x20);
 
-        var codepages:Array<OS2Codepage> = new Array<OS2Codepage>();
-        codepages.push(new OS2Codepage(OS2Codepage.LATIN_1));
-        codepages.push(new OS2Codepage(OS2Codepage.LATIN_2));
-        codepages.push(new OS2Codepage(OS2Codepage.CYRILLIC));
-        codepages.push(new OS2Codepage(OS2Codepage.GREEK));
-        codepages.push(new OS2Codepage(OS2Codepage.TURKISH));
-        codepages.push(new OS2Codepage(OS2Codepage.HEBREW));
-        codepages.push(new OS2Codepage(OS2Codepage.ARABIC));
-        codepages.push(new OS2Codepage(OS2Codepage.WINDOWS_BALTIC));
-        codepages.push(new OS2Codepage(OS2Codepage.VIETNAMESE));
-        codepages.push(new OS2Codepage(OS2Codepage.THAI));
-        for (cpg in codepages) {
-            if (cpg.isFunctional(codepoints)) {
-                table.addCodePage(cpg.getBit());
-            }
+        var os2Bits = OS2Codepages.getFunctionalCodepages(codepoints, 0.5);
+        for (bit in os2Bits) {
+            table.addCodePage(bit);
         }
         return table;
     }

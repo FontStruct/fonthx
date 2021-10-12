@@ -1,0 +1,8 @@
+-main fonthx.utils.codepagecompiler.CodepageCompiler
+-cp src
+-lib hxnodejs
+-D nodejs
+-js dist/codepagecompiler/js/compiler.js
+-cmd node dist/codepagecompiler/js/compiler.js
+
+

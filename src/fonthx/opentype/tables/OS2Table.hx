@@ -76,7 +76,21 @@ class OS2Table extends Table
 			panose.push(0);
 		}
 		panose[2] = 4;
-		ulUnicodeRange1 = 0x00000001; // default: just Basic Latin
+
+        /**
+        * 126 bits to indicate “functional” unicode block coverage
+        *
+        * This field is used to specify the Unicode blocks or ranges encompassed by the font file in 'cmap' subtables
+        * for platform 3, encoding ID 1 (Microsoft platform, Unicode BMP)
+        * and platform 3, encoding ID 10 (Microsoft platform, Unicode full repertoire).
+        * If a bit is set (1), then the Unicode ranges assigned to that bit are considered functional.
+        * If the bit is clear (0), then the range is not considered functional.
+        * Each of the bits is treated as an independent flag and the bits can be set in any combination.
+        * The determination of “functional” is left up to the font designer, although character set selection should
+        * attempt to be functional by ranges if at all possible.
+        *
+        **/
+        ulUnicodeRange1 = 0x00000000; // default: just Basic Latin
 		ulUnicodeRange2 = 0x00000000;
 		ulUnicodeRange3 = 0x00000000;
 		ulUnicodeRange4 = 0x00000000;

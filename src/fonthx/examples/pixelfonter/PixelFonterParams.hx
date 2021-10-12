@@ -1,6 +1,5 @@
 package fonthx.examples.pixelfonter;
 
-import haxe.macro.Type.Ref;
 import haxe.io.Bytes;
 
 class PixelFonterParams {

@@ -1,8 +1,8 @@
 package fonthx.model.font.features.lookups.ligasub;
 class LigaSubstitution {
 
-    public var componentGlyphIds:Array<Int>;
     public var ligatureGlyphId:Int;
+    public var componentGlyphIds:Array<Int>;
 
     public function new(ligatureGlyphId:Int, componentIds:Array<Int> = null) {
         this.ligatureGlyphId = ligatureGlyphId;

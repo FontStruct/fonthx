@@ -1,0 +1,40 @@
+# https://docs.microsoft.com/en-us/typography/opentype/spec/os2#ulcodepagerange1-bits-031ulcodepagerange2-bits-3263
+# sources: https://www.unicode.org/Public/MAPPINGS/
+# bit;codepageNumber;name
+0;1252;Latin 1
+1;1250;Latin 2: Eastern Europe
+2;1251;Cyrillic
+3;1253;Greek
+4;1254;Turkish
+5;1255;Hebrew
+6;1256;Arabic
+7;1257;Windows Baltic
+8;1258;Vietnamese
+9–15;-;Reserved for Alternate ANSI
+16;874;Thai
+17;932;JIS/Japan
+18;936;Chinese: Simplified chars—PRC and Singapore
+19;949;Korean Wansung
+20;950;Chinese: Traditional chars—Taiwan and Hong Kong
+21;1361;Korean Johab
+22-28;-;Reserved for Alternate ANSI or OEM
+29;MACROMAN;Mac Roman
+30;-;OEM Character Set
+31;-;Symbol Character Set
+32–47;-;Reserved for OEM
+48;869;IBM Greek
+49;866;MS-DOS Russian
+50;865;MS-DOS Nordic
+51;864;Arabic
+52;863;MS-DOS Canadian French
+53;862;Hebrew
+54;861;MS-DOS Icelandic
+55;860;MS-DOS Portuguese
+56;857;IBM Turkish
+57;855;IBM Cyrillic; primarily Russian
+58;852;Latin 2
+59;775;MS-DOS Baltic
+60;737;Greek; former 437 G
+61;708;Arabic; ASMO 708
+62;850;WE/Latin 1
+63;437;US

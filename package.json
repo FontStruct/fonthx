@@ -6,7 +6,7 @@
   "dependencies": {},
   "devDependencies": {
     "gulp": "^4.0.0",
-    "gulp-livereload": "^3.8.1",
+    "gulp-livereload": "^4.0.2",
     "gulp-parameterized": "^0.1.1"
   }
 }

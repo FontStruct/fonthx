@@ -1,5 +1,8 @@
 package fonthx.opentype;
 
+import fonthx.utils.MathUtils;
+import fonthx.model.font.features.lookups.LookupType;
+import fonthx.model.font.features.lookups.ILookup;
 import fonthx.opentype.os2.OS2Codepages;
 import fonthx.opentype.tables.opentype.GSUBTable;
 import fonthx.opentype.tables.CharacterMapFormat12Subtable;
@@ -187,10 +190,10 @@ class OpenTypeBuilder {
         var head = new FontHeader();
         var now = Date.now();
         head.setFormat(format)
-            .setCreated(Utils.getMillisSince1904(now))
-            .setModified(Utils.getMillisSince1904(now))
-            .setVersion(fnt.version)
-            .setEmSquare(fnt.emSquare)
+        .setCreated(Utils.getMillisSince1904(now))
+        .setModified(Utils.getMillisSince1904(now))
+        .setVersion(fnt.version)
+        .setEmSquare(fnt.emSquare)
         ;
         // calculate bounds
         var bounds = null;
@@ -208,13 +211,23 @@ class OpenTypeBuilder {
             bounds = new Rectangle();
         }
         head.setBounds(bounds)
-            .setMacStyle(MacStyle.REGULAR) // todo: parameterize
-            .setFontDirectionHint(2) // todo: make constants for this
-            .setLongOffsetFormat(true)
-            .setSmallestReadablePixelSize(8) // todo: parameterize
+        .setMacStyle(MacStyle.REGULAR) // todo: parameterize
+        .setFontDirectionHint(2) // todo: make constants for this
+        .setLongOffsetFormat(true)
+        .setSmallestReadablePixelSize(8) // todo: parameterize
         ;
         return head;
     }
+
+    private static function hasSMP(fnt:IFont):Bool {
+        for (g in fnt.glyphs) {
+            if (g.codepoint > 0xFFFF) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     private static function createCmap(fnt:IFont):CharacterMapTable {
         // https://docs.microsoft.com/en-us/typography/opentype/spec/recom#cmap-table
@@ -226,22 +239,12 @@ class OpenTypeBuilder {
         With either encoding, use a format 12 subtable.
         */
 
-        var hasSMP = false;
-        for (g in fnt.glyphs) {
-            if (g.codepoint > 0xFFFF) {
-                hasSMP = true;
-                trace('Font has encodings in SMP');
-                break;
-            }
-        }
-
         var cmap = new CharacterMapTable();
-        if (hasSMP) {
+        cmap.addSubtable(new CharacterMapFormat4Subtable(0, 3, 0)); // unicode 2
+        if (hasSMP(fnt)) {
             cmap.addSubtable(new CharacterMapFormat12Subtable(0, 4, 0));
-        } else {
-            cmap.addSubtable(new CharacterMapFormat4Subtable(0, 3, 0));  // unicode 2
-            cmap.addSubtable(new CharacterMapFormat4Subtable(3, 1, 0));  // ms unicode
         }
+        cmap.addSubtable(new CharacterMapFormat4Subtable(3, 1, 0)); // ms unicode
         for (sub in cmap.getSubtables()) {
             // iterate over glyphs adding mappings
             for (g in fnt.glyphs) {
@@ -291,6 +294,21 @@ class OpenTypeBuilder {
         .setNumberOfHMetrics(font.getNumberOfHMetrics())
         .setXMaxExtent(xMaxExtent)
         ;
+        // todo calculate “usMaxContext”
+        var maxContext = 0;
+        for (lookup in font.gsubLayout.lookups) {
+            if (lookup.type == LookupType.GSUB_SINGLE) {
+                maxContext = MathUtils.maxint(2, maxContext);
+            } else if (lookup.type == LookupType.GSUB_LIGATURE) {
+                //maxContext = MathUtils.maxint(2, maxContext);
+            }
+        }
+        for (lookup in font.gposLayout.lookups) {
+            if (lookup.type == LookupType.GPOS_PAIR_ADJUSTMENT) {
+                maxContext = MathUtils.maxint(2, maxContext);
+            }
+        }
+
         return table;
     }
 
@@ -306,8 +324,8 @@ class OpenTypeBuilder {
         var table = new MaximumProfileTable();
         var isTT = format == FontFileFormat.TrueType;
         table
-            .setVersion(isTT? MaximumProfileTable.TRUETYPE_OUTLINES : MaximumProfileTable.CFF_OUTLINES)
-            .setNumGlyphs(fnt.glyphs.length);
+        .setVersion(isTT ? MaximumProfileTable.TRUETYPE_OUTLINES : MaximumProfileTable.CFF_OUTLINES)
+        .setNumGlyphs(fnt.glyphs.length);
         if (isTT) {
             var maxPoints = 0;
             var maxContours = 0;
@@ -322,8 +340,8 @@ class OpenTypeBuilder {
                 }
             }
             table
-                .setMaxPoints(maxPoints)
-                .setMaxContours(maxContours);
+            .setMaxPoints(maxPoints)
+            .setMaxContours(maxContours);
         }
         return table;
     }
@@ -380,28 +398,28 @@ class OpenTypeBuilder {
 
     private static function createOS2Table(font:IFont):OS2Table {
         // todo: a lot needs to be parameterized here
-        //FontMetrics metrics = font.getMetrics();
         var table = new OS2Table();
         var halfEM = Std.int(font.emSquare / 2);
         table
-            .setVersion(0x0002)
-            .setAvgCharWidth(calculateAvgCharWidth(font))
-            .setWeightClass(OS2Weight.NORMAL)
-            .setWidthClass(OS2Width.NORMAL)
-            .setEmbedding(OS2Embeddable.PREVIEW_AND_PRINT)
-            .setYSubscriptXSize(halfEM)
-            .setYSubscriptYSize(halfEM)
-            .setYSubscriptXOffset(0)
-            .setYSubscriptYOffset(Std.int(font.idealDescender / 2))
-            .setYSuperscriptXSize(halfEM)
-            .setYSuperscriptYSize(halfEM)
-            .setYSuperscriptXOffset(0)
-            .setYSuperscriptYOffset(halfEM)
-            .setStrikeoutSize(Std.int(font.emSquare / 20))
-            .setStrikeoutPosition(Std.int(font.emSquare / 5))
+        .setVersion(0x0002)
+        .setAvgCharWidth(calculateAvgCharWidth(font))
+        .setWeightClass(OS2Weight.NORMAL)
+        .setWidthClass(OS2Width.NORMAL)
+        .setEmbedding(OS2Embeddable.PREVIEW_AND_PRINT)
+        .setYSubscriptXSize(halfEM)
+        .setYSubscriptYSize(halfEM)
+        .setYSubscriptXOffset(0)
+        .setYSubscriptYOffset(Std.int(font.idealDescender / 2))
+        .setYSuperscriptXSize(halfEM)
+        .setYSuperscriptYSize(halfEM)
+        .setYSuperscriptXOffset(0)
+        .setYSuperscriptYOffset(halfEM)
+        .setStrikeoutSize(Std.int(font.emSquare / 20))
+        .setStrikeoutPosition(Std.int(font.emSquare / 5))
         ;
         var codepoints:Array<Int> = new Array<Int>();
         for (g in font.glyphs) {
+            codepoints.push(g.codepoint);
             codepoints.push(g.codepoint);
         }
         var os2Bits = OS2Ranges.getFunctionalRanges(codepoints);
@@ -413,15 +431,14 @@ class OpenTypeBuilder {
         .setVendorID(font.vendorID)
         .setFontSelectionFlags(OS2FontSelectionFlags.REGULAR)
         .setFirstCharIndex(getFirstCharCode(font))
-        .setLastCharIndex(getLastCharCode(font))
+        ;
+        var lastCharCode = getLastCharCode(font);
+        table.setLastCharIndex(lastCharCode)
         .setTypoAscender(Std.int(font.idealAscender)) // http://typophile.com/node/13081?
         .setTypoDescender(Std.int(font.idealDescender))
         .setTypoLineGap(Std.int(font.typoLineGap))
         .setWinAscent(Std.int(font.realAscender))
         .setWinDescent(Std.int(0 - font.realDescender));
-
-        // trace([font.idealAscender, font.idealDescender, font.typoLineGap, font.realAscender, font.realDescender].join(' '));
-
         var sxHeight = 0;
         var x = font.getGlyphForCodepoint(0x78);
         if (x != null && x.getBounds() != null) {
@@ -433,12 +450,10 @@ class OpenTypeBuilder {
         if (H != null && H.getBounds() != null) {
             capHeight = Std.int(H.getBounds().height);
         }
-        table
-        .setCapHeight(capHeight)
-        .setDefaultChar(0)
-        .setBreakChar(0x20);
-
-        var os2Bits = OS2Codepages.getFunctionalCodepages(codepoints, 0.5);
+        table.setCapHeight(capHeight)
+            .setDefaultChar(0)
+            .setBreakChar(0x20);
+        var os2Bits = OS2Codepages.getFunctionalCodepages(codepoints);
         for (bit in os2Bits) {
             table.addCodePage(bit);
         }
@@ -512,7 +527,7 @@ class OpenTypeBuilder {
 
     private static function getLastCharCode(fnt:IFont) {
         return fnt.glyphs.fold(function(g:IContourGlyph, acc:Int) {
-            return g.codepoint > acc ? g.codepoint : acc;
+            return g.codepoint < 0xFFFF && g.codepoint > acc ? g.codepoint : acc;
         }, 0);
     }
 

@@ -1,12 +1,10 @@
 package fonthx.opentype.tables.opentype.lookup.gsub;
 
-import haxe.ds.IntMap;
 import fonthx.model.font.features.lookups.ligasub.LigaSubstitution;
 import fonthx.model.font.features.lookups.ligasub.LigaSubstitutionSubLookup;
-import fonthx.model.font.features.lookups.singlesub.SingleSubstitution;
-import fonthx.model.font.features.lookups.singlesub.SingleSubstitutionSubLookup;
 import fonthx.opentype.tables.opentype.lookup.coverage.CoverageTableHelper;
 import fonthx.opentype.writers.ITrueTypeWriter;
+import haxe.ds.IntMap;
 
 using Lambda;
 
@@ -105,7 +103,6 @@ class LigatureSubstitutionSubtableFormat1 implements ILookupSubtable {
         coverage.sort(function(a, b) {
             return a - b;
         });
-        trace(coverage);
         return CoverageTableHelper.getCoverageTable(coverage);
     }
 

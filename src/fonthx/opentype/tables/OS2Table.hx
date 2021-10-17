@@ -9,6 +9,7 @@ import fonthx.opentype.writers.ITrueTypeWriter;
 /**
     OS/2 and Windows Metrics Table
     @see https://docs.microsoft.com/en-us/typography/opentype/spec/os2
+    todo really need to look into the versions
 **/
 class OS2Table extends Table
 {
@@ -90,7 +91,7 @@ class OS2Table extends Table
         * attempt to be functional by ranges if at all possible.
         *
         **/
-        ulUnicodeRange1 = 0x00000000; // default: just Basic Latin
+        ulUnicodeRange1 = 0x00000000;
 		ulUnicodeRange2 = 0x00000000;
 		ulUnicodeRange3 = 0x00000000;
 		ulUnicodeRange4 = 0x00000000;
@@ -170,6 +171,7 @@ class OS2Table extends Table
 	   Use constants from fonthx.tt.constants.FontSelectionFlags;
 	 **/
 	public function setFontSelectionFlags(flags:Int):OS2Table {
+        // todo this is a bit mask
 		fsSelection = flags;
         return this;
 	}
@@ -275,7 +277,6 @@ class OS2Table extends Table
 		if (rangeIndex < 0) {
 			return;
 		}
-		// todo: implement setting unicode range bits
 		if (rangeIndex < 32) {
 			ulUnicodeRange1 |= (1 << rangeIndex);
 		} else if (rangeIndex < 64) {
@@ -285,6 +286,7 @@ class OS2Table extends Table
 		} else {
 			ulUnicodeRange4 |= (1 << (rangeIndex - 96));	
 		}
+        //trace(ulUnicodeRange1, ulUnicodeRange2, ulUnicodeRange3, ulUnicodeRange4);
 	}
 	
 	/**

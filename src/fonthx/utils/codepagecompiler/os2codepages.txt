@@ -12,11 +12,11 @@
 8;1258;Vietnamese
 9–15;-;Reserved for Alternate ANSI
 16;874;Thai
-17;932;JIS/Japan
+# 17;932;JIS/Japan
 18;936;Chinese: Simplified chars—PRC and Singapore
-19;949;Korean Wansung
-20;950;Chinese: Traditional chars—Taiwan and Hong Kong
-21;1361;Korean Johab
+# 19;949;Korean Wansung
+# 20;950;Chinese: Traditional chars—Taiwan and Hong Kong
+# 21;1361;Korean Johab
 22-28;-;Reserved for Alternate ANSI or OEM
 29;MACROMAN;Mac Roman
 30;-;OEM Character Set

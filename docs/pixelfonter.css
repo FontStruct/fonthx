@@ -1,5 +1,15 @@
-section {
-    margin: 30px 0;
+body {
+    font-family: 'Roboto', sans-serif;
+    padding: 10px 20px;
+}
+
+
+h1 {
+    font-family: pixelfont, sans-serif;
+}
+
+h2 {
+    color: #990000;
 }
 
 canvas {
@@ -7,33 +17,97 @@ canvas {
     image-rendering: crisp-edges;
 }
 
-#cells {
+.pf-header {
+    margin-bottom: 30px;
+}
+
+.pf-bottomBorder {
+    border-bottom: 1px solid #DDD;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+
+}
+
+.pf-inlineList {
+    list-style: none;
+    padding: 0;
+}
+.pf-inlineList li {
+    display: inline-block;
+    margin-bottom: 5px;
+}
+.pf-inlineList a {
+    display: inline-block;
+}
+.pf-button {
+    border: 0;
+    background: #333;
+    transition: all 0.2s;
+    color: white;
+    padding: 8px 12px;
+    font: inherit;
+    cursor: pointer;
+    text-decoration: none;
+}
+.pf-button--active {
+    cursor: default;
+}
+.pf-button:hover, .pf-button--active {
+    background: none;
+    color: #333;
+    outline: solid 1px #333;
+}
+
+.pf-label {
+    margin-bottom: 10px;
+    color: #999;
+}
+
+.pf-cells {
     display: flex;
     flex-wrap: wrap;
 }
 
-#cells canvas {
-    margin-bottom: 10px;
-    margin-right: 10px;
+.pf-cells canvas {
+    margin-bottom: 5px;
+    margin-right: 5px;
     outline: 1px solid #eee;
     image-rendering: pixelated;
     cursor: crosshair;
 }
 
-.pf {
+.pf-text {
     font-family: pixelfont, sans-serif;
-    text-transform: uppercase;
     font-kerning: normal;
+    border-bottom: 1px solid #DDD;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
 }
 
-.pf--unkerned {
+.pf-text--color {
+    font-family: pixelfontcolor, sans-serif;
+}
+
+.pf-text--smp {
+    font-family: pixelfontsmp, sans-serif;
+}
+
+.pf-text--gsub {
+     font-family: pixelfontgsub, sans-serif;
+ }
+
+.pf-text--liga {
+    font-family: pixelfontliga, sans-serif;
+}
+
+.pf-text--unkerned {
     font-kerning: none !important;
 }
 
-.label {
+.pf-label {
     margin-bottom: 10px;
 }
 
-#canvas {
+.pf-canvas {
     display: none;
 }

@@ -123,6 +123,6 @@ You need to:
 1. create a font class implementing [IFont](src/fonthx/model/font/IFont.hx) (optionally extending [AbstractFont](src/fonthx/model/font/AbstractFont.hx))
 1. create a glyph class implementing [IContourGlyph](src/fonthx/model/font/IContourGlyph.hx) (optionally extending [AbstractContourGlyph](src/fonthx/model/font/AbstractContourGlyph.hx))
 1. instantiate your font class, add some glyphs to it, then
-1. get your TrueType bytes using [TrueTypeBuilder](src/fonthx/tt/TrueTypeBuilder.hx)
+1. get your TrueType bytes using [OpenTypeBuilder](src/fonthx/opentype/OpenTypeBuilder.hx)
 
     

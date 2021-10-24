@@ -25,7 +25,7 @@ class Unicode {
         #if js
         // todo we will use UnicodeString when we move to haxe 4
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/codePointAt
-        untyped return Array.from(s).map(function(c) { return c.codePointAt(c); });
+        untyped return Array.from(s).map(function(c) { return c.codePointAt(0); });
         #end
         return s.split('').map(function(c) {
             return Unicode.charCodeAt(c, 0);

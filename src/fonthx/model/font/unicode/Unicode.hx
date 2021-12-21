@@ -7,10 +7,33 @@ var name:String;
 }
 
 
-
 class Unicode {
 
-    public static var whitespace:Array<Int> = [0x20, 0xA0, 0x1160, 0x115F, 0x3000];
+    // https://jkorpela.fi/chars/spaces.html
+    // https://stackoverflow.com/questions/18169006/all-the-whitespace-characters-is-it-language-independent
+    public static var whitespace:Array<Int> = [
+        0x20, // SPACE
+        0xA0, // NO-BREAK SPACE
+        0x1680, // OGHAM SPACE MARK
+        0x180E, // MONGOLIAN VOWEL SEPARATOR
+        0x2000, // 	EN QUAD
+        0x2001, // 	EM QUAD
+        0x2002, // 	EN SPACE (nut)
+        0x2003, // 	EM SPACE (mutton)
+        0x2004, // 	THREE-PER-EM SPACE (thick space) 1/3 em
+        0x2005, // 	FOUR-PER-EM SPACE (mid space) 1/4 em
+        0x2006, // 	SIX-PER-EM SPACE 1/6 em
+        0x2007, // 	FIGURE SPACE “Tabular width”, the width of digits
+        0x2008, // 	PUNCTUATION SPACE The width of a period “.”
+        0x2009, // 	THIN SPACE 1/5 em (or sometimes 1/6 em)
+        0x200A, // 	HAIR SPACE Narrower than THIN SPACE
+        0x200B, // 	ZERO WIDTH SPACE 0
+        0x202F, // 	NARROW NO-BREAK SPACE Narrower than NO-BREAK SPACE (or SPACE), “typically the width of a thin space or a mid space”
+        0x205F, // 	MEDIUM MATHEMATICAL SPACE 4/18 em
+        0x3000, // IDEOGRAPHIC SPACE
+        0xFEFF, // 	ZERO WIDTH NO-BREAK SPACE 0
+    ];
+
 
     public static function fromCharCode(c:Int):String {
         #if js

@@ -1,5 +1,6 @@
 package fonthx.opentype.tables;
 
+import haxe.io.Bytes;
 import fonthx.opentype.writers.ITrueTypeWriter;
 
 // https://docs.microsoft.com/en-us/typography/opentype/spec/dsig
@@ -10,10 +11,11 @@ class DSIGTable extends Table
         super(Table.DSIG);
     }
 
-	override public function write(tt:ITrueTypeWriter) {
+	override public function getBytes():Bytes {
         tt.writeULONG(0x00000001);
         tt.writeUINT16(0);
         tt.writeUINT16(0);
+        return tt.getBytes();
 	}
 
 }

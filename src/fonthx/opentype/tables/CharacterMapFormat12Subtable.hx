@@ -1,5 +1,6 @@
 package fonthx.opentype.tables;
 
+import haxe.io.Bytes;
 import fonthx.opentype.writers.ITrueTypeWriter;
 
 /**
@@ -54,7 +55,7 @@ class CharacterMapFormat12Subtable extends CharacterMapSubtable {
         //trace(groups);
     }
 
-    override public function write(tt:ITrueTypeWriter) {
+    override public function getBytes():Bytes {
         prepareGroups();
         tt.writeUSHORT(12);                 // Format number is set to 12.
         tt.writeUSHORT(0);                  // Reserved; set to 0
@@ -66,6 +67,7 @@ class CharacterMapFormat12Subtable extends CharacterMapSubtable {
             tt.writeULONG(g.end);
             tt.writeULONG(g.startId);
         }
+        return tt.getBytes();
     }
 
 }

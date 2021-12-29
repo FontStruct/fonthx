@@ -1,5 +1,6 @@
 package fonthx.opentype.tables;
 
+import haxe.io.Bytes;
 import fonthx.model.font.features.lookups.pairadjustment.PositioningPair;
 import fonthx.opentype.writers.ITrueTypeWriter;
 
@@ -19,7 +20,7 @@ class KerningTable extends Table
 		super(Table.KERN);
 	}
 
-    override public function write(tt:ITrueTypeWriter) {
+    override public function getBytes():Bytes {
 
 		// version
 		tt.writeUSHORT(0);
@@ -75,6 +76,7 @@ class KerningTable extends Table
 			tt.writeUSHORT(kp.idx2);
 			tt.writeSHORT(Std.int(kp.x)); // fixme ROUNDING
 		}
+        return tt.getBytes();
 	}
 
 	public function setKerningPairs(pairs:Array<PositioningPair>) {

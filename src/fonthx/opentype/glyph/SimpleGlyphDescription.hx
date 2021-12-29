@@ -1,5 +1,7 @@
 package fonthx.opentype.glyph;
 
+import haxe.io.Bytes;
+import fonthx.opentype.writers.TrueTypeFileWriter;
 import fonthx.model.geom.Rectangle;
 import fonthx.opentype.writers.ITrueTypeWriter;
 
@@ -14,10 +16,13 @@ class SimpleGlyphDescription {
 	public var lastPoint:ContourPoint;
 	private var simpleFlags:Bool = true;
 
+    private var tt:TrueTypeFileWriter;
+
 	public function new() {
 		points = new Array<ContourPoint>();
 		numContours = 0;
 		lastPoint = null;
+        tt = new TrueTypeFileWriter();
 	}
 	
 	public function startContour() {
@@ -103,9 +108,9 @@ class SimpleGlyphDescription {
 		return flags;
 	}
 	
-	public function write(tt:ITrueTypeWriter) {
+	public function write():Bytes {
 		if (numContours == 0) {
-			return;
+			return tt.getBytes();
 		}
 		tt.markPosition();
 		var endPtsOfContours = new Array<Int>();
@@ -187,6 +192,7 @@ class SimpleGlyphDescription {
 			last = p;
 		}
 		tt.pad(true);
+        return tt.getBytes();
 	}
 
 	public function getNumContours() {

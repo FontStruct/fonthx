@@ -1,5 +1,6 @@
 package fonthx.opentype.tables;
 
+import haxe.io.Bytes;
 import fonthx.opentype.writers.TrueTypeFileWriter;
 import fonthx.opentype.writers.ITrueTypeWriter;
 
@@ -23,7 +24,7 @@ class CharacterMapTable extends Table {
 		subtables = new Array<CharacterMapSubtable>();
 	}
 	
-	override public function write(tt:ITrueTypeWriter) {
+	override public function getBytes():Bytes {
 		/*
 		 * The header entries must be sorted first by platform ID,
 		 * then by platform-specific encoding ID, and then by the version field 
@@ -45,8 +46,9 @@ class CharacterMapTable extends Table {
 		}
 		// subtables
 		for (t in subtables) {
-			t.write(tt);
+			tt.writeBytes(t.getBytes());
 		}
+        return tt.getBytes();
 	}
 
 	public function addSubtable(sub:CharacterMapSubtable) {

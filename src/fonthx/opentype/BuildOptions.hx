@@ -1,5 +1,6 @@
 package fonthx.opentype;
 
+import haxe.ds.StringMap;
 import haxe.ds.IntMap;
 class BuildOptions {
 
@@ -7,6 +8,8 @@ class BuildOptions {
     public var useSubroutinesInCFF:Bool = false;
     public var includeSVG:Bool = false;
     public var extraNamingRecords:IntMap<String>;
+    public var cacheTableOptions:StringMap<Int>;
+
     public function new() {
         extraNamingRecords = new IntMap();
     }

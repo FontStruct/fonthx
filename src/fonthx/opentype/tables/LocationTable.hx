@@ -1,5 +1,6 @@
 package fonthx.opentype.tables;
 
+import haxe.io.Bytes;
 import fonthx.opentype.writers.ITrueTypeWriter;
 
 /**
@@ -19,12 +20,13 @@ class LocationTable extends Table {
 		this.glyphTable = glyphTable;
 	}
 
-	override public function write(tt:ITrueTypeWriter) {
+	override public function getBytes():Bytes {
 		// we use the long format
 		var offsets = glyphTable.getOffsets();
 		for (o in offsets) {
 			tt.writeULONG(o);
 		}
+        return tt.getBytes();
 	}
 
 }

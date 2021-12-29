@@ -1,5 +1,6 @@
 package fonthx.opentype.tables;
 
+import haxe.io.Bytes;
 import fonthx.opentype.writers.ITrueTypeWriter;
 
 /**
@@ -19,7 +20,7 @@ class TableDirectory extends Table {
 
     }
 
-	override public function write(tt:ITrueTypeWriter) {
+	override public function getBytes():Bytes {
         // Entries in the Table Record must be sorted in ascending order by tag
         entries.sort(function(a:TableDirectoryEntry, b:TableDirectoryEntry) {
             if (b.table.tag > a.table.tag) {
@@ -33,6 +34,7 @@ class TableDirectory extends Table {
 		for (entry in entries) {
 			entry.write(tt);
 		}
+        return tt.getBytes();
 	}
 
 

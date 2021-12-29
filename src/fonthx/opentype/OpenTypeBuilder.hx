@@ -138,7 +138,7 @@ class OpenTypeBuilder {
             numTables++;
             var writer = new TrueTypeFileWriter(); // need a factory for this (DI)
             trace('Writing ${table.tag}'); // todo control verbosity
-            table.write(writer);
+            writer.writeBytes(table.getBytes());
             table.length = writer.getPosition(); // store actual not padded length
             writer.pad();
             byteBlocks[tag] = writer.getBytes();
@@ -156,14 +156,10 @@ class OpenTypeBuilder {
         }
 
         // write the table directory
-        var writer = new TrueTypeFileWriter();
-        ttf.getTable(Table.TDIR).write(writer);
-        byteBlocks[Table.TDIR] = writer.getBytes();
+        byteBlocks[Table.TDIR] = ttf.getTable(Table.TDIR).getBytes();
 
         // write the font header
-        writer = new TrueTypeFileWriter();
-        ttf.getTable(Table.SFNT).write(writer);
-        byteBlocks[Table.SFNT] = writer.getBytes();
+        byteBlocks[Table.SFNT] = ttf.getTable(Table.SFNT).getBytes();
 
         // assemble the byte blocks into entire font “file”
         var b:BytesBuffer = new BytesBuffer();

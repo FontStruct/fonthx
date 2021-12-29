@@ -1,5 +1,7 @@
 package fonthx.opentype.tables;
 
+import fonthx.opentype.writers.TrueTypeFileWriter;
+import haxe.io.Bytes;
 import fonthx.svg.SVG;
 import fonthx.opentype.writers.ITrueTypeWriter;
 
@@ -46,17 +48,19 @@ class Table {
     public var offset:Int;
     public var length:Int;
     public var checksum:Int;
+    private var tt:TrueTypeFileWriter;
 
     public function new(tag:String = "") {
         this.tag = tag;
         offset = 0;
         length = 0;
         checksum = 0;
+        tt = new TrueTypeFileWriter();
     }
 
-    public function write(tt:ITrueTypeWriter) {
+    public function getBytes():Bytes {
         // default implementation does nothing
+        return tt.getBytes();
     }
-
 
 }

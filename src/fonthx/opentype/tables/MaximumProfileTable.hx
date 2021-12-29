@@ -1,5 +1,6 @@
 package fonthx.opentype.tables;
 
+import haxe.io.Bytes;
 import fonthx.opentype.writers.ITrueTypeWriter;
 
 /**
@@ -118,8 +119,7 @@ class MaximumProfileTable extends Table
 		maxComponentDepth = 0;
 	}
 
-
-	override public function write(tt:ITrueTypeWriter) {
+	override public function getBytes():Bytes {
 		tt.writeULONG(version);
 		tt.writeUSHORT(numGlyphs);
         if (version == TRUETYPE_OUTLINES) {
@@ -137,6 +137,7 @@ class MaximumProfileTable extends Table
             tt.writeUSHORT(maxComponentElements);
             tt.writeUSHORT(maxComponentDepth);
         }
+        return tt.getBytes();
 	}
 
 	/**

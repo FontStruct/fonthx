@@ -1,5 +1,6 @@
 package fonthx.opentype.tables;
 
+import haxe.io.Bytes;
 import fonthx.opentype.writers.ITrueTypeWriter;
 
 /**
@@ -48,7 +49,7 @@ class HorizontalHeaderTable extends Table
 	}
 
 
-	override public function write(tt:ITrueTypeWriter) {
+	override public function getBytes():Bytes {
 		tt
             .writeULONG(0x00010000)
             .writeSHORT(ascender)
@@ -66,6 +67,7 @@ class HorizontalHeaderTable extends Table
 			tt.writeSHORT(0);
 		}
 		tt.writeUSHORT(numberOfHMetrics);
+        return tt.getBytes();
 	}
 
 	/**

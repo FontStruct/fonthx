@@ -1,5 +1,6 @@
 package fonthx.opentype.tables;
 
+import haxe.io.Bytes;
 import fonthx.model.font.IFont;
 import fonthx.opentype.writers.ITrueTypeWriter;
 
@@ -52,7 +53,7 @@ class PostTable extends Table {
 		standardNames = new Array<Int>();
 	}
 
-	override public function write(tt:ITrueTypeWriter) {
+	override public function getBytes():Bytes {
 		tt
             .writeULONG(version)
 		    .writeFixed(font.getItalicAngle())
@@ -77,6 +78,7 @@ class PostTable extends Table {
 				tt.writePascalString(name);
 			}
 		}
+        return tt.getBytes();
 	}
 
 

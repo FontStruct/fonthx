@@ -1,5 +1,6 @@
 package fonthx.opentype.tables;
 
+import haxe.io.Bytes;
 import fonthx.opentype.writers.ITrueTypeWriter;
 
 /**
@@ -21,12 +22,13 @@ class HorizontalMetricsTable extends Table
 		metrics.push(new HorizontalMetric(advanceWidth, lsb));
 	}
 
-	override public function write(tt:ITrueTypeWriter) {
+	override public function getBytes():Bytes {
 		for (hm in metrics) {
 			tt
                 .writeUSHORT(hm.advanceWidth)
 			    .writeSHORT(hm.lsb);
 		}
+        return tt.getBytes();
 	}
 			
 }

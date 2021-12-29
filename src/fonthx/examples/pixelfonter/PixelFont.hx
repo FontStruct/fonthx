@@ -37,8 +37,8 @@ class PixelFont extends AbstractFont implements IFont {
         kerningSubLookup = new PairAdjustmentPositioningSubLookup();
     }
 
-    public function addGlyph(codepoint:Int, name:String = null, useComposites:Bool = false):PixelGlyph {
-        var glyph = useComposites? new CompositePixelGlyph(codepoint, name) : new PixelGlyph(codepoint, name);
+    public function addGlyph(codepoint:Int, name:String = null):PixelGlyph {
+        var glyph = new PixelGlyph(codepoint, name);
         glyph.pixelSize = pixelSize;
         glyph.emSquare = emSquare;
         glyph.shape = shape;

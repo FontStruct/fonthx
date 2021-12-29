@@ -59,7 +59,7 @@ class PixelFonter {
         // build the glyph data
         var numRows = opts.imageHeight / opts.glyphHeight;
         for (idx in 0 ... identifiers.length) {
-            var glyph = font.addGlyph(identifiers[idx].codepoint, identifiers[idx].name, opts.useComposites);
+            var glyph = font.addGlyph(identifiers[idx].codepoint, identifiers[idx].name);
             for (dy in 0 ... opts.glyphHeight) {
                 for (dx in 0 ... opts.glyphWidth) {
                     var x = (idx * opts.glyphWidth + dx);
@@ -93,9 +93,9 @@ class PixelFonter {
             pixelGlyph.pixelSize = em;
             pixelGlyph.addPixel(0, 0);
             for (g in font.glyphs) {
-                if (Std.is(g, CompositePixelGlyph)) {
-                    var cpg = cast(g, CompositePixelGlyph);
-                    cpg.createComponents(pixelGlyph);
+                if (g.isComposite()) {
+                    var pg = cast(g, PixelGlyph);
+                    pg.createComponents(pixelGlyph); 
                 }
             }
         }

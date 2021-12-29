@@ -1,14 +1,11 @@
 package fonthx.opentype.tables;
 
-import fonthx.opentype.cff.operators.TopDictOp;
-import fonthx.model.font.glyphnames.GlyphNamer;
-import fonthx.model.font.glyphnames.AGLFN;
-import fonthx.examples.pixelfonter.PixelGlyph;
-import fonthx.examples.pixelfonter.PixelGlyph.Pixel;
-import fonthx.opentype.writers.TrueTypeFileWriter;
-import fonthx.opentype.io.ByteWriter;
 import fonthx.examples.pixelfonter.PixelFont;
+import fonthx.model.font.glyphnames.AGLFN;
+import fonthx.model.font.glyphnames.GlyphNamer;
 import fonthx.opentype.cff.CFF;
+import fonthx.opentype.cff.operators.TopDictOp;
+import fonthx.opentype.writers.TrueTypeFileWriter;
 
 using buddy.Should;
 using StringTools;

@@ -27,7 +27,6 @@ class CharacterMapSubtable extends Table {
 
 	public function addCodepoint(codepoint:Int) {
 		codepoints.push(codepoint);
-        // todo increment unmapped here?
 	}
 	
 	public function incrementUnmapped() {

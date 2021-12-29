@@ -44,7 +44,7 @@ interface IContourGlyph {
     var name(get, set):String;
 
     /**
-    * @return true if the Glyph is unmapped (i.e. has no codepoint mapping in the cmap)
+    * @return true if the Glyph is unmapped (i.e. has no codepoint mapping in the cmap) // todo: could this be just codepoint == -1?
     **/
     var unmapped:Bool;
 
@@ -59,5 +59,15 @@ interface IContourGlyph {
     * @param options For specifying contour type e.g. merged if the implementation supports merging
     **/
     function walkContours(consumer:IContourConsumer, options:ContourOptions = null):Void;
+
+    /**
+    * @return true if this glyph is composed of components
+    **/
+    function isComposite():Bool;
+
+    /**
+    * @return an array of GlyphComponents (can be null or empty)
+    **/
+    function getComponents():Array<GlyphComponent>;
 
 }

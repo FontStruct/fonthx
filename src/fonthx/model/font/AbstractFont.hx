@@ -51,9 +51,18 @@ class AbstractFont implements IFont {
         return glyphs.find(function(g) { return g.codepoint == cp; });
     }
 
+    public function getGlyphIndexForGlyph(g:IContourGlyph) {
+        var idx = this.getGlyphIndexForCodepoint(g.codepoint);
+        if (idx == -1) {
+            idx = this.getGlyphIndexForName(g.name);
+        }
+        return idx;
+    }
+
     public function getGlyphIndexForCodepoint(cp:Int):Int {
+        if (cp < 1) return -1;
         for (i in 0...glyphs.length) {
-            if (glyphs[i].codepoint ==cp) {
+            if (glyphs[i].codepoint == cp) {
                 return i;
             }
         }
@@ -61,8 +70,9 @@ class AbstractFont implements IFont {
     }
 
     public function getGlyphIndexForName(name:String):Int {
+        if (name == null || name.length == 0) return -1;
         for (i in 0...glyphs.length) {
-            if (glyphs[i].name ==name) {
+            if (glyphs[i].name == name) {
                 return i;
             }
         }

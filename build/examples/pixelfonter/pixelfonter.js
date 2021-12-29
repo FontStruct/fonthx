@@ -148,6 +148,10 @@ makeEditor('liga', {
     }],
   }
 });
+makeEditor('comp', {
+  name: 'pixelfontcomp',
+  useComposites: true
+});
 
 const sections = document.querySelectorAll('.pf-page');
 const menuButtons = document.querySelectorAll('[data-toggle]');

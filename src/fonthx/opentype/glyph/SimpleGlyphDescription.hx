@@ -3,6 +3,9 @@ package fonthx.opentype.glyph;
 import fonthx.model.geom.Rectangle;
 import fonthx.opentype.writers.ITrueTypeWriter;
 
+/**
+* @see https://docs.microsoft.com/en-us/typography/opentype/spec/glyf#simple-glyph-description
+**/
 class SimpleGlyphDescription {
 
 	private var points:Array<ContourPoint> ;

@@ -173,6 +173,11 @@ class TrueTypeFileWriter implements ITrueTypeWriter {
         return this;
     }
 
+    public function writeF2DOT14(f:Float):ITrueTypeWriter {
+        writeSHORT(f.toFixed(14));
+        return this;
+    }
+
     public function writeVersion(major:Int, minor:Int):ITrueTypeWriter {
         writeUSHORT(major);
         writeUSHORT(minor);

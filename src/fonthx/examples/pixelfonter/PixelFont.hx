@@ -1,28 +1,23 @@
 package fonthx.examples.pixelfonter;
 
-import fonthx.model.font.features.Layout;
-import fonthx.model.font.features.lookups.LookupType;
-import fonthx.model.font.features.lookups.Lookup;
-import fonthx.model.font.features.LanguageTag;
-import fonthx.model.font.features.Language;
-import fonthx.model.font.features.Script;
-import fonthx.model.font.features.lookups.pairadjustment.PairAdjustmentPositioningSubLookup;
+import fonthx.model.font.AbstractFont;
 import fonthx.model.font.features.Feature;
-import fonthx.examples.pixelfonter.PixelGlyph.Pixel;
+import fonthx.model.font.features.FeatureTag;
+import fonthx.model.font.features.lookups.Lookup;
+import fonthx.model.font.features.lookups.LookupType;
+import fonthx.model.font.features.lookups.pairadjustment.PairAdjustmentPositioningSubLookup;
 import fonthx.model.font.features.lookups.pairadjustment.PositioningPair;
 import fonthx.model.font.features.ScriptTag;
-import fonthx.model.font.features.FeatureTag;
-import fonthx.model.geom.Rectangle;
 import fonthx.model.font.IContourGlyph;
 import fonthx.model.font.IFont;
-import fonthx.model.font.AbstractFont;
+import fonthx.model.geom.Rectangle;
 
 using StringTools;
 
 /**
 * A Pixel Font
 **/
-class PixelFont implements IFont extends AbstractFont {
+class PixelFont extends AbstractFont implements IFont {
 
     private var pixelSize:Int;
     private var shape:Int;
@@ -42,44 +37,36 @@ class PixelFont implements IFont extends AbstractFont {
         kerningSubLookup = new PairAdjustmentPositioningSubLookup();
     }
 
-    public function addGlyph(codepoint:Int, name:String = null):PixelGlyph {
-        var glyph = new PixelGlyph(codepoint, name);
+    public function addGlyph(codepoint:Int, name:String = null, useComposites:Bool = false):PixelGlyph {
+        var glyph = useComposites? new CompositePixelGlyph(codepoint, name) : new PixelGlyph(codepoint, name);
         glyph.pixelSize = pixelSize;
+        glyph.emSquare = emSquare;
         glyph.shape = shape;
         this.glyphs.push(glyph);
         return glyph;
     }
 
-    public function prepareForExport():Void {
-
-        // todo: do default prep in TT Builder
+    public function addDefaultGlyphs():Void {
+        // todo: Considering doing some default prep in TT Builder – e.g. add .notdef if not provided
 
         // https://docs.microsoft.com/en-us/typography/opentype/spec/recom#glyph-0-the-notdef-glyph
-        // https://docs.microsoft.com/en-us/typography/opentype/otspec170/recom#first-four-glyphs-in-fonts
 
         // add .notdef glyph
         var notdef = addGlyph(0);
         notdef.name = '.notdef';
-        //NotDefGlyph.draw(notdef, 500);
 
-//        // add .nul glyph
-//        var nul = addGlyph(0);
-//
-//        // add CR (0x0D)
-//        var cr = addGlyph(0x0D);
-//        cr.bounds = new Rectangle(0, 0, pixelSize * 2, emSquare);
-//
         // add space
         var space = addGlyph(0x20);
         space.bounds = new Rectangle(0, 0, pixelSize * 2, emSquare);
+    }
+
+    public function prepareForExport():Void {
+
 
         // sort glyphs by codepoint
         glyphs.sort(function(a:IContourGlyph, b:IContourGlyph) {
             return a.codepoint - b.codepoint;
         });
-
-
-
 
         var kerning = new Feature(FeatureTag.FEAT_KERN, true);
         gposLayout.addFeature(kerning, ScriptTag.LATIN);

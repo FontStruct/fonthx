@@ -42,6 +42,7 @@ interface IFont {
     var typoLineGap(get, null):Float;
 
     function getGlyphForCodepoint(cp:Int):IContourGlyph;
+    function getGlyphIndexForGlyph(g:IContourGlyph):Int;
     function getGlyphIndexForCodepoint(cp:Int):Int;
     function getGlyphIndexForName(name:String):Int;
     function getKerningPairs():Array<PositioningPair>;

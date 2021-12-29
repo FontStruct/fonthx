@@ -14,6 +14,7 @@ class PixelFonterParams {
     public var includeSVG:Bool;
     public var svgSheet:Bool;
     public var floatingPointCoords:Bool;
+    public var useComposites:Bool = false;
     public var features:Dynamic;
     public var imageWidth:Int;
     public var imageHeight:Int;

@@ -73,4 +73,13 @@ class AbstractContourGlyph implements IContourGlyph {
 
     }
 
+    public function isComposite():Bool {
+        return false;
+    }
+
+    public function getComponents():Array<GlyphComponent> {
+        return null;
+    }
+
+
 }

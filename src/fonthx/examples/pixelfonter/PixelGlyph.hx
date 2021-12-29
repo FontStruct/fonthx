@@ -13,12 +13,11 @@ class PixelGlyph extends AbstractContourGlyph implements IContourGlyph {
 
     /** Pixel width and height in em units */
     public var pixelSize:Int;
+    public var emSquare:Int;
     public var shape:Int;
 
     public var bounds:Rectangle;
     public var gridBounds:Rectangle;
-
-    public static var useCircles:Bool = false;
 
     public function new(codepoint:Int, name = null) {
         super(codepoint, name);
@@ -121,23 +120,4 @@ class PixelGlyph extends AbstractContourGlyph implements IContourGlyph {
         return pixelSize;
     }
 
-}
-
-class Pixel {
-
-    public var x:Int;
-    public var y:Int;
-    public var color:String;
-    public var opacity:Float;
-
-    public function new(x, y, color = '#FF0000', opacity = 1) {
-        this.x = x;
-        this.y = y;
-        this.color = color;
-        this.opacity = opacity;
-    }
-
-    public function toString():String {
-        return '(${x}, ${y}) ${color} ${opacity}';
-    }
 }

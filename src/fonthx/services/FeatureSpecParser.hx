@@ -88,7 +88,6 @@ class FeatureSpecParser {
         return feature;
     }
 
-    // todo consider putting this in font(?)
     public function getGlyphId(id:Dynamic, font:IFont) {
         if (Std.is(id, std.String)) {
             return font.getGlyphIndexForName(id);

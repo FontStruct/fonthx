@@ -82,6 +82,12 @@ interface ITrueTypeWriter {
     public function writeFixed(f:Float):ITrueTypeWriter;
 
     /**
+    * append a 16-bit signed fixed number with the low 14 bits of fraction (2.14).
+    * @see https://docs.microsoft.com/en-us/typography/opentype/spec/otff#data-types
+    **/
+    public function writeF2DOT14(f:Float):ITrueTypeWriter;
+
+    /**
 	 *  make sure the output length is divisible by 4
 	 *  pad with zeroes
 	 * @param mod

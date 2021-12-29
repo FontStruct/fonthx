@@ -5,7 +5,6 @@ import fonthx.model.geom.Shape;
 
 class ContourGlyph extends AbstractContourGlyph implements IContourGlyph {
 
-
     public var areas:Array<Shape>;
 
     public function new(codepoint:Int) {

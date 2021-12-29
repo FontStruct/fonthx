@@ -48,6 +48,8 @@ class PixelFonter {
             return identifiers;
         }, new Array<GlyphIdentifier>());
 
+
+
         var em = 1024;
         var pixelSize = Std.int(em / opts.glyphWidth);
 
@@ -57,7 +59,7 @@ class PixelFonter {
         // build the glyph data
         var numRows = opts.imageHeight / opts.glyphHeight;
         for (idx in 0 ... identifiers.length) {
-            var glyph = font.addGlyph(identifiers[idx].codepoint, identifiers[idx].name);
+            var glyph = font.addGlyph(identifiers[idx].codepoint, identifiers[idx].name, opts.useComposites);
             for (dy in 0 ... opts.glyphHeight) {
                 for (dx in 0 ... opts.glyphWidth) {
                     var x = (idx * opts.glyphWidth + dx);
@@ -84,7 +86,23 @@ class PixelFonter {
         // setup gpos layout – default script
         font.gposLayout.setDefaults(ScriptTag.LATIN);
 
+        font.addDefaultGlyphs();
+
+        if (opts.useComposites) {
+            var pixelGlyph = font.addGlyph(0, 'pixel');
+            pixelGlyph.pixelSize = em;
+            pixelGlyph.addPixel(0, 0);
+            for (g in font.glyphs) {
+                if (Std.is(g, CompositePixelGlyph)) {
+                    var cpg = cast(g, CompositePixelGlyph);
+                    cpg.createComponents(pixelGlyph);
+                }
+            }
+        }
+
         font.prepareForExport();
+
+
         // we need GlyphNamer here already so that we can use names more in the feature spec, todo hmm
         GlyphNamer.nameGlyphs(font.glyphs);
         if (opts.features != null) {
@@ -96,6 +114,9 @@ class PixelFonter {
         buildOptions.useSubroutinesInCFF = true;
         buildOptions.useFixedCoordinatesInCFF = opts.floatingPointCoords;
         buildOptions.includeSVG = opts.includeSVG;
+
+
+
         var bytes = OpenTypeBuilder.build(font, opts.format == 'ttf' ? TrueType : CFF, buildOptions);
 
         ExecutionTimer.end('PixelFonter::generate');

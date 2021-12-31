@@ -53,5 +53,6 @@ interface IFont {
     function getItalicAngle():Float;
     function getUnderlinePosition():Int;
     function getUnderlineThickness():Int;
+    function sortGlyphs():Void;
 
 }

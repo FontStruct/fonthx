@@ -76,6 +76,10 @@ class OpenTypeBuilder {
             return null;
         }
 
+        if (options.sortGlyphs) {
+            font.sortGlyphs();
+        }
+
         GlyphNamer.nameGlyphs(font.glyphs);
 
         ExecutionTimer.start('OpenTypeBuilder.build');

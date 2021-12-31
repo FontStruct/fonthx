@@ -320,4 +320,14 @@ class AbstractFont implements IFont {
     public function getUnderlineThickness():Int {
         return Std.int(emSquare / 20);
     }
+
+    public function sortGlyphs():Void {
+        glyphs.sort(function(a:IContourGlyph, b:IContourGlyph) {
+            if (a.name == '.notdef') {
+                return -1; // must be first
+            }
+            return a.codepoint - b.codepoint;
+        });
+    }
+
 }

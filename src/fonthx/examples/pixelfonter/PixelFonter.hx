@@ -95,13 +95,12 @@ class PixelFonter {
             for (g in font.glyphs) {
                 if (g.isComposite()) {
                     var pg = cast(g, PixelGlyph);
-                    pg.createComponents(pixelGlyph); 
+                    pg.createComponents(pixelGlyph);
                 }
             }
         }
 
         font.prepareForExport();
-
 
         // we need GlyphNamer here already so that we can use names more in the feature spec, todo hmm
         GlyphNamer.nameGlyphs(font.glyphs);
@@ -114,8 +113,6 @@ class PixelFonter {
         buildOptions.useSubroutinesInCFF = true;
         buildOptions.useFixedCoordinatesInCFF = opts.floatingPointCoords;
         buildOptions.includeSVG = opts.includeSVG;
-
-
 
         var bytes = OpenTypeBuilder.build(font, opts.format == 'ttf' ? TrueType : CFF, buildOptions);
 

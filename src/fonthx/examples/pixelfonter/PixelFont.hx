@@ -52,8 +52,7 @@ class PixelFont extends AbstractFont implements IFont {
         // https://docs.microsoft.com/en-us/typography/opentype/spec/recom#glyph-0-the-notdef-glyph
 
         // add .notdef glyph
-        var notdef = addGlyph(0);
-        notdef.name = '.notdef';
+        var notdef = addGlyph(0, '.notdef');
 
         // add space
         var space = addGlyph(0x20);
@@ -61,20 +60,13 @@ class PixelFont extends AbstractFont implements IFont {
     }
 
     public function prepareForExport():Void {
-
-
-        // sort glyphs by codepoint
-        glyphs.sort(function(a:IContourGlyph, b:IContourGlyph) {
-            return a.codepoint - b.codepoint;
-        });
-
+        // we need to sort now, because of kerning
+        sortGlyphs();
         var kerning = new Feature(FeatureTag.FEAT_KERN, true);
         gposLayout.addFeature(kerning, ScriptTag.LATIN);
         var kerningLookup = autoKern();
         kerning.addLookup(kerningLookup);
         gposLayout.addLookup(kerningLookup);
-
-
     }
 
     override function get_vendorID():String {

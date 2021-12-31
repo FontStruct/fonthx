@@ -4,6 +4,8 @@ import fonthx.model.geom.Rectangle;
 
 class AbstractContourGlyph implements IContourGlyph {
 
+    private var components:Array<GlyphComponent>;
+
     @:isVar public var codepoint(get, set):Int;
     @:isVar public var numContours(get, null):Int;
     @:isVar public var numPoints(get, null):Int;
@@ -18,6 +20,7 @@ class AbstractContourGlyph implements IContourGlyph {
         this.codepoint = codepoint;
         this.name = name;
         unmapped = codepoint < 1;
+        components = new Array();
     }
 
     public function getBounds():Rectangle {
@@ -74,11 +77,11 @@ class AbstractContourGlyph implements IContourGlyph {
     }
 
     public function isComposite():Bool {
-        return false;
+        return components.length > 0;
     }
 
     public function getComponents():Array<GlyphComponent> {
-        return null;
+        return components;
     }
 
 

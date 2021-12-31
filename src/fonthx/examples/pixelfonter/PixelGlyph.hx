@@ -1,5 +1,6 @@
 package fonthx.examples.pixelfonter;
 
+import fonthx.model.font.GlyphComponent;
 import fonthx.model.font.ContourOptions;
 import fonthx.model.font.PathProperties;
 import fonthx.model.font.AbstractContourGlyph;
@@ -94,6 +95,16 @@ class PixelGlyph extends AbstractContourGlyph implements IContourGlyph {
             consumer.endShape();
         }
         consumer.end();
+    }
+
+    public function createComponents(sourceGlyph:IContourGlyph):Void {
+        var scale = pixelSize / emSquare;
+        for (p in pixels) {
+            var comp = new GlyphComponent(sourceGlyph);
+            comp.setScale(scale, scale);
+            comp.setOffset(p.x * pixelSize, p.y * pixelSize);
+            components.push(comp);
+        }
     }
 
     public function getPixels() {

@@ -8,7 +8,6 @@ import fonthx.model.font.features.lookups.LookupType;
 import fonthx.model.font.features.lookups.pairadjustment.PairAdjustmentPositioningSubLookup;
 import fonthx.model.font.features.lookups.pairadjustment.PositioningPair;
 import fonthx.model.font.features.ScriptTag;
-import fonthx.model.font.IContourGlyph;
 import fonthx.model.font.IFont;
 import fonthx.model.geom.Rectangle;
 

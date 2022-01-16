@@ -48,8 +48,6 @@ class PixelFonter {
             return identifiers;
         }, new Array<GlyphIdentifier>());
 
-
-
         var em = 1024;
         var pixelSize = Std.int(em / opts.glyphWidth);
 

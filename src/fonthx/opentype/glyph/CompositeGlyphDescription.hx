@@ -67,7 +67,9 @@ class CompositeGlyphDescription {
                 flags |= MORE_COMPONENTS;
             }
             if (component.scaleX != 1.0 || component.scaleY != 1.0) {
-                if (component.scaleX != component.scaleY) {
+                if (component.rotation != 0) {
+                    flags |= WE_HAVE_A_TWO_BY_TWO;
+                } else if (component.scaleX != component.scaleY) {
                     flags |= WE_HAVE_AN_X_AND_Y_SCALE;
                 } else {
                     flags |= WE_HAVE_A_SCALE;
@@ -84,6 +86,17 @@ class CompositeGlyphDescription {
             if (flags & WE_HAVE_AN_X_AND_Y_SCALE != 0) {
                 tt.writeF2DOT14(component.scaleX);
                 tt.writeF2DOT14(component.scaleY);
+            }
+            if (flags & WE_HAVE_A_TWO_BY_TWO != 0) {
+                // https://en.wikipedia.org/wiki/Rotation_matrix
+                var a = component.rotation * Math.PI/180;
+                var sin = Math.round(Math.sin(a) * 10000) / 10000;
+                var cos = Math.round(Math.cos(a) * 10000) / 10000;
+                tt.writeF2DOT14(cos * component.scaleX);
+                tt.writeF2DOT14(-sin * component.scaleY);
+                tt.writeF2DOT14(sin * component.scaleX);
+                tt.writeF2DOT14(cos * component.scaleY);
+
             }
         }
         tt.pad(true);

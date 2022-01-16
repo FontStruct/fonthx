@@ -19,6 +19,11 @@ class PairAdjustmentPositioningSubLookup extends AbstractSubLookup implements IS
         this.format2 = format2;
     }
 
+    public function reset() {
+        pairs = new Array();
+        coveredGlyphIndices = new Array();
+    }
+
     public function get_pairs() {
         return pairs;
     }

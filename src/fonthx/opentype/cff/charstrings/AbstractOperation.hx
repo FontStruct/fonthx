@@ -5,6 +5,7 @@ import haxe.io.Bytes;
 import haxe.io.BytesBuffer;
 
 using fonthx.opentype.postscript.Encoder;
+using Lambda;
 
 class AbstractOperation implements IOperation {
 
@@ -38,6 +39,12 @@ class AbstractOperation implements IOperation {
 
     function get_lastPoint():Array<Float> {
         return this.values.length > 1? [this.values[this.values.length- 2], this.values[this.values.length- 1]] : null;
+    }
+
+    public function toString():String {
+        return Std.string(op) + ":" + values.map(function(v:Float) {
+            return Std.string(v);
+        }).join(',');
     }
 }
 

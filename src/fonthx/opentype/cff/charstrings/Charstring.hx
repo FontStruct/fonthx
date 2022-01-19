@@ -7,6 +7,7 @@ import fonthx.model.font.IContourConsumer;
 import fonthx.model.font.AbstractContourConsumer;
 import fonthx.model.geom.Point;
 using fonthx.opentype.postscript.Encoder;
+using Lambda;
 
 // w? {hs* vs* cm* hm* mt subpath}? {mt subpath}* endchar
 // we do not support hints (hs* vs* cm* hm*)
@@ -20,6 +21,7 @@ class Charstring extends AbstractContourConsumer implements IContourConsumer {
     private var useFixed:Bool;
     private var width:Float;
     private var pen:Point;
+    public var _cp:Int;
     public var bytes(get, never):Bytes;
 
     public function new(width:Float, useFixed:Bool = false) {
@@ -139,6 +141,12 @@ class Charstring extends AbstractContourConsumer implements IContourConsumer {
         var endOp = createOperation(endchar, []).bytes;
         buffer.addBytes(endOp, 0, endOp.length);
         return buffer.getBytes();
+    }
+
+    public function toString():String {
+        return subpaths.fold(function(p:Subpath, acc:String) {
+            return acc + "," + p.toString();
+        }, "");
     }
 
 }

@@ -23,11 +23,10 @@ class Subpath {
     private var _hash:String;
     public function getHash(forceRehash = false):String {
         if (_hash == null || forceRehash) {
-             _hash = Md5.encode(getBytes(false).getBytes().toString()).toString();
+            _hash = Md5.encode(Md5.make(getBytes(false).getBytes()).toString());
         }
         return _hash;
     }
-
 
     public function replaceWithGlobalSubroutine(subrIdx:Int) {
         var moveTo = ops[0];
@@ -61,6 +60,12 @@ class Subpath {
             idx++;
             return b;
         }, new BytesBuffer());
+    }
+
+    public function toString():String {
+        return ops.map(function(op:IOperation) {
+            return op.toString();
+        }).join('|');
     }
 
 }

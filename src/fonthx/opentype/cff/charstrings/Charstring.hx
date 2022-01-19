@@ -21,7 +21,6 @@ class Charstring extends AbstractContourConsumer implements IContourConsumer {
     private var useFixed:Bool;
     private var width:Float;
     private var pen:Point;
-    public var _cp:Int;
     public var bytes(get, never):Bytes;
 
     public function new(width:Float, useFixed:Bool = false) {

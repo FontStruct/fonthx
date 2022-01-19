@@ -7,4 +7,5 @@ interface IOperation {
     var op:CharstringOp;
     var bytes(get, never):Bytes;
     var lastPoint(get, never):Array<Float>;
+    function toString():String;
 }

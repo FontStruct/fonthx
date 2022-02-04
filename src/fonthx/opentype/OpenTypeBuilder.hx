@@ -90,7 +90,9 @@ class OpenTypeBuilder {
         ttf.addTable(createHorizontalMetricsTable(font));
 
         if (font.hasKerning()) {
-            ttf.addTable(createKerningTable(font));
+            if (options.includeDeprecatedKERNTable) {
+                ttf.addTable(createKerningTable(font));
+            }
             ttf.addTable(createGPOSTable(font));
         }
 

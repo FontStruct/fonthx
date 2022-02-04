@@ -6,6 +6,7 @@ class BuildOptions {
 
     public var useFixedCoordinatesInCFF:Bool = false;
     public var useSubroutinesInCFF:Bool = false;
+    public var includeDeprecatedKERNTable:Bool = false;
     public var includeSVG:Bool = false;
     public var sortGlyphs:Bool = true;
     public var extraNamingRecords:IntMap<String>;

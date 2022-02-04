@@ -2,7 +2,6 @@ package fonthx.opentype;
 
 import fonthx.utils.MathUtils;
 import fonthx.model.font.features.lookups.LookupType;
-import fonthx.model.font.features.lookups.ILookup;
 import fonthx.opentype.os2.OS2Codepages;
 import fonthx.opentype.tables.opentype.GSUBTable;
 import fonthx.opentype.tables.CharacterMapFormat12Subtable;
@@ -10,7 +9,6 @@ import fonthx.opentype.svg.SVGTable;
 import fonthx.opentype.FontFileFormat;
 import fonthx.opentype.tables.DSIGTable;
 import fonthx.opentype.cff.CFF;
-import fonthx.opentype.os2.OS2Codepage;
 import fonthx.opentype.constants.MacintoshEncoding;
 import fonthx.opentype.constants.MacintoshLanguages;
 import fonthx.opentype.constants.MacStyle;
@@ -47,7 +45,6 @@ import fonthx.model.font.IFont;
 import fonthx.opentype.os2.OS2Ranges;
 import fonthx.model.geom.Rectangle;
 import fonthx.utils.ExecutionTimer;
-import fonthx.utils.MathUtils;
 import haxe.Int64;
 import haxe.io.Bytes;
 import haxe.io.BytesBuffer;
@@ -69,10 +66,10 @@ class OpenTypeBuilder {
             options = new BuildOptions();
         }
 
-        trace("Generating font file for " + font.name + " " + font.glyphs.length + " glyphs");
+        trace('Generating font file for ${font.name} ${font.glyphs.length} glyphs');
 
         if (font.glyphs.length == 0) {
-            trace("Font file contains no glyphs");
+            trace('Font file contains no glyphs');
             return null;
         }
 

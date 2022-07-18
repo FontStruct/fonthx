@@ -67,6 +67,10 @@ class Point {
                 type == other.type;
     }
 
+    public function transform(mtx:Matrix):Point {
+        return new Point(x * mtx.a + y * mtx.c + mtx.tx, x * mtx.b + y * mtx.d + mtx.ty);
+    }
+
     /**
 	 * Get a string representation of this object
 	 */

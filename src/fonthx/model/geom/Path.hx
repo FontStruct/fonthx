@@ -28,16 +28,18 @@ class Path {
                 bounds = new Rectangle(p.x, p.y);
             } else {
                 if (!Math.isNaN(p.x)) {
-                    if (p.x > bounds.x) {
+                    if (p.x > bounds.right) {
                         bounds.right = p.x;
-                    } else {
+                    }
+                    if (p.x < bounds.left) {
                         bounds.left = p.x;
                     }
                 }
                 if (!Math.isNaN(p.y)) {
-                    if (p.y > bounds.y) {
+                    if (p.y > bounds.bottom) {
                         bounds.bottom = p.y;
-                    } else {
+                    }
+                    if (p.y < bounds.top) {
                         bounds.top = p.y;
                     }
                 }

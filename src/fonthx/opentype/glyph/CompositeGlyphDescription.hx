@@ -1,5 +1,6 @@
 package fonthx.opentype.glyph;
 
+import fonthx.model.geom.Rectangle;
 import haxe.io.Bytes;
 import fonthx.opentype.writers.TrueTypeFileWriter;
 import fonthx.model.font.IFont;
@@ -51,6 +52,9 @@ class CompositeGlyphDescription {
     public function write(glyph:IContourGlyph, font:IFont):Bytes {
         tt.markPosition();
         var bounds = glyph.getBounds();
+        if (bounds == null) {
+            bounds = new Rectangle();
+        }
         // write glyph header – todo this could be shared with SimpleGlyphDescription
         tt.writeSHORT(-1)
         .writeSHORT(Std.int(bounds.left))

@@ -1,5 +1,6 @@
 package fonthx.opentype.cff.charstrings;
 
+import haxe.crypto.Md5;
 import fonthx.opentype.cff.operators.CharstringOp;
 import haxe.crypto.Md5;
 import haxe.io.Bytes;
@@ -23,7 +24,16 @@ class Subpath {
     private var _hash:String;
     public function getHash(forceRehash = false):String {
         if (_hash == null || forceRehash) {
-            _hash = Md5.encode(Md5.make(getBytes(false).getBytes()).toString());
+            var buf = getBytes(false).getBytes();
+            var len:Int = buf.length;
+            if (len % 16 != 0) {
+                var paddedLen:Int = Math.ceil(len / 16) * 16;
+                var buf2:Bytes = Bytes.alloc(paddedLen);
+                buf2.fill(0, paddedLen, 0x65);
+                buf2.blit(0, buf, 0, len);
+                buf = buf2;
+            }
+            _hash = Md5.encode(Md5.make(buf).toString());
         }
         return _hash;
     }

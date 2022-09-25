@@ -79,6 +79,7 @@ canvas {
 .pf-text {
     font-family: pixelfont, sans-serif;
     font-kerning: normal;
+    font-variant-ligatures: no-common-ligatures;
     border-bottom: 1px solid #DDD;
     margin-bottom: 10px;
     padding-bottom: 10px;

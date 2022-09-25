@@ -17,14 +17,20 @@ https://fontstruct.github.io/fonthx/
         git clone git@github.com:FontStruct/fonthx.git
 
 1. Install Haxe, e.g. from https://haxe.org/download/   
-Currently only supports 3.4.  
+Currently supports Haxe 4.2 (If on Haxe 3.4 use tag 0.04)  
     
     
-1. Install Haxe dependencies (anyone installing with haxelib should check [this issue](https://github.com/FontStruct/fonthx/issues/4) first)
+1. Install Haxe dependencies 
+
+With [lix](https://github.com/lix-pm/lix.client) (preferred):
+
+    lix download
+
+With haxelib (anyone installing with haxelib should check [this issue](https://github.com/FontStruct/fonthx/issues/4) first)
 
         haxelib install haxelib.json
         
-1. To compile for node, you will need to have nodejs installed. To compile for java, you will need to have a java JDK installed. Other requirements listed below. If on Windows, you may need to adjust some of the paths below. 
+1. To compile for node, you will need to have nodejs installed. To compile for java, you will need to have a java JDK installed. Other requirements listed below. If on Windows, you may need to adjust some of the paths. 
     
 ## Try it for node
 
@@ -82,6 +88,8 @@ Run:
 – In order to view this example, you will need to point a web server at dist/examples/pixelfonter/js/index.html
 
 ## And even with WASM!
+
+This is complicated and unstable – an adventure.
     
     HXCWD=`pwd` haxe build/examples/pixelfonter/pixelfonter-wasm.hxml     
 

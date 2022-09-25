@@ -1,0 +1,3 @@
+# @install: lix --silent download "haxelib:/polygonal-printf#1.0.2-beta" into polygonal-printf/1.0.2-beta/haxelib
+-cp ${HAXE_LIBCACHE}/polygonal-printf/1.0.2-beta/haxelib/
+-D polygonal-printf=1.0.2-beta

@@ -185,7 +185,6 @@ featureToggles.forEach(el => {
   el.addEventListener('click', () => {
     targets.forEach(targetEl => {
       let currentSettings = targetEl.style.fontFeatureSettings;
-      console.log(currentSettings);
       currentSettings = currentSettings.split(',').map(f => f.replace(/[\s\\"]+/g, ''));
       if (!currentSettings) {
         currentSettings = [];
@@ -197,7 +196,6 @@ featureToggles.forEach(el => {
       }
       currentSettings = currentSettings.filter(f => f !== '');
       currentSettings = currentSettings.map(f => '"' + f + '"').join(',');
-      console.log(currentSettings, targetEl.style);
       targetEl.style.fontFeatureSettings = currentSettings;
     });
   });

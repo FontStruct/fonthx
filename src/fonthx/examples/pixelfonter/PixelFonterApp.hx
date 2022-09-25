@@ -10,7 +10,7 @@ using format.png.Tools;
 **/
 class PixelFonterApp {
 
-    public static function main() {
+    public static function main():Void {
 
         trace("Executing PixelFonter");
 
@@ -31,12 +31,12 @@ class PixelFonterApp {
             trace('-f format ttf|otf (defaults to “ttf”)');
             trace('-svg include SVG table');
             trace('-sheet export font as a single SVG');
-            return 0;
+            return;
         }
 
         if (!args.has('i')) {
             trace('-i path to image required');
-            return 0;
+            return;
         }
 
         var o:PixelFonterParams = new PixelFonterParams();
@@ -66,6 +66,5 @@ class PixelFonterApp {
         // save ’em
         sys.io.File.saveBytes(o.outputPath, bytes);
 
-        return 0;
     }
 }

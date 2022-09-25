@@ -14,18 +14,18 @@ import fonthx.opentype.tables.opentype.lookup.gsub.SingleSubstitutionSubtableFor
 class LookupSubtableFactory {
 
     public static function createSubtable(subLookup:ISubLookup):ILookupSubtable {
-        if (Std.is(subLookup, PairAdjustmentPositioningSubLookup)) {
+        if (Std.isOfType(subLookup, PairAdjustmentPositioningSubLookup)) {
             return new PairAdjustmentPositioningSubtableFormat1(cast subLookup);
-        } else if (Std.is(subLookup, ClassPairAdjustmentPositioningSubLookup)) {
+        } else if (Std.isOfType(subLookup, ClassPairAdjustmentPositioningSubLookup)) {
             return new PairAdjustmentPositioningSubtableFormat2(cast subLookup);
-        } else if (Std.is(subLookup, SingleSubstitutionSubLookup)) {
+        } else if (Std.isOfType(subLookup, SingleSubstitutionSubLookup)) {
             // choose most appropriate format
             var ssSubLookup = cast(subLookup, SingleSubstitutionSubLookup);
             if (ssSubLookup.simpleDeltaSubstitutions()) {
                 return new SingleSubstitutionSubtableFormat1(ssSubLookup);
             }
             return new SingleSubstitutionSubtableFormat2(ssSubLookup);
-        } else if (Std.is(subLookup, LigaSubstitutionSubLookup)) {
+        } else if (Std.isOfType(subLookup, LigaSubstitutionSubLookup)) {
             return new LigatureSubstitutionSubtableFormat1(cast subLookup);
         }
         trace('Unidentified lookup subtable ${Type.getClassName(Type.getClass(subLookup))}');

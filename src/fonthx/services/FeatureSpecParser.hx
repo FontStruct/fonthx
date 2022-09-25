@@ -89,10 +89,10 @@ class FeatureSpecParser {
     }
 
     public function getGlyphId(id:Dynamic, font:IFont) {
-        if (Std.is(id, std.String)) {
+        if (Std.isOfType(id, std.String)) {
             return font.getGlyphIndexForName(id);
         }
-        if (Std.is(id, Int)) {
+        if (Std.isOfType(id, Int)) {
             return font.getGlyphIndexForCodepoint(id);
         }
         return -1;

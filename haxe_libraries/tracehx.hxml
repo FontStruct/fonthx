@@ -1,0 +1,4 @@
+# @install: lix --silent download "haxelib:/tracehx#0.0.2" into tracehx/0.0.2/haxelib
+-lib tink_lang
+-cp ${HAXE_LIBCACHE}/tracehx/0.0.2/haxelib/src/
+-D tracehx=0.0.2

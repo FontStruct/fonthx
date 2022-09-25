@@ -1,22 +1,6 @@
 package fonthx.opentype.os2;
 
-import haxe.Json;
-import haxe.ds.IntMap;
 using Lambda;
-
-
-#if macro
-import haxe.macro.Expr;
-import haxe.io.Path;
-import haxe.macro.Context;
-import haxe.macro.Type;
-import sys.io.File;
-import sys.FileSystem;
-import haxe.macro.Expr.ExprOf;
-#end
-
-
-
 
 class OS2Codepages {
 

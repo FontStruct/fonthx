@@ -1,5 +1,11 @@
 # fonthhx Changelog
 
+## 0.0.5
+
+* Support Haxe 4
+* No longer support Haxe 3 
+* Switch to lix as preferred dependency manager
+
 ## 0.0.4
 
 * Added basic support for OpenType SVG fonts

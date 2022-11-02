@@ -12,6 +12,7 @@ class SimpleGlyphDescription {
 	private var bounds:Rectangle;
 	private var numContours:Int;
 	public var lastPoint:ContourPoint;
+    private var firstPoint:ContourPoint;
 	private var simpleFlags:Bool = true;
 
 	public function new() {
@@ -22,17 +23,22 @@ class SimpleGlyphDescription {
 	
 	public function startContour() {
 		lastPoint = null;
+        firstPoint = null;
 	}
 	
 	public function closeContour() {
-		if (lastPoint != null) {
-			var start = ContourPoint.copy(lastPoint.getHead());
-			if (start != lastPoint) {
-				start.previous = lastPoint;
-				start.next = null;
-			}
-			points.push(start);
-		}
+        /*
+        * FT docu
+        * The last point in a contour uses the first as an end point to create a closed contour. For example, if the
+        * last two points of a contour were an ‘on’ point followed by a conic ‘off’ point, the first point in the contour
+        * would be used as final point to create an ‘on’ – ‘off’ – ‘on’ sequence as described above.
+        **/
+        if (lastPoint != null && firstPoint != null && points.length > 0 && lastPoint.equals(firstPoint)) {
+            var extraPoint = points.pop();
+            if (extraPoint.previous != null) {
+                extraPoint.previous.next = null;
+            }
+        }
 	}
 	
 	public function addPoint(x:Int, y:Int, onCurve:Bool) {
@@ -62,6 +68,7 @@ class SimpleGlyphDescription {
 		points.push(p);
 		if (lastPoint == null) {
 			numContours++;
+            firstPoint = p;
 		} else {
 			lastPoint.next = p;
 			

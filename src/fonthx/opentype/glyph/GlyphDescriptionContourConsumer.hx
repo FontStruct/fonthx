@@ -13,6 +13,11 @@ class GlyphDescriptionContourConsumer extends AbstractContourConsumer {
     }
 
     override public function moveTo(x:Float, y:Float) {
+        if (gDesc.lastPoint != null) {
+            // if we are moving on from an existing contour, close the existing one before
+            // starting a new one
+            gDesc.closeContour();
+        }
         gDesc.startContour();
         gDesc.addPoint(Std.int(x), Std.int(y), true);
     }
@@ -41,7 +46,7 @@ class GlyphDescriptionContourConsumer extends AbstractContourConsumer {
     }
 
     override public function endPath() {
-        // gDesc.closeContour();
+        gDesc.closeContour();
     }
 
 }

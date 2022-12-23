@@ -10,6 +10,6 @@ gulp.task("specs", gulp.series(function(cb) {
 }));
 
 gulp.task("specs-watch", gulp.series(function() {
-	gulp.watch(["src/**/*.hx", "spec/**/*.hx"], ["specs"]);
+	gulp.watch(["src/**/*.hx", "spec/**/*.hx"], gulp.series(["specs"]));
 }));
 

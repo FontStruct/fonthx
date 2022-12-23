@@ -142,7 +142,7 @@ class CFF extends Table {
 
     public function createTopDict() {
         var topDict = new Dictionary();
-        topDict.addInt(version, strings.require(Std.string(font.version)));
+        topDict.addInt(version, strings.require(Std.string('${font.majorVersion}.${font.minorVersion}')));
         if (font.description.length > 0) {
             topDict.addInt(Notice, strings.require(font.description));
         }

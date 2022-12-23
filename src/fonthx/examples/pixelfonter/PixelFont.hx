@@ -84,10 +84,6 @@ class PixelFont extends AbstractFont implements IFont {
         return uniqueFamilyName + ' ' + styleModifiers;
     }
 
-    override public function get_version() {
-        return '1.0';
-    }
-
     override public function get_postscriptName() {
         var psName = ~/[^\x00-\x7F]]/g.replace(get_uniqueFamilyName(), '');
         psName = psName.replace(' ', '');

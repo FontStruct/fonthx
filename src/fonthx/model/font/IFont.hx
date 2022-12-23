@@ -14,7 +14,8 @@ interface IFont {
     var author(get, null):String;
     var style(get, null):String;
     var creationDate(get, null):String;
-    var version(get, null):String;
+    var minorVersion(get, null):Int;
+    var majorVersion(get, null):Int;
     var gposLayout(get, null):Layout;
     var gsubLayout(get, null):Layout;
     var emSquare(get, null):Int;

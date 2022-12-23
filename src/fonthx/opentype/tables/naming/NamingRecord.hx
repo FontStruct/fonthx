@@ -1,4 +1,4 @@
-package fonthx.opentype.tables;
+package fonthx.opentype.tables.naming;
 
 import fonthx.opentype.constants.MacintoshEncoding;
 import fonthx.opentype.constants.Platform;
@@ -195,10 +195,10 @@ class NamingRecord {
 
     public function getBytes():Bytes {
         // todo: review this
-        if (encodingID == MacintoshEncoding.ROMAN) {
+        if (platformID == Platform.MACINTOSH && encodingID == MacintoshEncoding.ROMAN) {
             return StringEncoder.encode(string, Encoding.MACROMAN);
         } else {
-            // UnicodeBigUnmarked
+            //  UTF-16BE
             var bytes:BytesBuffer = new BytesBuffer();
             for (i in 0...string.length) {
                 var  c = string.charCodeAt(i);

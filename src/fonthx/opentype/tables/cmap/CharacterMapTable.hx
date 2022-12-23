@@ -1,4 +1,4 @@
-package fonthx.opentype.tables;
+package fonthx.opentype.tables.cmap;
 
 import fonthx.opentype.writers.TrueTypeFileWriter;
 import fonthx.opentype.writers.ITrueTypeWriter;

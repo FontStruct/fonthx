@@ -1,9 +1,14 @@
 # fonthhx Changelog
 
+## 0.0.6
+
+* Bugfixes for name table – version string and postscript name
+* version is now stored as majorVersion and minorVersion in IFont (no longer single string)
+
 ## 0.0.5
 
 * Support Haxe 4
-* No longer support Haxe 3 
+* Drop support for Haxe 3
 * Switch to lix as preferred dependency manager
 
 ## 0.0.4

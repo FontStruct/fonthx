@@ -30,7 +30,7 @@ class Encoder {
             bytes.addByte(28);
             bytes.addByte(v >> 8);
             bytes.addByte(v & 0xFF);
-        } else if (v >= -32768 && v < 32768) {
+        } else {
             bytes.addByte(29);
             bytes.addByte((v >> 24) & 0xff);
             bytes.addByte((v >> 16) & 0xff);

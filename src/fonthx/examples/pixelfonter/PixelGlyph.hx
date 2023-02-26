@@ -88,7 +88,6 @@ class PixelGlyph extends AbstractContourGlyph implements IContourGlyph {
                 consumer.lineTo(x2, y1);
                 consumer.lineTo(x2, y2);
                 consumer.lineTo(x1, y2);
-                consumer.lineTo(x1, y1);
             }
             consumer.endPath();
             consumer.endGroup();

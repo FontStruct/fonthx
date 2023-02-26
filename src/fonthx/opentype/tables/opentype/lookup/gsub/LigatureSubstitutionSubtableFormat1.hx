@@ -17,16 +17,16 @@ using Lambda;
 * defined in this table (ligatureSetCount), and an array of offsets to LigatureSet tables (ligatureSetOffsets).
 * The Coverage table specifies only the index of the first glyph component of each ligature set.
 **/
-class LigatureSubstitutionSubtableFormat1 implements ILookupSubtable {
+class LigatureSubstitutionSubtableFormat1 extends AbstractLookupSubtable {
 
-    public var length(get, never):Int;
     private var subLookup:LigaSubstitutionSubLookup;
 
     public function new(subLookup:LigaSubstitutionSubLookup) {
+        super();
         this.subLookup = subLookup;
     }
 
-    public function write(tt:ITrueTypeWriter):Void {
+    override public function write(tt:ITrueTypeWriter):Void {
         var ligatureSetCount = 0;
         var ligatureSetMap = subLookup.subs.fold(function(p:LigaSubstitution, acc:IntMap<Array<LigaSubstitution>>) {
             // The Coverage table specifies only the index of the first glyph component of each ligature set.
@@ -82,7 +82,7 @@ class LigatureSubstitutionSubtableFormat1 implements ILookupSubtable {
         }
     }
 
-    public function get_length():Int {
+    override public function get_length():Int {
         return 6 + getCoverageTable().length;
     }
 

@@ -29,16 +29,16 @@ using Lambda;
 * e.g. smcp, c2sc, lnum, locl, onum, possibly frac
 *
 **/
-class SingleSubstitutionSubtableFormat2 implements ILookupSubtable {
+class SingleSubstitutionSubtableFormat2 extends AbstractLookupSubtable {
 
-    public var length(get, never):Int;
     private var subLookup:SingleSubstitutionSubLookup;
 
     public function new(subLookup:SingleSubstitutionSubLookup) {
+        super();
         this.subLookup = subLookup;
     }
 
-    public function write(tt:ITrueTypeWriter):Void {
+    override public function write(tt:ITrueTypeWriter):Void {
         var coverageTable = getCoverageTable();
         tt.writeUINT16(2); // uint16 	Format identifier
         tt.writeOffset16(6 + (2 * subLookup.subs.length)); // Offset16 coverageOffset Offset to Coverage table, from beginning of substitution subtable
@@ -49,7 +49,7 @@ class SingleSubstitutionSubtableFormat2 implements ILookupSubtable {
         coverageTable.write(tt); // coverage table at the end
     }
 
-    public function get_length():Int {
+    override public function get_length():Int {
         return 6 + (2 * subLookup.subs.length) + this.getCoverageTable().length;
     }
 

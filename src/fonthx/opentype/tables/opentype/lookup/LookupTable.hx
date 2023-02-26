@@ -15,7 +15,7 @@ import fonthx.opentype.writers.ITrueTypeWriter;
 class LookupTable implements ICommonTable {
 
     private var lookup:Lookup;
-    private var subtables:Array<ILookupSubtable>;
+    public var subtables:Array<ILookupSubtable>;
     public var length(get, never):Int;
 
     public function new(lookup:Lookup) {
@@ -23,6 +23,7 @@ class LookupTable implements ICommonTable {
         subtables = new Array();
         for (sublookup in lookup.subLookups) {
             var subtable = LookupSubtableFactory.createSubtable(sublookup);
+            subtable.writeInternally();
             subtables.push(subtable);
         }
     }
@@ -31,23 +32,22 @@ class LookupTable implements ICommonTable {
         tt.writeUINT16(lookup.type);                    // uint16 	lookupType 	Different enumerations for GSUB and GPOS
         tt.writeUINT16(lookup.flags);                   // uint16 	lookupFlag 	Lookup qualifiers
         tt.writeUINT16(lookup.subLookups.length);       // uint16 	subTableCount 	Number of subtables for this lookup
-        var offset = 6 + (2 * lookup.subLookups.length);
         for (subtable in subtables) {
             // Offset16 	subtableOffsets[subTableCount] 	Array of offsets to lookup subtables, from beginning of Lookup table
-            tt.writeOffset16(offset); // Array of offsets to lookup subtables, from beginning of Lookup table
-            offset += subtable.length;
+            tt.writeOffset16(subtable.offset); // Array of offsets to lookup subtables, from beginning of Lookup table
         }
+//        for (subtable in subtables) {
+//            tt.writeBytes(subtable.tt.getBytes());
+//        }
         // uint16 	markFilteringSet 	Index (base 0) into GDEF mark glyph sets structure. TODO This field is only present if bit useMarkFilteringSet of lookup flags is set.
-        for (subtable in subtables) {
-            subtable.write(tt);
-        }
+
     }
 
     public function get_length():Int {
         var l = 6 + (2 * lookup.subLookups.length);
-        for (subtable in subtables) {
-            l += subtable.length;
-        }
+//        for (subtable in subtables) {
+//            l += subtable.length;
+//        }
         return l;
     }
 

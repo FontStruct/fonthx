@@ -15,16 +15,16 @@ import fonthx.opentype.writers.ITrueTypeWriter;
  * that identifies glyphs by class (Format 2).
  **/
 // TODO implement !!!
-class PairAdjustmentPositioningSubtableFormat2 implements ILookupSubtable {
+class PairAdjustmentPositioningSubtableFormat2 extends AbstractLookupSubtable {
 
-    public var length(get, never):Int;
     private var subLookup:ClassPairAdjustmentPositioningSubLookup;
 
     public function new(subLookup:ClassPairAdjustmentPositioningSubLookup) {
+        super();
         this.subLookup = subLookup;
     }
 
-    public function write(tt:ITrueTypeWriter) {
+    override public function write(tt:ITrueTypeWriter) {
         tt.writeUINT16(2);      // posFormat Format identifier
         tt.writeOffset16(0);    // coverageOffset Offset to Coverage table, from beginning of PairPos subtable
         tt.writeUINT16(0);      // valueFormat1	Defines the types of data in valueRecord1 — for the first glyph in the pair (may be zero).
@@ -33,7 +33,7 @@ class PairAdjustmentPositioningSubtableFormat2 implements ILookupSubtable {
         // pairSetOffsets[pairSetCount]	Array of offsets to PairSet tables. Offsets are from beginning of PairPos subtable, ordered by Coverage Index.
     }
 
-    public function get_length():Int {
+    override public function get_length():Int {
         return 0;
     }
 

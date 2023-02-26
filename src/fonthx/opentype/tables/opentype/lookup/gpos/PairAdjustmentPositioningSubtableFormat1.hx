@@ -1,5 +1,6 @@
 package fonthx.opentype.tables.opentype.lookup.gpos;
 
+import fonthx.model.font.features.lookups.AbstractSubLookup;
 import fonthx.opentype.tables.opentype.lookup.coverage.CoverageTableHelper;
 import fonthx.opentype.writers.ITrueTypeWriter;
 import fonthx.model.font.features.lookups.pairadjustment.PairAdjustmentPositioningSubLookup;
@@ -18,16 +19,16 @@ using Lambda;
  * PairPos subtables can be either of two formats: one that identifies glyphs individually by index (Format 1), and one
  * that identifies glyphs by class (Format 2).
  **/
-class PairAdjustmentPositioningSubtableFormat1 implements ILookupSubtable {
+class PairAdjustmentPositioningSubtableFormat1 extends AbstractLookupSubtable {
 
-    public var length(get, never):Int;
     private var subLookup:PairAdjustmentPositioningSubLookup;
 
     public function new(subLookup:PairAdjustmentPositioningSubLookup) {
+        super();
         this.subLookup = subLookup;
     }
 
-    public function write(tt:ITrueTypeWriter):Void {
+    override public function write(tt:ITrueTypeWriter):Void {
 
         var coverageTable = getCoverageTable();
         var valueRecordLength = getValueRecordLength();
@@ -71,7 +72,7 @@ class PairAdjustmentPositioningSubtableFormat1 implements ILookupSubtable {
         coverageTable.write(tt); // coverage table at the end
     }
 
-    public function get_length():Int {
+    override public function get_length():Int {
         var valueRecordLength = getValueRecordLength();
         var groupedPairs = getGroupedPairs();
         var l = 10;
@@ -106,16 +107,15 @@ class PairAdjustmentPositioningSubtableFormat1 implements ILookupSubtable {
     }
 
     private var _grouped:Array<Array<PositioningPair>> = null;
-
     private function getGroupedPairs() {
+        if (_grouped != null) {
+            return _grouped;
+        }
         var pairs = subLookup.pairs.copy();
         pairs.sort(function(a, b) {
             return a.idx1 - b.idx1;
         });
         // group the pairs according to first glyph
-        if (_grouped != null) {
-            return _grouped;
-        }
         var currentGroup:Array<PositioningPair> = [];
         var lastPair:PositioningPair = null;
         _grouped = pairs.fold(function(p:PositioningPair, acc:Array<Array<PositioningPair>>) {

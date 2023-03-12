@@ -1,5 +1,10 @@
 # fonthhx Changelog
 
+## 0.0.7
+
+* Refactor layout table & subtables – support for Extension Positioning subtable
+* Diverse bugfixes
+
 ## 0.0.6
 
 * Bugfixes for name table – version string and postscript name

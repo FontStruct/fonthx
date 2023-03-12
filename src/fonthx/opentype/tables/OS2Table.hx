@@ -382,7 +382,7 @@ class OS2Table extends Table
 
 	/**
 	   Set the version number for this OS/2 table.
-	   Default is 3. 
+	   Default is 3. (we will probably only support 3)
 	   Versions zero (0, TrueType rev 1.5), 
 	   one (1, TrueType rev 1.66), 
 	   and two (2, OpenType rev 1.2) have been used previously.
@@ -394,10 +394,8 @@ class OS2Table extends Table
 	}
 
 	/**
-	   Set the average weighted escapement.
-	   arithmetic average of the escapement (width) 
-	   of all of the 26 lowercase letters
-	   a through z of the Latin alphabet and the space character
+	   The Average Character Width parameter specifies the arithmetic average of the escapement (width) of all non-zero
+	   width glyphs in the font. (v3+ only)
 	   @param avgCharWidth
 	 **/
 	public function setAvgCharWidth(avgCharWidth:Int):OS2Table {

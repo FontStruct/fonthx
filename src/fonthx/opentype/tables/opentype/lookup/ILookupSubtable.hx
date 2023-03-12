@@ -1,7 +1,6 @@
 package fonthx.opentype.tables.opentype.lookup;
 
 import fonthx.model.font.features.lookups.ISubLookup;
-import fonthx.opentype.writers.ITrueTypeWriter;
 
 interface ILookupSubtable extends ICommonTable {
 

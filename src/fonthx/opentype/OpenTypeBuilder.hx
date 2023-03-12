@@ -496,7 +496,6 @@ class OpenTypeBuilder {
 	 * @see https://docs.microsoft.com/en-us/typography/opentype/spec/os2#xavgcharwidth
 	 *
 	 */
-
     private static function calculateAvgCharWidth(font:IFont) {
         var totalWidth:Float = 0;
         var numWidths = 0;

@@ -1,5 +1,6 @@
 package fonthx.opentype.tables.opentype.lookup.gsub;
 
+import fonthx.model.font.features.lookups.LookupType;
 import fonthx.model.font.features.lookups.ligasub.LigaSubstitution;
 import fonthx.model.font.features.lookups.ligasub.LigaSubstitutionSubLookup;
 import fonthx.opentype.tables.opentype.lookup.coverage.CoverageTableHelper;
@@ -19,16 +20,16 @@ using Lambda;
 **/
 class LigatureSubstitutionSubtableFormat1 extends AbstractLookupSubtable {
 
-    private var subLookup:LigaSubstitutionSubLookup;
+    private var LSSubLookup:LigaSubstitutionSubLookup;
 
     public function new(subLookup:LigaSubstitutionSubLookup) {
-        super();
-        this.subLookup = subLookup;
+        super(subLookup);
+        this.LSSubLookup = subLookup;
     }
 
     override public function write(tt:ITrueTypeWriter):Void {
         var ligatureSetCount = 0;
-        var ligatureSetMap = subLookup.subs.fold(function(p:LigaSubstitution, acc:IntMap<Array<LigaSubstitution>>) {
+        var ligatureSetMap = LSSubLookup.subs.fold(function(p:LigaSubstitution, acc:IntMap<Array<LigaSubstitution>>) {
             // The Coverage table specifies only the index of the first glyph component of each ligature set.
             var leadingGlyph = p.componentGlyphIds[0];
             if (!acc.exists(leadingGlyph)) {
@@ -92,7 +93,7 @@ class LigatureSubstitutionSubtableFormat1 extends AbstractLookupSubtable {
         if (_coverageTable != null) {
             return _coverageTable;
         }
-        var coverage:Array<Int> = subLookup.subs.fold(function(p:LigaSubstitution, acc:Array<Int>) {
+        var coverage:Array<Int> = LSSubLookup.subs.fold(function(p:LigaSubstitution, acc:Array<Int>) {
             // The Coverage table specifies only the index of the first glyph component of each ligature set.
             var leadingGlyph = p.componentGlyphIds[0];
             if (acc.indexOf(leadingGlyph) == -1) {

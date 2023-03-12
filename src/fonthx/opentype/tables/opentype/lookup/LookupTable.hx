@@ -1,7 +1,7 @@
 package fonthx.opentype.tables.opentype.lookup;
 
-import fonthx.model.font.features.lookups.Lookup;
 import fonthx.model.font.features.lookups.LookupType;
+import fonthx.model.font.features.lookups.Lookup;
 import fonthx.opentype.writers.ITrueTypeWriter;
 
 /**
@@ -14,45 +14,59 @@ import fonthx.opentype.writers.ITrueTypeWriter;
  */
 class LookupTable implements ICommonTable {
 
-    private var lookup:Lookup;
+    public var lookup:Lookup;
     public var subtables:Array<ILookupSubtable>;
     public var length(get, never):Int;
+    @:isVar public var useExtension(get, set):Bool;
 
     public function new(lookup:Lookup) {
         this.lookup = lookup;
+        this.useExtension = false;
+        updateSubtables();
+    }
+
+    public function updateSubtables() {
         subtables = new Array();
-        for (sublookup in lookup.subLookups) {
-            var subtable = LookupSubtableFactory.createSubtable(sublookup);
-            subtable.writeInternally();
+        for (subLookup in lookup.subLookups) {
+            var subtable = LookupSubtableFactory.createSubtable(subLookup);
             subtables.push(subtable);
         }
     }
 
     public function write(tt:ITrueTypeWriter):Void {
-        tt.writeUINT16(lookup.type);                    // uint16 	lookupType 	Different enumerations for GSUB and GPOS
-        tt.writeUINT16(lookup.flags);                   // uint16 	lookupFlag 	Lookup qualifiers
-        tt.writeUINT16(lookup.subLookups.length);       // uint16 	subTableCount 	Number of subtables for this lookup
+        // uint16 	lookupType 	Different enumerations for GSUB and GPOS
+        tt.writeUINT16(useExtension? (lookup.isPos?
+            LookupType.GPOS_EXTENSION_POSITIONING : LookupType.GSUB_EXTENSION_SUBSTITUTION) :
+            lookup.type
+        );
+        // uint16 	lookupFlag 	Lookup qualifiers
+        tt.writeUINT16(lookup.flags);
+        // uint16 	subTableCount 	Number of subtables for this lookup
+        tt.writeUINT16(subtables.length);
         for (subtable in subtables) {
-            // Offset16 	subtableOffsets[subTableCount] 	Array of offsets to lookup subtables, from beginning of Lookup table
+            trace('writing offset to ${subtable.offset}');
             tt.writeOffset16(subtable.offset); // Array of offsets to lookup subtables, from beginning of Lookup table
         }
-//        for (subtable in subtables) {
-//            tt.writeBytes(subtable.tt.getBytes());
-//        }
-        // uint16 	markFilteringSet 	Index (base 0) into GDEF mark glyph sets structure. TODO This field is only present if bit useMarkFilteringSet of lookup flags is set.
-
+        // TODO This field is only present if bit useMarkFilteringSet of lookup flags is set.
+        // uint16 	markFilteringSet 	Index (base 0) into GDEF mark glyph sets structure.
     }
 
     public function get_length():Int {
-        var l = 6 + (2 * lookup.subLookups.length);
-//        for (subtable in subtables) {
-//            l += subtable.length;
-//        }
-        return l;
+        return 6 + (2 * subtables.length);
+    }
+
+    function set_useExtension(useExtension:Bool):Bool {
+        return this.useExtension = useExtension;
+    }
+
+    function get_useExtension():Bool {
+        return useExtension;
     }
 
 
 }
+
+
 
 
 

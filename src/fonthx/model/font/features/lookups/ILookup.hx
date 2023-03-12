@@ -5,4 +5,5 @@ interface ILookup {
     var flags:Int;
     var type:LookupType;
     var subLookups:Array<ISubLookup>;
+
 }

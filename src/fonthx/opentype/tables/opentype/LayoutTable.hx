@@ -20,7 +20,7 @@ class LayoutTable extends Table {
         minorVersion = 0;
         scriptList = new ScriptListTable();
         featureList = new FeatureListTable();
-        lookupList = new LookupListTable();
+        lookupList = new LookupListTable(tag);
     }
 
     public function setLayout(layout:Layout) {

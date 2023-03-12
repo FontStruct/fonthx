@@ -14,7 +14,6 @@ using StringTools;
 class NamingRecordSpec extends buddy.BuddySuite {
 
     public function new() {
-        @include
         describe("Name", function() {
             var s = 'testo[mat]';
             it("encodes mac roman", function() {

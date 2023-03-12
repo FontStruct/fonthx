@@ -1,5 +1,6 @@
 package fonthx.opentype.tables.opentype.lookup.gsub;
 
+import fonthx.model.font.features.lookups.LookupType;
 import fonthx.model.font.features.lookups.singlesub.SingleSubstitution;
 import fonthx.model.font.features.lookups.singlesub.SingleSubstitutionSubLookup;
 import fonthx.opentype.tables.opentype.lookup.coverage.CoverageTableHelper;
@@ -31,26 +32,26 @@ using Lambda;
 **/
 class SingleSubstitutionSubtableFormat2 extends AbstractLookupSubtable {
 
-    private var subLookup:SingleSubstitutionSubLookup;
+    private var SSSubLookup:SingleSubstitutionSubLookup;
 
     public function new(subLookup:SingleSubstitutionSubLookup) {
-        super();
-        this.subLookup = subLookup;
+        super(subLookup);
+        this.SSSubLookup = subLookup;
     }
 
     override public function write(tt:ITrueTypeWriter):Void {
         var coverageTable = getCoverageTable();
         tt.writeUINT16(2); // uint16 	Format identifier
-        tt.writeOffset16(6 + (2 * subLookup.subs.length)); // Offset16 coverageOffset Offset to Coverage table, from beginning of substitution subtable
-        tt.writeSHORT(subLookup.subs.length);
-        for (sub in subLookup.subs) {
+        tt.writeOffset16(6 + (2 * SSSubLookup.subs.length)); // Offset16 coverageOffset Offset to Coverage table, from beginning of substitution subtable
+        tt.writeSHORT(SSSubLookup.subs.length);
+        for (sub in SSSubLookup.subs) {
             tt.writeUINT16(sub.toId);
         }
         coverageTable.write(tt); // coverage table at the end
     }
 
     override public function get_length():Int {
-        return 6 + (2 * subLookup.subs.length) + this.getCoverageTable().length;
+        return 6 + (2 * SSSubLookup.subs.length) + this.getCoverageTable().length;
     }
 
     // todo can this be shared with the format1 table
@@ -60,7 +61,7 @@ class SingleSubstitutionSubtableFormat2 extends AbstractLookupSubtable {
             return _coverageTable;
         }
         // coverage – each pairset needs a coverage idx
-        var coverage = subLookup.subs.fold(function(p:SingleSubstitution, acc:Array<Int>) {
+        var coverage = SSSubLookup.subs.fold(function(p:SingleSubstitution, acc:Array<Int>) {
             if (acc.indexOf(p.fromId) == -1) {
                 acc.push(p.fromId);
             }

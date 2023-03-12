@@ -1,5 +1,6 @@
 package fonthx.opentype.tables.opentype.lookup.gsub;
 
+import fonthx.model.font.features.lookups.LookupType;
 import fonthx.model.font.features.lookups.singlesub.SingleSubstitution;
 import fonthx.model.font.features.lookups.singlesub.SingleSubstitutionSubLookup;
 import fonthx.model.font.features.lookups.pairadjustment.PairAdjustmentPositioningSubLookup;
@@ -32,18 +33,18 @@ using Lambda;
 **/
 class SingleSubstitutionSubtableFormat1 extends AbstractLookupSubtable {
 
-    private var subLookup:SingleSubstitutionSubLookup;
+    private var SSSubLookup:SingleSubstitutionSubLookup;
 
     public function new(subLookup:SingleSubstitutionSubLookup) {
-        super();
-        this.subLookup = subLookup;
+        super(subLookup);
+        this.SSSubLookup = subLookup;
     }
 
     override public function write(tt:ITrueTypeWriter):Void {
         var coverageTable = getCoverageTable();
         tt.writeUINT16(1); // uint16 	Format identifier
         tt.writeOffset16(6); // Offset16 coverageOffset Offset to Coverage table, from beginning of substitution subtable
-        tt.writeSHORT(subLookup.subs[0].getDelta());
+        tt.writeSHORT(SSSubLookup.subs[0].getDelta());
         coverageTable.write(tt); // coverage table at the end
     }
 
@@ -58,7 +59,7 @@ class SingleSubstitutionSubtableFormat1 extends AbstractLookupSubtable {
             return _coverageTable;
         }
         // coverage – each pairset needs a coverage idx
-        var coverage = subLookup.subs.fold(function(p:SingleSubstitution, acc:Array<Int>) {
+        var coverage = SSSubLookup.subs.fold(function(p:SingleSubstitution, acc:Array<Int>) {
             if (acc.indexOf(p.fromId) == -1) {
                 acc.push(p.fromId);
             }

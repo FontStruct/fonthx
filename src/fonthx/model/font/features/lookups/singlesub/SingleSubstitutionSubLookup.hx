@@ -19,7 +19,7 @@ class SingleSubstitutionSubLookup extends AbstractSubLookup implements ISubLooku
     }
 
     /**
-    * Does this sublookup contain only substitutions with one common delta?
+    * Does this subLookup contain only substitutions with one common delta?
     **/
     public function simpleDeltaSubstitutions():Bool {
         if (subs.length < 2) return true;

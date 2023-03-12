@@ -8,7 +8,9 @@ class Specs implements Buddy<[
     fonthx.model.geom.RectangleSpec,
     fonthx.utils.StringEncoderSpec,
     fonthx.opentype.utils.UtilsSpec,
-    fonthx.opentype.postscript.EncoderSpec
+    fonthx.opentype.postscript.EncoderSpec,
+    fonthx.opentype.tables.opentype.lookup.gpos.PairAdjustmentPositioningSubtableFormat1Spec,
+    fonthx.opentype.tables.opentype.lookup.LookupListTableSpec
 ]> {
 
 }

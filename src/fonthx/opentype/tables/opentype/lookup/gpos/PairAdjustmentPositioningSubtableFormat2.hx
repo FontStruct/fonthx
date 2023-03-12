@@ -1,5 +1,6 @@
 package fonthx.opentype.tables.opentype.lookup.gpos;
 
+import fonthx.model.font.features.lookups.LookupType;
 import fonthx.model.font.features.lookups.pairadjustment.ClassPairAdjustmentPositioningSubLookup;
 import fonthx.opentype.writers.ITrueTypeWriter;
 
@@ -17,11 +18,11 @@ import fonthx.opentype.writers.ITrueTypeWriter;
 // TODO implement !!!
 class PairAdjustmentPositioningSubtableFormat2 extends AbstractLookupSubtable {
 
-    private var subLookup:ClassPairAdjustmentPositioningSubLookup;
+    private var CPASubLookup:ClassPairAdjustmentPositioningSubLookup;
 
     public function new(subLookup:ClassPairAdjustmentPositioningSubLookup) {
-        super();
-        this.subLookup = subLookup;
+        super(subLookup);
+        this.CPASubLookup = subLookup;
     }
 
     override public function write(tt:ITrueTypeWriter) {

@@ -31,5 +31,4 @@ class UnicodeEncoding {
 	 */
 	public static var UNICODE2_FULL = 4;
 
-	
 }

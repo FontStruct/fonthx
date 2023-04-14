@@ -46,4 +46,25 @@ class PairAdjustmentPositioningSubLookup extends AbstractSubLookup implements IS
     public function hasSecondValues() {
         return this.format2 != PositioningValueFormat.NONE;
     }
+
+    override public function canSplit():Bool {
+        return true;
+    }
+
+    override public function split(maxPairsPerTable:Int):Array<ILookup> {
+        var splitLookups = new Array<PairAdjustmentPositioningSubLookup>();
+        var lookup = new PairAdjustmentPositioningSubLookup();
+        for (pair in this.pairs) {
+            lookup.addPair(pair);
+            if (lookup.pairs.length == maxPairsPerTable) {
+                splitLookups.push(lookup);
+                lookup = new PairAdjustmentPositioningSubLookup();
+            }
+        }
+        if (lookup.pairs.length > 0) {
+            splitLookups.push(lookup);
+        }
+        return cast splitLookups;
+    }
+
 }

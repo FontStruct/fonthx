@@ -1,8 +1,9 @@
 package fonthx.opentype.tables.opentype.lookup.gpos;
 
+import fonthx.model.font.features.lookups.ILookup;
+import fonthx.model.font.features.lookups.pairadjustment.PairAdjustmentPositioningSubLookup;
 import fonthx.opentype.tables.opentype.lookup.coverage.CoverageTableHelper;
 import fonthx.opentype.writers.ITrueTypeWriter;
-import fonthx.model.font.features.lookups.pairadjustment.PairAdjustmentPositioningSubLookup;
 import fonthx.model.font.features.lookups.pairadjustment.PositioningPair;
 
 using Lambda;
@@ -18,16 +19,16 @@ using Lambda;
  * PairPos subtables can be either of two formats: one that identifies glyphs individually by index (Format 1), and one
  * that identifies glyphs by class (Format 2).
  **/
-class PairAdjustmentPositioningSubtableFormat1 implements ILookupSubtable {
+class PairAdjustmentPositioningSubtableFormat1 extends AbstractLookupSubtable {
 
-    public var length(get, never):Int;
-    private var subLookup:PairAdjustmentPositioningSubLookup;
+    private var PAPSubLookup:PairAdjustmentPositioningSubLookup;
 
     public function new(subLookup:PairAdjustmentPositioningSubLookup) {
-        this.subLookup = subLookup;
+        super(subLookup);
+        this.PAPSubLookup = subLookup;
     }
 
-    public function write(tt:ITrueTypeWriter):Void {
+    override public function write(tt:ITrueTypeWriter):Void {
 
         var coverageTable = getCoverageTable();
         var valueRecordLength = getValueRecordLength();
@@ -35,8 +36,8 @@ class PairAdjustmentPositioningSubtableFormat1 implements ILookupSubtable {
 
         tt.writeUINT16(1); // uint16 	posFormat Format identifier
         tt.writeOffset16(this.length - coverageTable.length); // Offset16 coverageOffset Offset to Coverage table, from beginning of this PairPos subtable
-        tt.writeUINT16(cast subLookup.format1); // uint16 	valueFormat1	Defines the types of data in valueRecord1 — for the first glyph in the pair (may be zero).
-        tt.writeUINT16(cast subLookup.format2); // uint16   valueFormat2	Defines the types of data in valueRecord2 — for the second glyph in the pair (may be zero).
+        tt.writeUINT16(cast PAPSubLookup.format1); // uint16 	valueFormat1	Defines the types of data in valueRecord1 — for the first glyph in the pair (may be zero).
+        tt.writeUINT16(cast PAPSubLookup.format2); // uint16   valueFormat2	Defines the types of data in valueRecord2 — for the second glyph in the pair (may be zero).
         tt.writeUINT16(groupedPairs.length); // uint16   pairSetCount	Number of PairSet tables
 
         // group the pairs according to first glyph
@@ -60,10 +61,10 @@ class PairAdjustmentPositioningSubtableFormat1 implements ILookupSubtable {
             for (pair in group) {
                 tt.writeUINT16(pair.idx2);
                 // https://docs.microsoft.com/en-us/typography/opentype/spec/gpos#valueRecord
-                if (subLookup.hasFirstValues()) {
+                if (PAPSubLookup.hasFirstValues()) {
                     tt.writeSHORT(Std.int(pair.x)); // int16
                 }
-                if (subLookup.hasSecondValues()) {
+                if (PAPSubLookup.hasSecondValues()) {
                     tt.writeSHORT(Std.int(pair.y)); // int16
                 }
             }
@@ -71,7 +72,7 @@ class PairAdjustmentPositioningSubtableFormat1 implements ILookupSubtable {
         coverageTable.write(tt); // coverage table at the end
     }
 
-    public function get_length():Int {
+    override public function get_length():Int {
         var valueRecordLength = getValueRecordLength();
         var groupedPairs = getGroupedPairs();
         var l = 10;
@@ -92,7 +93,7 @@ class PairAdjustmentPositioningSubtableFormat1 implements ILookupSubtable {
             return _coverageTable;
         }
         // coverage – each pairset needs a coverage idx
-        var coverage = subLookup.pairs.fold(function(p:PositioningPair, acc:Array<Int>) {
+        var coverage = PAPSubLookup.pairs.fold(function(p:PositioningPair, acc:Array<Int>) {
             if (acc.indexOf(p.idx1) == -1) {
                 acc.push(p.idx1);
             }
@@ -106,16 +107,15 @@ class PairAdjustmentPositioningSubtableFormat1 implements ILookupSubtable {
     }
 
     private var _grouped:Array<Array<PositioningPair>> = null;
-
     private function getGroupedPairs() {
-        var pairs = subLookup.pairs.copy();
+        if (_grouped != null) {
+            return _grouped;
+        }
+        var pairs = PAPSubLookup.pairs.copy();
         pairs.sort(function(a, b) {
             return a.idx1 - b.idx1;
         });
         // group the pairs according to first glyph
-        if (_grouped != null) {
-            return _grouped;
-        }
         var currentGroup:Array<PositioningPair> = [];
         var lastPair:PositioningPair = null;
         _grouped = pairs.fold(function(p:PositioningPair, acc:Array<Array<PositioningPair>>) {
@@ -132,13 +132,26 @@ class PairAdjustmentPositioningSubtableFormat1 implements ILookupSubtable {
 
     private function getValueRecordLength():Int {
         var valueRecordLength = 2;
-        if (subLookup.hasFirstValues()) {
+        if (PAPSubLookup.hasFirstValues()) {
             valueRecordLength += 2;
         }
-        if (subLookup.hasSecondValues()) {
+        if (PAPSubLookup.hasSecondValues()) {
             valueRecordLength += 2;
         }
         return valueRecordLength;
     }
+
+    override public function split():Array<ILookupSubtable> {
+        // split sublookups heuristically
+        var bytesPerPair = this.length / this.PAPSubLookup.pairs.length;
+        var maxPairsPerTable = Std.int(0.95 * (AbstractLookupSubtable.MAX_SIZE / bytesPerPair)); // 0.95 to allow for error
+        var splitLookups = this.PAPSubLookup.split(maxPairsPerTable);
+        // make new tables from the sublookups
+        return splitLookups.map(function(lookup:ILookup) {
+            var subtable = new PairAdjustmentPositioningSubtableFormat1(cast lookup);
+            return cast(subtable, ILookupSubtable);
+        });
+    }
+
 
 }

@@ -2,13 +2,15 @@ package fonthx.opentype;
 
 import fonthx.utils.MathUtils;
 import fonthx.model.font.features.lookups.LookupType;
+import fonthx.model.font.features.lookups.ILookup;
 import fonthx.opentype.os2.OS2Codepages;
 import fonthx.opentype.tables.opentype.GSUBTable;
-import fonthx.opentype.tables.CharacterMapFormat12Subtable;
+import fonthx.opentype.tables.cmap.CharacterMapFormat12Subtable;
 import fonthx.opentype.svg.SVGTable;
 import fonthx.opentype.FontFileFormat;
 import fonthx.opentype.tables.DSIGTable;
 import fonthx.opentype.cff.CFF;
+import fonthx.opentype.os2.OS2Codepage;
 import fonthx.opentype.constants.MacintoshEncoding;
 import fonthx.opentype.constants.MacintoshLanguages;
 import fonthx.opentype.constants.MacStyle;
@@ -20,8 +22,8 @@ import fonthx.opentype.constants.OS2Weight;
 import fonthx.opentype.constants.OS2Width;
 import fonthx.opentype.constants.Platform;
 import fonthx.opentype.constants.UnicodeEncoding;
-import fonthx.opentype.tables.CharacterMapFormat4Subtable;
-import fonthx.opentype.tables.CharacterMapTable;
+import fonthx.opentype.tables.cmap.CharacterMapFormat4Subtable;
+import fonthx.opentype.tables.cmap.CharacterMapTable;
 import fonthx.opentype.tables.FontHeader;
 import fonthx.opentype.tables.GlyphTable;
 import fonthx.opentype.tables.HorizontalHeaderTable;
@@ -29,8 +31,8 @@ import fonthx.opentype.tables.HorizontalMetricsTable;
 import fonthx.opentype.tables.KerningTable;
 import fonthx.opentype.tables.LocationTable;
 import fonthx.opentype.tables.MaximumProfileTable;
-import fonthx.opentype.tables.NamingRecord;
-import fonthx.opentype.tables.NamingTable;
+import fonthx.opentype.tables.naming.NamingRecord;
+import fonthx.opentype.tables.naming.NamingTable;
 import fonthx.opentype.tables.opentype.GPOSTable;
 import fonthx.opentype.tables.OS2Table;
 import fonthx.opentype.tables.PostTable;
@@ -45,6 +47,7 @@ import fonthx.model.font.IFont;
 import fonthx.opentype.os2.OS2Ranges;
 import fonthx.model.geom.Rectangle;
 import fonthx.utils.ExecutionTimer;
+import fonthx.utils.MathUtils;
 import haxe.Int64;
 import haxe.io.Bytes;
 import haxe.io.BytesBuffer;
@@ -66,10 +69,10 @@ class OpenTypeBuilder {
             options = new BuildOptions();
         }
 
-        trace('Generating font file for ${font.name} ${font.glyphs.length} glyphs');
+        trace("Generating font file for " + font.name + " " + font.glyphs.length + " glyphs");
 
         if (font.glyphs.length == 0) {
-            trace('Font file contains no glyphs');
+            trace("Font file contains no glyphs");
             return null;
         }
 
@@ -90,7 +93,10 @@ class OpenTypeBuilder {
         ttf.addTable(createHorizontalMetricsTable(font));
 
         if (font.hasKerning()) {
-            if (options.includeDeprecatedKERNTable) {
+            var numPairs = font.getKerningPairs().length;
+            if (numPairs > 10919) { // (((256 * 256) - 18) / 6);
+                trace('Too many kerning pairs ${numPairs}. KERN table will overflow. No KERN table will be written');
+            } else {
                 ttf.addTable(createKerningTable(font));
             }
             ttf.addTable(createGPOSTable(font));
@@ -139,7 +145,7 @@ class OpenTypeBuilder {
             var table = ttf.getTable(tag);
             if (table == null) continue;
             numTables++;
-            var writer = new TrueTypeFileWriter(); // need a factory for this (DI)
+            var writer = new TrueTypeFileWriter(); // todo need a factory for this (DI)
             trace('Writing ${table.tag}'); // todo control verbosity
             writer.writeBytes(table.getBytes());
             table.length = writer.getPosition(); // store actual not padded length
@@ -191,7 +197,7 @@ class OpenTypeBuilder {
         head.setFormat(format)
         .setCreated(Utils.getMillisSince1904(now))
         .setModified(Utils.getMillisSince1904(now))
-        .setVersion(fnt.version)
+        .setVersion('${fnt.majorVersion}.${fnt.minorVersion}')
         .setEmSquare(fnt.emSquare)
         ;
         // calculate bounds
@@ -347,33 +353,19 @@ class OpenTypeBuilder {
 
     private static function createNamingTable(fnt:IFont, options:BuildOptions):NamingTable {
         var table = new NamingTable();
-        for (i in 1...3) {
-            var platform = Platform.UNICODE;
-            var encoding = UnicodeEncoding.UNICODE_1_0; // 0 = Unicode 1.0 semantics
-            // todo: set language?
-            var language = 0;
-            if (i == 1) {
-                platform = Platform.MACINTOSH; // 1
-                encoding = MacintoshEncoding.ROMAN; // 0
-                language = MacintoshLanguages.ENGLISH; // 0
-            } else if (i == 2) {
-                platform = Platform.MICROSOFT; // 3
-                encoding = MicrosoftEncoding.UNICODE_BMP_ONLY; // 1
-                language = MicrosoftLanguages.ENU; // 0x0409
-            }
-            var addRecord = function(key, content) {
-                if (content != null) {
-                    table.addRecord(key, content, platform, encoding, language);
-                }
-            }
+        for (encoding in options.namingEncodings) {
+            var addRecord = function(key, content) { table.addRecord(key, content, encoding); } // shorthand
+
             addRecord(NamingRecord.COPYRIGHT, fnt.copyright);
             addRecord(NamingRecord.FONT_FAMILY, fnt.uniqueFamilyName);
             addRecord(NamingRecord.FONT_SUBFAMILY, fnt.styleModifiers);
             addRecord(NamingRecord.UNIQUE_NAME, fnt.uniqueFamilyName == null ? null : fnt.uniqueFamilyName);
             addRecord(NamingRecord.FULLNAME, fnt.fullName);
-
-            addRecord(NamingRecord.VERSION, fnt.version);
-            addRecord(NamingRecord.PS_NAME, fnt.postscriptName);
+            addRecord(NamingRecord.VERSION, 'Version ${fnt.majorVersion}.${fnt.minorVersion}');
+            var postscriptName = Utils.postscriptName(fnt.postscriptName);
+            if (postscriptName.length > 2) {
+                addRecord(NamingRecord.PS_NAME, postscriptName);
+            }
             addRecord(NamingRecord.TRADEMARK_NOTICE, fnt.trademark);
             addRecord(NamingRecord.MANUFACTURER, fnt.manufacturerURL);
             addRecord(NamingRecord.DESIGNER, fnt.author);
@@ -381,10 +373,9 @@ class OpenTypeBuilder {
             addRecord(NamingRecord.VENDOR_URL, fnt.vendorURL);
             addRecord(NamingRecord.DESIGNER_URL, fnt.URL);
             addRecord(NamingRecord.LICENSE, fnt.license);
-            if (fnt.licenseURL != null && fnt.licenseURL.length > 0) {
-                // todo null records will not be added in any case
-                addRecord(NamingRecord.LICENSE_URL, fnt.licenseURL);
-            }
+
+            addRecord(NamingRecord.LICENSE_URL, fnt.licenseURL);
+
             addRecord(NamingRecord.SAMPLE_TEXT, fnt.sampleText);
             if (options.extraNamingRecords != null) {
                 for (id in options.extraNamingRecords.keys()) {
@@ -450,8 +441,8 @@ class OpenTypeBuilder {
             capHeight = Std.int(H.getBounds().height);
         }
         table.setCapHeight(capHeight)
-            .setDefaultChar(0)
-            .setBreakChar(0x20);
+        .setDefaultChar(0)
+        .setBreakChar(0x20);
         var os2Bits = OS2Codepages.getFunctionalCodepages(codepoints);
         for (bit in os2Bits) {
             table.addCodePage(bit);
@@ -501,7 +492,6 @@ class OpenTypeBuilder {
 	 * @see https://docs.microsoft.com/en-us/typography/opentype/spec/os2#xavgcharwidth
 	 *
 	 */
-
     private static function calculateAvgCharWidth(font:IFont) {
         var totalWidth:Float = 0;
         var numWidths = 0;

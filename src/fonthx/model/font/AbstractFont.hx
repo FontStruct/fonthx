@@ -24,7 +24,8 @@ class AbstractFont implements IFont {
     public var description(get, null):String;
     public var uniqueFamilyName(get, null):String;
     public var fullName(get, null):String;
-    public var version(get, null):String;
+    public var minorVersion(get, null):Int;
+    public var majorVersion(get, null):Int;
     public var postscriptName(get, null):String;
     public var trademark(get, null):String;
     public var manufacturerURL(get, null):String;
@@ -38,7 +39,8 @@ class AbstractFont implements IFont {
     public function new() {
         glyphs = new Array();
         name = 'Unnamed';
-        version = '1.0';
+        majorVersion = 1;
+        minorVersion = 0;
         style = "Regular";
         copyright = '';
         description = '';
@@ -143,12 +145,20 @@ class AbstractFont implements IFont {
         return this.fullName = value;
     }
 
-    function get_version():String {
-        return '1.0';
+    function get_majorVersion():Int {
+        return majorVersion;
     }
 
-    function set_version(value:String) {
-        return this.version = value;
+    function get_minorVersion():Int {
+        return minorVersion;
+    }
+
+    function set_majorVersion(value:Int) {
+        return this.majorVersion = value;
+    }
+
+    function set_minorVersion(value:Int) {
+        return this.minorVersion = value;
     }
 
     function get_postscriptName():String {

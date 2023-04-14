@@ -140,8 +140,9 @@ class CFFSpec extends buddy.BuddySuite {
                     nextByte(); // additional offsets
                 }
                 var closingOffset = nextByte();
-                closingOffset.should.be(1 + '${f.version}${f.fullName}${f.postscriptName}'.length);
-                nextStringBytesShouldBe(f.version);
+                var version = Std.string('${f.majorVersion}.${f.minorVersion}');
+                closingOffset.should.be(1 + '${version}${f.fullName}${f.postscriptName}'.length);
+                nextStringBytesShouldBe(version);
                 nextStringBytesShouldBe(f.fullName);
                 nextStringBytesShouldBe(f.postscriptName);
 

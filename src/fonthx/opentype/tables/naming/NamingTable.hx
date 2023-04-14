@@ -1,6 +1,6 @@
-package fonthx.opentype.tables;
+package fonthx.opentype.tables.naming;
 
-import haxe.io.Bytes;
+import String;
 import fonthx.opentype.writers.ITrueTypeWriter;
 
 /**
@@ -8,23 +8,14 @@ import fonthx.opentype.writers.ITrueTypeWriter;
     The naming table allows multilingual strings to be associated
     with the OpenType font file.
     @see https://docs.microsoft.com/en-us/typography/opentype/spec/name
+    https://developer.apple.com/fonts/TrueType-Reference-Manual/RM06/Chap6name.html
+    https://github.com/caryll/otfcc/blob/235d1bd6fb81c8daeaa5232aa840c1e37f07fa86/lib/table/name.c
  **/
 class NamingTable extends Table {
 
     private var records:Array<NamingRecord>;
 
     private var format:Int;
-
-    // macintosh encoding ids
-    public static var E_MAC_ROMAN = 0;
-
-    // microsoft language ids
-    public static var L_MS_ENGLISH = 0x0409;
-
-    // macintosh language ids
-    public static var L_MAC_ENGLISH = 0;
-
-    // standard naming record ids
 
     // default constructor
     public function new() {
@@ -33,17 +24,9 @@ class NamingTable extends Table {
         records = new Array<NamingRecord>();
     }
 
-    /**
-	 * Add a naming record
-	 * @param platformId
-	 * @param encodingId
-	 * @param languageId
-	 * @param nameId
-	 * @param string
-	 */
-    public function addRecord(nameId:Int, string:String, platformId:Int, encodingId:Int, languageId:Int) {
+    public function addRecord(nameId:Int, string:String, encoding:NamingEncoding) {
         if (string != null && string.length > 0) {
-            records.push(new NamingRecord(platformId, encodingId, languageId, nameId, string));
+            records.push(new NamingRecord(encoding.platformId, encoding.encodingId, encoding.languageId, nameId, string));
         }
     }
 
@@ -55,7 +38,7 @@ class NamingTable extends Table {
         return s;
     }
 
-    override public function getBytes():Bytes {
+    public function write() {
         tt
             .writeUSHORT(format)
             .writeUSHORT(records.length)
@@ -72,7 +55,6 @@ class NamingTable extends Table {
         for (r in records) {
             tt.writeBytes(r.getBytes());
         }
-        return tt.getBytes();
     }
 
 }

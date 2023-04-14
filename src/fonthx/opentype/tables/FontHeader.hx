@@ -95,6 +95,7 @@ class FontHeader extends Table {
 	 */
     public function setCreated(secs:Int64):FontHeader {
         created = secs;
+        
         return this;
     }
 

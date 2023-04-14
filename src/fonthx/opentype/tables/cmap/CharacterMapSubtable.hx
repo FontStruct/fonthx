@@ -1,4 +1,4 @@
-package fonthx.opentype.tables;
+package fonthx.opentype.tables.cmap;
 
 class CharacterMapSubtable extends Table {
 	

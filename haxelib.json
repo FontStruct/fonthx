@@ -6,8 +6,8 @@
     "font", "truetype", "font-generator"
   ],
   "description": "Font Generation for Haxe",
-  "version": "0.0.5",
-  "releasenote": "Haxe 4 Support and Lix Install",
+  "version": "0.0.7",
+  "releasenote": "Support for GPOS Extended Position subtable type",
   "contributors": ["FontStruct"],
   "classPath": "src/",
   "dependencies": {

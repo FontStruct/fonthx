@@ -1,4 +1,4 @@
-package fonthx.opentype.tables;
+package fonthx.opentype.tables.cmap;
 
 import haxe.io.Bytes;
 import fonthx.opentype.writers.ITrueTypeWriter;

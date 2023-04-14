@@ -13,7 +13,7 @@ class StringEncoder {
     /**
         Encode the given string in the given encoding (supported encodings: Encoding.MACROMAN)
         @param s the string to encode
-        @paran encodingName the encoding
+        @param encodingName the encoding
     **/
     public static function encode(s:String, encoding:Encoding):Bytes {
         var buffer = new BytesBuffer();
@@ -22,6 +22,7 @@ class StringEncoder {
             var code = s.charCodeAt(i);
             var encoded = encodingMap.get(code);
             if (encoded != null) {
+                // todo perhaps throw exception if we cannot encode
                 buffer.addByte(encoded);
             }
         }

@@ -1,7 +1,5 @@
 package fonthx.opentype.tables.opentype.lookup;
 
-import fonthx.model.font.features.lookups.ISubLookup;
-import fonthx.model.font.features.lookups.LookupType;
 import fonthx.opentype.tables.opentype.lookup.PackedLookupSubtableItem;
 import fonthx.opentype.tables.opentype.lookup.gpos.ExtensionPositioningSubtableFormat1;
 import fonthx.model.font.features.lookups.Lookup;
@@ -109,7 +107,6 @@ class LookupListTable {
             ext.longOffset = ext.subtable.offset - ext.offset;
         }
 
-
         var offset = 2 + (2 * lookups.length);
         var lookupTablesBaseOffset = 0;
         // write the offsets to the lookup tables in this table, and add up the length of these offset entries
@@ -120,9 +117,9 @@ class LookupListTable {
 //            trace('LookupTable', lookupTable.subtables.length, lookupTable.length);
             lookupTablesBaseOffset += lookupTable.length;
         }
+
         // now adjust the subtable offsets so they are relative to the beginning of their respective lookupTable
         // (until now they are relative to the start of the first subtable)
-        // todo hmmm
         for (lookupTable in lookupTables) {
             for (subtable in lookupTable.subtables) {
                 subtable.offset = subtable.offset + lookupTablesBaseOffset;

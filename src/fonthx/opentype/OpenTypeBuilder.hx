@@ -353,6 +353,7 @@ class OpenTypeBuilder {
 
     private static function createNamingTable(fnt:IFont, options:BuildOptions):NamingTable {
         var table = new NamingTable();
+        trace("Creating Naming table");
         for (encoding in options.namingEncodings) {
             var addRecord = function(key, content) { table.addRecord(key, content, encoding); } // shorthand
 

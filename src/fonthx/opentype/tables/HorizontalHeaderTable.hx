@@ -1,7 +1,6 @@
 package fonthx.opentype.tables;
 
 import haxe.io.Bytes;
-import fonthx.opentype.writers.ITrueTypeWriter;
 
 /**
  * Horizontal Header

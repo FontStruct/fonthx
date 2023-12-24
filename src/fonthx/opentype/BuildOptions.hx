@@ -13,7 +13,8 @@ class BuildOptions {
 
     public var useFixedCoordinatesInCFF:Bool = false;
     public var useSubroutinesInCFF:Bool = false;
-    public var includeSVG:Bool = false;
+    public var includeSVG:Bool = false; // todo general color config
+    public var includeCOLR:Bool = false;
     public var sortGlyphs:Bool = true;
     public var namingEncodings:Array<NamingEncoding> = [
         {platformId: Platform.UNICODE /*  0 */, encodingId: UnicodeEncoding.UNICODE_1_0, languageId: 0},

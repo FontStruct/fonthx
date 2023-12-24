@@ -70,4 +70,8 @@ interface IContourGlyph {
     **/
     function getComponents():Array<GlyphComponent>;
 
+    function hasLayers():Bool;
+
+    function getLayers():Array<LayerComponent>;
+
 }

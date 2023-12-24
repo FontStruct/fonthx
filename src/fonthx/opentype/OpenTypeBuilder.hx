@@ -124,6 +124,10 @@ class OpenTypeBuilder {
             ttf.addTable(svgTable);
         }
 
+        if (options.includeCOLR) {
+
+        }
+
         ttf.addTable(new DSIGTable());
         ttf.addTable(new SnftTable(ttf.getNumTables(), format));
 
@@ -475,6 +479,16 @@ class OpenTypeBuilder {
     private static function createCFFTable(font:IFont, options:BuildOptions):CFF {
         var table = new CFF(font, options);
         return table;
+    }
+
+    private static function createCPALTable(font:IFont, options:BuildOptions):CPALTable {
+        var table = new CPALTable();
+        table.addPalette(font.getPalette());
+        return table;
+    }
+
+    private static function createCOLRTable(font:IFont, options:BuildOptions):COLRTable {
+
     }
 
     private static function ensureRequiredGlyphs(f:IFont):Void {

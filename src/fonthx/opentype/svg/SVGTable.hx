@@ -19,6 +19,7 @@ import java.StdTypes;
 * The SVG table is optional, and may be used in OpenType fonts with TrueType, CFF or CFF2 outlines. For every SVG glyph
 * description, there must be a corresponding TrueType, CFF or CFF2 glyph description in the font.
 **/
+// todo move to tables
 class SVGTable extends Table {
 
     private var font:IFont;

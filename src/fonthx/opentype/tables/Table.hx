@@ -19,6 +19,8 @@ class Table {
     public static var LOCA = "loca";
     public static var CFF = "CFF ";
     public static var SVG = "SVG ";
+    public static var COLR = "COLR";
+    public static var CPAL = "CPAL";
     public static var KERN = "kern";
     public static var GPOS = "GPOS";
     public static var GSUB = "GSUB";

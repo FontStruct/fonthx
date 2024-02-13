@@ -39,10 +39,10 @@ class Table {
     // "sfnt", "tdir",
 
     public static var compileOrder = [HEAD, HHEA, MAXP, OS2, HMTX, CMAP, GLYF, LOCA,
-        CFF, KERN, NAME, POST, GPOS, GSUB, SVG, DSIG, CPAL];
+        CFF, KERN, NAME, POST, GPOS, GSUB, SVG, DSIG, CPAL, COLR];
 
     public static var optimalOrder = [HEAD, HHEA, MAXP, OS2, HMTX, CMAP, LOCA, GLYF,
-        CFF, KERN, NAME, POST, GPOS, GSUB, SVG, DSIG, CPAL];
+        CFF, KERN, NAME, POST, GPOS, GSUB, SVG, DSIG, CPAL, COLR];
 
     public var tag:String;
     public var offset:Int;

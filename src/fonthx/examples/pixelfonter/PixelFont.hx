@@ -15,9 +15,6 @@ import fonthx.model.color.Palette;
 import fonthx.model.color.RGBAColor;
 using StringTools;
 
-/**
-* A Pixel Font
-**/
 class PixelFont extends AbstractFont implements IFont {
 
     private var pixelSize:Int;

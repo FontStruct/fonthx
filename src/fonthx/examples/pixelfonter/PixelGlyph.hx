@@ -24,11 +24,10 @@ class PixelGlyph extends AbstractContourGlyph implements IContourGlyph {
     public var bounds:Rectangle;
     public var gridBounds:Rectangle;
 
-
     public function new(codepoint:Int, name = null) {
         super(codepoint, name);
         pixels = new Array();
-        bounds = new Rectangle();
+        bounds = null;
         gridBounds = null;
     }
 
@@ -39,8 +38,11 @@ class PixelGlyph extends AbstractContourGlyph implements IContourGlyph {
         } else {
             gridBounds.add(x, y);
         }
-        // todo following is flawed (if left side is offset from 0)
-        bounds.add((x + 1) * pixelSize, (y + 1) * pixelSize);
+        if (bounds == null) {
+            bounds = new Rectangle(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
+        } else {
+            bounds.add(x * pixelSize, y * pixelSize);
+        }
     }
 
     public function toString():String {
@@ -120,10 +122,11 @@ class PixelGlyph extends AbstractContourGlyph implements IContourGlyph {
                     return g.color == p.color;
                 }), PixelGlyph);
                 if (layerGlyph == null) {
-                    layerGlyph = this.clone();
+                    layerGlyph = new PixelGlyph(0, ['layer', name, codepoint.hex(), p.color.rgbHex].join('-'));
+                    layerGlyph.pixelSize = pixelSize;
+                    layerGlyph.emSquare = emSquare;
+                    layerGlyph.shape = shape;
                     layerGlyph.color = p.color;
-                    layerGlyph.codepoint = 0;
-                    layerGlyph.name = ['layer', name, codepoint.hex(), p.color.rgbHex].join('-');
                     layers.push(layerGlyph);
                 }
                 layerGlyph.addPixel(p.x, p.y, p.color);
@@ -132,12 +135,16 @@ class PixelGlyph extends AbstractContourGlyph implements IContourGlyph {
         return layers;
     }
 
+    override public function hasLayers():Bool {
+        return layers != null;
+    }
+
     public function getPixels() {
         return pixels;
     }
 
     override public function get_advancedWidth():Float {
-        return bounds.width + pixelSize;
+        return bounds == null? pixelSize : bounds.width + pixelSize;
     }
 
     override public function get_numPoints():Int {
@@ -149,20 +156,11 @@ class PixelGlyph extends AbstractContourGlyph implements IContourGlyph {
     }
 
     override public function get_lsb():Float {
-        return 0;
+        return bounds == null? 0 : bounds.left;
     }
 
     override public function get_rsb():Float {
         return pixelSize;
-    }
-
-    public function clone():PixelGlyph {
-        var clone = new PixelGlyph(codepoint, name);
-        clone.color = color;
-        clone.emSquare = emSquare;
-        clone.pixelSize = pixelSize;
-        clone.shape = shape;
-        return clone;
     }
 
 }

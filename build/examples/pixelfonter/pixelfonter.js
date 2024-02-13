@@ -13,7 +13,6 @@ const defaultOptions = {
 };
 
 const makeEditor = (sectionId, options = {}) => {
-  if (sectionId !== 'colrColor') return;
   options = Object.assign({}, defaultOptions, options);
   const section = document.getElementById(sectionId);
   const srcImage = section.dataset.image;

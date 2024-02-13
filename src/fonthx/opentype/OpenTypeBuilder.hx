@@ -76,9 +76,7 @@ class OpenTypeBuilder {
                     font.glyphs.push(l);
                 }
             }
-            trace(font.glyphs.length + " glyphs for layers");
         }
-
 
         if (options.sortGlyphs) {
             font.sortGlyphs();
@@ -130,7 +128,7 @@ class OpenTypeBuilder {
 
         if (options.includeCOLR) {
             ttf.addTable(createCPALTable(font));
-//            ttf.addTable(createCOLRTable(font, options));
+            ttf.addTable(createCOLRTable(font, options));
         }
 
         ttf.addTable(new DSIGTable());

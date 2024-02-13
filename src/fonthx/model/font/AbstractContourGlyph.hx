@@ -1,11 +1,12 @@
 package fonthx.model.font;
 
+import fonthx.model.color.RGBAColor;
 import fonthx.model.geom.Rectangle;
 
 class AbstractContourGlyph implements IContourGlyph {
 
     private var components:Array<GlyphComponent>;
-    private var layers:Array<LayerComponent>;
+    private var layers:Array<IContourGlyph>;
 
     @:isVar public var codepoint(get, set):Int;
     @:isVar public var numContours(get, null):Int;
@@ -16,13 +17,13 @@ class AbstractContourGlyph implements IContourGlyph {
     @:isVar public var name(get, set):String;
 
     public var unmapped:Bool;
+    public var color:RGBAColor = RGBAColor.BLACK;
 
     public function new(codepoint:Int = 0, name:String = null) {
         this.codepoint = codepoint;
         this.name = name;
         unmapped = codepoint < 1;
         components = new Array();
-        layers = new Array();
     }
 
     public function getBounds():Rectangle {
@@ -91,7 +92,7 @@ class AbstractContourGlyph implements IContourGlyph {
         return layers.length > 0;
     }
 
-    public function getLayers():Array<LayerComponent> {
+    public function getLayers():Array<IContourGlyph> {
         return layers;
     }
 }

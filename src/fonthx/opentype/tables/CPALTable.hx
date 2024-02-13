@@ -13,6 +13,7 @@ using Lambda;
 class CPALTable extends Table {
 
     private var palettes:Array<Palette>;
+    private var version:Int = 0;
 
     public function new(version:Int = 0) {
         super(Table.CPAL);
@@ -23,16 +24,17 @@ class CPALTable extends Table {
     override public function write(tt:ITrueTypeWriter) {
         var numPaletteEntries = 0;
         if (palettes.length > 0) {
-            numPaletteEntries = palettes[0].length; // todo crass assumption
+            numPaletteEntries = palettes[0].colors.length; // todo crass assumption
         }
+        trace(numPaletteEntries);
         tt
-            .writeUINT16(version)
+            .writeUINT16(this.version)
             .writeUINT16(numPaletteEntries) // numPaletteEntries Number of palette entries in each palette. (always the same?)
             .writeUINT16(palettes.length) // numPalettes Number of palettes in the table.
-            .writeUINT16(palettes.fold(function(sum:Int, p:Palette) {
+            .writeUINT16(palettes.fold(function(p:Palette, sum:Int) {
                 return sum + p.colors.length;
             }, 0)) // numColorRecords Total number of color records, combined for all palettes.
-            .writeOffset32(12) // colorRecordsArrayOffset Offset from the beginning of CPAL table to the first ColorRecord.
+            .writeOffset32(12 + palettes.length * 2) // colorRecordsArrayOffset Offset from the beginning of CPAL table to the first ColorRecord.
         ;
         var idx = 0;
         for (palette in palettes) {

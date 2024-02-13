@@ -1,6 +1,7 @@
 package fonthx.model.font;
 
 import fonthx.model.geom.Rectangle;
+import fonthx.model.color.RGBAColor;
 
 /**
 * Interface to implement for a fonthx Glyph
@@ -48,6 +49,8 @@ interface IContourGlyph {
     **/
     var unmapped:Bool;
 
+    var color:RGBAColor;
+
     /**
     * get the bounding box
     **/
@@ -72,6 +75,7 @@ interface IContourGlyph {
 
     function hasLayers():Bool;
 
-    function getLayers():Array<LayerComponent>;
+    function getLayers():Array<IContourGlyph>;
+
 
 }

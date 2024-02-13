@@ -1,15 +1,23 @@
 package fonthx.model.color;
 
+using Lambda;
+
 class Palette {
 
-    var colors:Array<RGBAColor>;
+    public var colors:Array<RGBAColor>;
 
     public function new() {
         colors = new Array();
     }
 
     public function addColor(color:RGBAColor) {
-        colors.push(color);
+        if (!colors.contains(color)) {
+            colors.push(color);
+        }
+    }
+
+    public function addRGBA(r:Int, g: Int, b:Int, a:Int = 255){
+        addColor(RGBAColor.fromRGBA(r, g, b, a));
     }
 
 

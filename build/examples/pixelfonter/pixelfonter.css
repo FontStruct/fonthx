@@ -85,6 +85,10 @@ canvas {
     padding-bottom: 10px;
 }
 
+.pf-text--colrcolor {
+    font-family: pixelfontcolrcolor, sans-serif;
+}
+
 .pf-text--color {
     font-family: pixelfontcolor, sans-serif;
 }

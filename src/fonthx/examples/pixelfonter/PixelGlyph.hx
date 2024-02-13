@@ -1,12 +1,16 @@
 package fonthx.examples.pixelfonter;
 
-import fonthx.model.font.GlyphComponent;
-import fonthx.model.font.ContourOptions;
-import fonthx.model.font.PathProperties;
+import fonthx.model.color.RGBAColor;
 import fonthx.model.font.AbstractContourGlyph;
-import fonthx.model.geom.Rectangle;
+import fonthx.model.font.ContourOptions;
+import fonthx.model.font.GlyphComponent;
 import fonthx.model.font.IContourConsumer;
 import fonthx.model.font.IContourGlyph;
+import fonthx.model.font.PathProperties;
+import fonthx.model.geom.Rectangle;
+
+using Lambda;
+using StringTools;
 
 class PixelGlyph extends AbstractContourGlyph implements IContourGlyph {
 
@@ -20,6 +24,7 @@ class PixelGlyph extends AbstractContourGlyph implements IContourGlyph {
     public var bounds:Rectangle;
     public var gridBounds:Rectangle;
 
+
     public function new(codepoint:Int, name = null) {
         super(codepoint, name);
         pixels = new Array();
@@ -27,7 +32,7 @@ class PixelGlyph extends AbstractContourGlyph implements IContourGlyph {
         gridBounds = null;
     }
 
-    public function addPixel(x:Int, y:Int, color:String = '#FF0000') {
+    public function addPixel(x:Int, y:Int, color:RGBAColor = RGBAColor.BLACK) {
         pixels.push(new Pixel(x, y, color));
         if (gridBounds == null) {
             gridBounds = new Rectangle(x, y, 1, 1);
@@ -106,6 +111,27 @@ class PixelGlyph extends AbstractContourGlyph implements IContourGlyph {
         }
     }
 
+    override public function getLayers():Array<IContourGlyph> {
+        if (layers == null) {
+            // make layer glyphs (with colors) from this one
+            layers = new Array<IContourGlyph>();
+            for (p in pixels) {
+                var layerGlyph = cast(layers.find(function(g:IContourGlyph) {
+                    return g.color == p.color;
+                }), PixelGlyph);
+                if (layerGlyph == null) {
+                    layerGlyph = this.clone();
+                    layerGlyph.color = p.color;
+                    layerGlyph.codepoint = 0;
+                    layerGlyph.name = ['layer', name, codepoint.hex(), p.color.rgbHex].join('-');
+                    layers.push(layerGlyph);
+                }
+                layerGlyph.addPixel(p.x, p.y, p.color);
+            }
+        }
+        return layers;
+    }
+
     public function getPixels() {
         return pixels;
     }
@@ -128,6 +154,15 @@ class PixelGlyph extends AbstractContourGlyph implements IContourGlyph {
 
     override public function get_rsb():Float {
         return pixelSize;
+    }
+
+    public function clone():PixelGlyph {
+        var clone = new PixelGlyph(codepoint, name);
+        clone.color = color;
+        clone.emSquare = emSquare;
+        clone.pixelSize = pixelSize;
+        clone.shape = shape;
+        return clone;
     }
 
 }

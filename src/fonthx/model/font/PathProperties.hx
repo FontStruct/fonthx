@@ -1,12 +1,14 @@
 package fonthx.model.font;
 
+import fonthx.model.color.RGBAColor;
 class PathProperties {
-    public var fill:String;
-    public var stroke:String;
+
+    public var fill:RGBAColor;
+    public var stroke:RGBAColor;
     public var opacity:Float;
 
     public function new() {
-        fill = '#000000';
+        fill = RGBAColor.BLACK;
         stroke = null;
         opacity = 1;
     }

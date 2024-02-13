@@ -6,7 +6,6 @@ import fonthx.model.font.PathProperties;
 // https://docs.microsoft.com/en-us/typography/opentype/spec/svg#glyph-identifiers
 class SVGGlyph extends AbstractContourConsumer implements IContourConsumer {
 
-
     private var s:StringBuf;
     private var id:Int;
     private var options:SVGOptions;
@@ -40,10 +39,10 @@ class SVGGlyph extends AbstractContourConsumer implements IContourConsumer {
         }
         s.add('<path ');
         if (props.fill != null) {
-            s.add('fill="${props.fill}" ');
+            s.add('fill="#${props.fill.rgbHex}" ');
         }
         if (props.stroke != null) {
-            s.add('stroke="${props.stroke}" ');
+            s.add('stroke="#${props.stroke.rgbHex}" ');
         }
         if (props.opacity != 1) {
             s.add('opacity="${props.opacity}" ');

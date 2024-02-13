@@ -1,19 +1,15 @@
 package fonthx.examples.pixelfonter;
 
-import fonthx.model.font.features.LanguageTag;
-import fonthx.model.font.features.ScriptTag;
-import fonthx.model.font.features.Language;
-import fonthx.model.font.features.Script;
-import fonthx.model.font.glyphnames.GlyphNamer;
-import fonthx.services.FeatureSpecParser;
-import fonthx.svg.SVGBuilder;
-import fonthx.opentype.BuildOptions;
-import fonthx.utils.ExecutionTimer;
-import fonthx.opentype.FontFileFormat;
-import fonthx.opentype.OpenTypeBuilder;
-import haxe.io.Bytes;
 import fonthx.examples.pixelfonter.GlyphIdentifier;
-
+import fonthx.model.font.features.ScriptTag;
+import fonthx.svg.SVGBuilder;
+import fonthx.utils.ExecutionTimer;
+import haxe.io.Bytes;
+import fonthx.model.font.glyphnames.GlyphNamer;
+import fonthx.opentype.BuildOptions;
+import fonthx.services.FeatureSpecParser;
+import fonthx.opentype.OpenTypeBuilder;
+import fonthx.model.color.RGBAColor;
 using StringTools;
 using Lambda;
 
@@ -64,10 +60,15 @@ class PixelFonter {
                     var row = Std.int(Math.floor(x / opts.imageWidth));
                     x = x % opts.imageWidth;
                     var y = dy + (row * opts.glyphHeight);
-                    var idx = ((y * opts.imageWidth) + x) * 4;
-                    var color = opts.pixelData.get(idx);
-                    if (color != 0) continue;
-                    glyph.addPixel(dx, opts.glyphHeight - (dy + 1), dy > Math.floor(opts.glyphHeight / 2) ? '#0099CC' : '#CC0000'); // note inverted y axis
+                    var pidx = ((y * opts.imageWidth) + x) * 4;
+                    var r = opts.pixelData.get(pidx + 2);
+                    var g = opts.pixelData.get(pidx + 1);
+                    var b = opts.pixelData.get(pidx);
+                    var color = RGBAColor.fromRGBA(r, g, b);
+//                    trace(color, RGBAColor.WHITE);
+                    if (color == RGBAColor.WHITE) continue;
+                    font.palette.addColor(color);
+                    glyph.addPixel(dx, opts.glyphHeight - (dy + 1), color); // note inverted y axis
                 }
             }
         }
@@ -85,6 +86,10 @@ class PixelFonter {
         font.gposLayout.setDefaults(ScriptTag.LATIN);
 
         font.addDefaultGlyphs();
+
+        if (opts.includeCOLR) {
+
+        }
 
         if (opts.useComposites) {
             var pixelGlyph = font.addGlyph(0, 'pixel');
@@ -111,6 +116,7 @@ class PixelFonter {
         buildOptions.useSubroutinesInCFF = true;
         buildOptions.useFixedCoordinatesInCFF = opts.floatingPointCoords;
         buildOptions.includeSVG = opts.includeSVG;
+        buildOptions.includeCOLR = opts.includeCOLR;
 
         var bytes = OpenTypeBuilder.build(font, opts.format == 'ttf' ? TrueType : CFF, buildOptions);
 

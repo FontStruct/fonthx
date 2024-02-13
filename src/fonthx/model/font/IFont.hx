@@ -21,8 +21,8 @@ interface IFont {
     var gsubLayout(get, null):Layout;
     var emSquare(get, null):Int;
 
-    var numLayers(get, null):Int;
-    var getPalette(get, null):Palette;
+//    var numLayers(get, null):Int;
+    var palette(get, null):Palette;
 
     // todo put following in IExportableFont or IOpenTypable (and IPostscriptable)?
     var description(get, null):String;

@@ -13,6 +13,9 @@ using fonthx.opentype.types.Fixed;
  */
 class COLRTable extends Table {
 
+    private var font:IFont;
+    private var version:Int = 1;
+
 	public function new(font:IFont, version:Int = 1) {
 		super(Table.COLR);
         this.font = font;

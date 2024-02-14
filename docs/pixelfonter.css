@@ -79,9 +79,14 @@ canvas {
 .pf-text {
     font-family: pixelfont, sans-serif;
     font-kerning: normal;
+    font-variant-ligatures: no-common-ligatures;
     border-bottom: 1px solid #DDD;
     margin-bottom: 10px;
     padding-bottom: 10px;
+}
+
+.pf-text--colrcolor {
+    font-family: pixelfontcolrcolor, sans-serif;
 }
 
 .pf-text--color {
@@ -98,6 +103,10 @@ canvas {
 
 .pf-text--liga {
     font-family: pixelfontliga, sans-serif;
+}
+
+.pf-text--comp {
+    font-family: pixelfontcomp, sans-serif;
 }
 
 .pf-text--unkerned {

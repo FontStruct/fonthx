@@ -1,5 +1,6 @@
 package fonthx.model.font;
 
+import fonthx.model.color.Palette;
 import fonthx.model.font.features.Layout;
 import fonthx.model.font.features.lookups.pairadjustment.PositioningPair;
 
@@ -19,6 +20,9 @@ interface IFont {
     var gposLayout(get, null):Layout;
     var gsubLayout(get, null):Layout;
     var emSquare(get, null):Int;
+
+//    var numLayers(get, null):Int;
+    var palette(get, null):Palette;
 
     // todo put following in IExportableFont or IOpenTypable (and IPostscriptable)?
     var description(get, null):String;

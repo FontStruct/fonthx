@@ -1,12 +1,16 @@
 package fonthx.examples.pixelfonter;
 
-import fonthx.model.font.GlyphComponent;
-import fonthx.model.font.ContourOptions;
-import fonthx.model.font.PathProperties;
+import fonthx.model.color.RGBAColor;
 import fonthx.model.font.AbstractContourGlyph;
-import fonthx.model.geom.Rectangle;
+import fonthx.model.font.ContourOptions;
+import fonthx.model.font.GlyphComponent;
 import fonthx.model.font.IContourConsumer;
 import fonthx.model.font.IContourGlyph;
+import fonthx.model.font.PathProperties;
+import fonthx.model.geom.Rectangle;
+
+using Lambda;
+using StringTools;
 
 class PixelGlyph extends AbstractContourGlyph implements IContourGlyph {
 
@@ -23,19 +27,22 @@ class PixelGlyph extends AbstractContourGlyph implements IContourGlyph {
     public function new(codepoint:Int, name = null) {
         super(codepoint, name);
         pixels = new Array();
-        bounds = new Rectangle();
+        bounds = null;
         gridBounds = null;
     }
 
-    public function addPixel(x:Int, y:Int, color:String = '#FF0000') {
+    public function addPixel(x:Int, y:Int, color:RGBAColor = RGBAColor.BLACK) {
         pixels.push(new Pixel(x, y, color));
         if (gridBounds == null) {
             gridBounds = new Rectangle(x, y, 1, 1);
         } else {
             gridBounds.add(x, y);
         }
-        // todo following is flawed (if left side is offset from 0)
-        bounds.add((x + 1) * pixelSize, (y + 1) * pixelSize);
+        if (bounds == null) {
+            bounds = new Rectangle(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
+        } else {
+            bounds.extendBounds(new Rectangle(x * pixelSize, y * pixelSize, pixelSize, pixelSize));
+        }
     }
 
     public function toString():String {
@@ -106,12 +113,38 @@ class PixelGlyph extends AbstractContourGlyph implements IContourGlyph {
         }
     }
 
+    override public function getLayers():Array<IContourGlyph> {
+        if (layers == null) {
+            // make layer glyphs (with colors) from this one
+            layers = new Array<IContourGlyph>();
+            for (p in pixels) {
+                var layerGlyph = cast(layers.find(function(g:IContourGlyph) {
+                    return g.color == p.color;
+                }), PixelGlyph);
+                if (layerGlyph == null) {
+                    layerGlyph = new PixelGlyph(0, ['layer', name, codepoint.hex(), p.color.rgbHex].join('-'));
+                    layerGlyph.pixelSize = pixelSize;
+                    layerGlyph.emSquare = emSquare;
+                    layerGlyph.shape = shape;
+                    layerGlyph.color = p.color;
+                    layers.push(layerGlyph);
+                }
+                layerGlyph.addPixel(p.x, p.y, p.color);
+            }
+        }
+        return layers;
+    }
+
+    override public function hasLayers():Bool {
+        return layers != null;
+    }
+
     public function getPixels() {
         return pixels;
     }
 
     override public function get_advancedWidth():Float {
-        return bounds.width + pixelSize;
+        return bounds == null? pixelSize : bounds.width + pixelSize;
     }
 
     override public function get_numPoints():Int {
@@ -123,7 +156,7 @@ class PixelGlyph extends AbstractContourGlyph implements IContourGlyph {
     }
 
     override public function get_lsb():Float {
-        return 0;
+        return bounds == null? 0 : bounds.left;
     }
 
     override public function get_rsb():Float {

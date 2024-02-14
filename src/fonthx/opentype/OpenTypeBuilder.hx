@@ -1,29 +1,23 @@
 package fonthx.opentype;
 
-import fonthx.utils.MathUtils;
 import fonthx.model.font.features.lookups.LookupType;
-import fonthx.model.font.features.lookups.ILookup;
-import fonthx.opentype.os2.OS2Codepages;
-import fonthx.opentype.tables.opentype.GSUBTable;
-import fonthx.opentype.tables.cmap.CharacterMapFormat12Subtable;
-import fonthx.opentype.svg.SVGTable;
-import fonthx.opentype.FontFileFormat;
-import fonthx.opentype.tables.DSIGTable;
+import fonthx.model.font.glyphnames.GlyphNamer;
+import fonthx.model.font.IContourGlyph;
+import fonthx.model.font.IFont;
+import fonthx.model.geom.Rectangle;
 import fonthx.opentype.cff.CFF;
-import fonthx.opentype.os2.OS2Codepage;
-import fonthx.opentype.constants.MacintoshEncoding;
-import fonthx.opentype.constants.MacintoshLanguages;
 import fonthx.opentype.constants.MacStyle;
-import fonthx.opentype.constants.MicrosoftEncoding;
-import fonthx.opentype.constants.MicrosoftLanguages;
 import fonthx.opentype.constants.OS2Embeddable;
 import fonthx.opentype.constants.OS2FontSelectionFlags;
 import fonthx.opentype.constants.OS2Weight;
 import fonthx.opentype.constants.OS2Width;
-import fonthx.opentype.constants.Platform;
-import fonthx.opentype.constants.UnicodeEncoding;
-import fonthx.opentype.tables.cmap.CharacterMapFormat4Subtable;
-import fonthx.opentype.tables.cmap.CharacterMapTable;
+import fonthx.opentype.FontFileFormat;
+import fonthx.opentype.os2.OS2Codepages;
+import fonthx.opentype.os2.OS2Ranges;
+import fonthx.opentype.svg.SVGTable;
+import fonthx.opentype.tables.COLRTable;
+import fonthx.opentype.tables.CPALTable;
+import fonthx.opentype.tables.DSIGTable;
 import fonthx.opentype.tables.FontHeader;
 import fonthx.opentype.tables.GlyphTable;
 import fonthx.opentype.tables.HorizontalHeaderTable;
@@ -31,27 +25,25 @@ import fonthx.opentype.tables.HorizontalMetricsTable;
 import fonthx.opentype.tables.KerningTable;
 import fonthx.opentype.tables.LocationTable;
 import fonthx.opentype.tables.MaximumProfileTable;
-import fonthx.opentype.tables.naming.NamingRecord;
-import fonthx.opentype.tables.naming.NamingTable;
-import fonthx.opentype.tables.opentype.GPOSTable;
 import fonthx.opentype.tables.OS2Table;
 import fonthx.opentype.tables.PostTable;
 import fonthx.opentype.tables.SnftTable;
 import fonthx.opentype.tables.Table;
 import fonthx.opentype.tables.TableDirectory;
+import fonthx.opentype.tables.cmap.CharacterMapFormat12Subtable;
+import fonthx.opentype.tables.cmap.CharacterMapFormat4Subtable;
+import fonthx.opentype.tables.cmap.CharacterMapTable;
+import fonthx.opentype.tables.naming.NamingRecord;
+import fonthx.opentype.tables.naming.NamingTable;
+import fonthx.opentype.tables.opentype.GPOSTable;
+import fonthx.opentype.tables.opentype.GSUBTable;
 import fonthx.opentype.utils.Utils;
 import fonthx.opentype.writers.TrueTypeFileWriter;
-import fonthx.model.font.glyphnames.GlyphNamer;
-import fonthx.model.font.IContourGlyph;
-import fonthx.model.font.IFont;
-import fonthx.opentype.os2.OS2Ranges;
-import fonthx.model.geom.Rectangle;
 import fonthx.utils.ExecutionTimer;
 import fonthx.utils.MathUtils;
 import haxe.Int64;
 import haxe.io.Bytes;
 import haxe.io.BytesBuffer;
-
 using Lambda;
 using fonthx.opentype.options.OptionMapTools;
 
@@ -74,6 +66,16 @@ class OpenTypeBuilder {
         if (font.glyphs.length == 0) {
             trace("Font file contains no glyphs");
             return null;
+        }
+
+        if (options.includeCOLR) {
+            for (i in 0...font.glyphs.length) {
+                var g:IContourGlyph = font.glyphs[i];
+                var layers = g.getLayers();
+                for (l in layers) {
+                    font.glyphs.push(l);
+                }
+            }
         }
 
         if (options.sortGlyphs) {
@@ -122,6 +124,11 @@ class OpenTypeBuilder {
         if (options.includeSVG) {
             var svgTable = new SVGTable(font);
             ttf.addTable(svgTable);
+        }
+
+        if (options.includeCOLR) {
+            ttf.addTable(createCPALTable(font));
+            ttf.addTable(createCOLRTable(font, options));
         }
 
         ttf.addTable(new DSIGTable());
@@ -471,6 +478,17 @@ class OpenTypeBuilder {
 
     private static function createCFFTable(font:IFont, options:BuildOptions):CFF {
         var table = new CFF(font, options);
+        return table;
+    }
+
+    private static function createCPALTable(font:IFont):CPALTable {
+        var table = new CPALTable();
+        table.addPalette(font.palette);
+        return table;
+    }
+
+    private static function createCOLRTable(font:IFont, options:BuildOptions):COLRTable {
+        var table = new COLRTable(font);
         return table;
     }
 

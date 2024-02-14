@@ -12,6 +12,8 @@ class PixelFonterParams {
     public var outputPath:String;
     public var shape:Int;
     public var includeSVG:Bool;
+    public var includeCOLR:Bool = false;
+    public var w:Bool;
     public var svgSheet:Bool;
     public var floatingPointCoords:Bool;
     public var useComposites:Bool = false;

@@ -11,16 +11,16 @@ import fonthx.model.font.features.ScriptTag;
 import fonthx.model.font.IFont;
 import fonthx.model.geom.Rectangle;
 
+import fonthx.model.color.Palette;
+import fonthx.model.color.RGBAColor;
 using StringTools;
 
-/**
-* A Pixel Font
-**/
 class PixelFont extends AbstractFont implements IFont {
 
     private var pixelSize:Int;
     private var shape:Int;
     private var kerningSubLookup:PairAdjustmentPositioningSubLookup;
+    private var _palette:Palette;
 
     public function new(name:String, emSquare:Int, pixelSize:Int, shape:Int = 1) {
         super();
@@ -34,6 +34,8 @@ class PixelFont extends AbstractFont implements IFont {
         realDescender = 0;
         typoLineGap = emSquare;
         kerningSubLookup = new PairAdjustmentPositioningSubLookup();
+        _palette = new Palette();
+        palette.addColor(0xFF);
     }
 
     public function addGlyph(codepoint:Int, name:String = null):PixelGlyph {
@@ -176,6 +178,10 @@ class PixelFont extends AbstractFont implements IFont {
             }
         }
         return kern;
+    }
+
+    override function get_palette():Palette {
+        return _palette;
     }
 
 }

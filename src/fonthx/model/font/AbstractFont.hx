@@ -2,6 +2,7 @@ package fonthx.model.font;
 
 import fonthx.model.font.features.Layout;
 import fonthx.model.font.features.lookups.pairadjustment.PositioningPair;
+import fonthx.model.color.Palette;
 using Lambda;
 
 class AbstractFont implements IFont {
@@ -35,6 +36,7 @@ class AbstractFont implements IFont {
     public var license(get, null):String;
     public var licenseURL(get, null):String;
     public var styleModifiers(get, null):String;
+    public var palette(get, null):Palette;
 
     public function new() {
         glyphs = new Array();
@@ -340,4 +342,7 @@ class AbstractFont implements IFont {
         });
     }
 
+    function get_palette():Palette {
+        return null;
+    }
 }

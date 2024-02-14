@@ -83,9 +83,13 @@ const makeEditor = (sectionId, options = {}) => {
 };
 
 makeEditor('basic');
-makeEditor('color', {
+makeEditor('svgColor', {
   name: 'pixelfontcolor',
   includeSVG: true
+});
+makeEditor('colrColor', {
+  name: 'pixelfontcolrcolor',
+  includeCOLR: true
 });
 makeEditor('smp', {
   name: 'pixelfontsmp',
@@ -171,7 +175,7 @@ function showSection(id) {
 
 let sectionId = 'basic';
 if (window.location.hash) {
-  let hash = window.location.hash.substr(1).replace('-example', '');
+  let hash = window.location.hash.substring(1).replace('-example', '');
   if (hash && document.getElementById(hash)) {
     sectionId = hash;
   }

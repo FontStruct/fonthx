@@ -1,5 +1,9 @@
 # fonthhx Changelog
 
+## 0.0.8
+
+* Support for COLR table (version 0)
+
 ## 0.0.7
 
 * Refactor layout table & subtables – support for Extension Positioning subtable

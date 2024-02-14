@@ -51,6 +51,7 @@ class PixelFonterApp {
         o.useComposites = args.has('m') ? true : false;
         o.shape = args.has('s') ? Std.parseInt(args.get('s').value) : 1;
         o.format = args.has('f') ? args.get('f').value : 'ttf';
+        o.includeCOLR = args.has('l')? true: false;
 
         // load the image
         var handle = sys.io.File.read(args.get('i').value, true);

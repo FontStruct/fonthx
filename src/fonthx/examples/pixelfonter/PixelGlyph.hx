@@ -41,7 +41,7 @@ class PixelGlyph extends AbstractContourGlyph implements IContourGlyph {
         if (bounds == null) {
             bounds = new Rectangle(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
         } else {
-            bounds.add(x * pixelSize, y * pixelSize);
+            bounds.extendBounds(new Rectangle(x * pixelSize, y * pixelSize, pixelSize, pixelSize));
         }
     }
 

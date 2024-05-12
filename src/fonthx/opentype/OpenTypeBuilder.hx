@@ -194,7 +194,6 @@ class OpenTypeBuilder {
         bytes.set(offset + 1, (csa >>> 16) & 0xFF);
         bytes.set(offset + 2, (csa >>> 8) & 0xFF);
         bytes.set(offset + 3, csa & 0xFF);
-
         return bytes;
     }
 
@@ -202,10 +201,10 @@ class OpenTypeBuilder {
         var head = new FontHeader();
         var now = Date.now();
         head.setFormat(format)
-        .setCreated(Utils.getMillisSince1904(now))
-        .setModified(Utils.getMillisSince1904(now))
-        .setVersion('${fnt.majorVersion}.${fnt.minorVersion}')
-        .setEmSquare(fnt.emSquare)
+            .setCreated(Utils.getMillisSince1904(now))
+            .setModified(Utils.getMillisSince1904(now))
+            .setVersion('${fnt.majorVersion}.${fnt.minorVersion}')
+            .setEmSquare(fnt.emSquare)
         ;
         // calculate bounds
         var bounds = null;

@@ -9,7 +9,7 @@ class PathProperties {
 
     public function new() {
         fill = RGBAColor.BLACK;
-        stroke = null;
+        stroke = 0;
         opacity = 1;
     }
 }

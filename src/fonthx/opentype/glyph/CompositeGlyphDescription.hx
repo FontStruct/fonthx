@@ -1,5 +1,8 @@
 package fonthx.opentype.glyph;
 
+import fonthx.model.geom.Rectangle;
+import haxe.io.Bytes;
+import fonthx.opentype.writers.TrueTypeFileWriter;
 import fonthx.model.font.IFont;
 import fonthx.model.font.IContourGlyph;
 import fonthx.opentype.writers.ITrueTypeWriter;
@@ -40,16 +43,20 @@ class CompositeGlyphDescription {
     // Bit 12: The composite is designed not to have the component offset scaled. Ignored if ARGS_ARE_XY_VALUES is not set.
     public static var UNSCALED_COMPONENT_OFFSET:Int = 0x1000;
 
+    private var tt:TrueTypeFileWriter;
+
     public function new() {
+        tt = new TrueTypeFileWriter();
     }
 
-    public function write(tt:ITrueTypeWriter, glyph:IContourGlyph, font:IFont) {
-
+    public function write(glyph:IContourGlyph, font:IFont):Bytes {
         tt.markPosition();
         var bounds = glyph.getBounds();
+        if (bounds == null) {
+            bounds = new Rectangle();
+        }
         // write glyph header – todo this could be shared with SimpleGlyphDescription
-        tt
-        .writeSHORT(-1)
+        tt.writeSHORT(-1)
         .writeSHORT(Std.int(bounds.left))
         .writeSHORT(Std.int(bounds.top))
         .writeSHORT(Std.int(bounds.right))
@@ -96,8 +103,8 @@ class CompositeGlyphDescription {
 
             }
         }
-
         tt.pad(true);
+        return tt.getBytes();
     }
 
 

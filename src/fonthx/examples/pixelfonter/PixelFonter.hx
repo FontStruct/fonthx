@@ -116,6 +116,7 @@ class PixelFonter {
         buildOptions.useSubroutinesInCFF = true;
         buildOptions.useFixedCoordinatesInCFF = opts.floatingPointCoords;
         buildOptions.includeSVG = opts.includeSVG;
+        //buildOptions.includeDeprecatedKERNTable = true;
         buildOptions.includeCOLR = opts.includeCOLR;
 
         var bytes = OpenTypeBuilder.build(font, opts.format == 'ttf' ? TrueType : CFF, buildOptions);

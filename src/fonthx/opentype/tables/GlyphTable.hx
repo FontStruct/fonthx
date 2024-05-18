@@ -1,10 +1,10 @@
 package fonthx.opentype.tables;
 
+import haxe.io.Bytes;
 import fonthx.opentype.glyph.CompositeGlyphDescription;
 import fonthx.opentype.glyph.GlyphDescriptionContourConsumer;
 import fonthx.model.font.IFont;
 import fonthx.opentype.glyph.SimpleGlyphDescription;
-import fonthx.opentype.writers.ITrueTypeWriter;
 
 /**
  * Truetype glyph table 
@@ -25,13 +25,13 @@ class GlyphTable extends Table {
         this.font = font;
     }
 
-    override public function write(tt:ITrueTypeWriter) {
+    override public function getBytes():Bytes {
         offsets = new Array<Int>();
         var coffset = 0;
         for (glyph in font.glyphs) {
             if (glyph.isComposite()) {
                 var cgDesc = new CompositeGlyphDescription();
-                cgDesc.write(tt, glyph, font);
+                tt.writeBytes(cgDesc.write(glyph, font));
                 offsets.push(coffset);
                 coffset = tt.getPosition() - this.offset;
 
@@ -39,7 +39,7 @@ class GlyphTable extends Table {
                 var gDesc = new SimpleGlyphDescription();
                 var consumer = new GlyphDescriptionContourConsumer(gDesc);
                 glyph.walkContours(consumer);
-                gDesc.write(tt);
+                tt.writeBytes(gDesc.write());
                 offsets.push(coffset);
                 coffset = tt.getPosition() - this.offset;
             }
@@ -47,6 +47,7 @@ class GlyphTable extends Table {
         /*In order to compute the length of the last glyph element,
 		there is an extra entry after the last valid index. */
         offsets.push(coffset);
+        return tt.getBytes();
     }
 
     public function getOffsets():Array<Int> {

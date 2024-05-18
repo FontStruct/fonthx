@@ -1,6 +1,6 @@
 package fonthx.opentype.tables;
 
-import fonthx.opentype.writers.ITrueTypeWriter;
+import haxe.io.Bytes;
 
 /**
     @see https://docs.microsoft.com/en-us/typography/opentype/spec/font-file
@@ -16,10 +16,9 @@ class TableDirectory extends Table {
 
 	public function addEntry(entry:TableDirectoryEntry) {
 		entries.push(entry);
-
     }
 
-	override public function write(tt:ITrueTypeWriter) {
+	override public function getBytes():Bytes {
         // Entries in the Table Record must be sorted in ascending order by tag
         entries.sort(function(a:TableDirectoryEntry, b:TableDirectoryEntry) {
             if (b.table.tag > a.table.tag) {
@@ -33,6 +32,7 @@ class TableDirectory extends Table {
 		for (entry in entries) {
 			entry.write(tt);
 		}
+        return tt.getBytes();
 	}
 
 

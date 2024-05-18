@@ -1,6 +1,6 @@
 package fonthx.opentype.tables;
 
-import fonthx.opentype.writers.ITrueTypeWriter;
+import haxe.io.Bytes;
 
 class SnftTable extends Table {
 
@@ -13,7 +13,7 @@ class SnftTable extends Table {
         this.format = format;
     }
 
-    override public function write(tt:ITrueTypeWriter) {
+    override public function getBytes():Bytes {
         var maxPow2:Int = Std.int(Math.pow(2, Math.floor(Math.log(numTables) / Math.log(2))));
         var searchRange:Int = (maxPow2) * 16;
         var entrySelector:Int = Std.int(Math.log(maxPow2) / Math.log(2));
@@ -27,6 +27,7 @@ class SnftTable extends Table {
         tt.writeUSHORT(searchRange);
         tt.writeUSHORT(entrySelector);
         tt.writeUSHORT(rangeShift);
+        return tt.getBytes();
     }
 
 }

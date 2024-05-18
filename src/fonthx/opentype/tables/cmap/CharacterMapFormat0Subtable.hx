@@ -17,7 +17,7 @@ class CharacterMapFormat0Subtable extends CharacterMapSubtable {
         super(platformID, encodingID, languageID);
     }
 
-    override public function write(tt:ITrueTypeWriter) {
+    override public function getBytes():Bytes {
         // UInt16 format Set to 0
         tt.writeUSHORT(0);
         // UInt16 length Length in bytes of the subtable (set to 262 for format
@@ -42,6 +42,7 @@ class CharacterMapFormat0Subtable extends CharacterMapSubtable {
         for (i in 0...256) {
             tt.writeByte(mapping[i]);
         }
+        return tt.getBytes();
     }
 
     override public function calculateLength() {

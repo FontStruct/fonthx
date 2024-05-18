@@ -41,7 +41,7 @@ class CFF extends Table {
         super(Table.CFF);
     }
 
-    override public function write(tt:ITrueTypeWriter) {
+    override public function getBytes():Bytes {
 
         // NAME INDEX (single entry only)
         createNameIndex();
@@ -123,6 +123,7 @@ class CFF extends Table {
         for (sectionKey in sectionOrder) {
             tt.writeBytes(sections.get(sectionKey));
         }
+        return tt.getBytes();
     }
 
     public function createHeader() {

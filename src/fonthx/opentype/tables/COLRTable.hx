@@ -1,9 +1,9 @@
 package fonthx.opentype.tables;
 
 import fonthx.model.font.IFont;
-import fonthx.opentype.writers.ITrueTypeWriter;
 
 import fonthx.model.font.IContourGlyph;
+import haxe.io.Bytes;
 using fonthx.opentype.types.Fixed;
 
 /**
@@ -23,7 +23,7 @@ class COLRTable extends Table {
 		this.version = version; // todo we only support v0
 	}
 
-	override public function write(tt:ITrueTypeWriter) {
+    override public function getBytes():Bytes {
 
         var baseGlyphs = font.glyphs.filter(function(g:IContourGlyph) {
             return g.hasLayers();
@@ -60,6 +60,7 @@ class COLRTable extends Table {
                 tt.writeUINT16(font.palette.colors.indexOf(l.color));                              // uint16 	paletteIndex 	Index (base 0) for a palette entry in the CPAL table.
             }
         }
+        return tt.getBytes();
     }
 
 }

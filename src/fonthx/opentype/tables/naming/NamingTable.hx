@@ -1,7 +1,7 @@
 package fonthx.opentype.tables.naming;
 
 import String;
-import fonthx.opentype.writers.ITrueTypeWriter;
+import haxe.io.Bytes;
 
 /**
     Naming Table
@@ -38,7 +38,7 @@ class NamingTable extends Table {
         return s;
     }
 
-    override public function write(tt:ITrueTypeWriter) {
+    override public function getBytes():Bytes {
         tt
             .writeUSHORT(format)
             .writeUSHORT(records.length)
@@ -55,6 +55,7 @@ class NamingTable extends Table {
         for (r in records) {
             tt.writeBytes(r.getBytes());
         }
+        return tt.getBytes();
     }
 
 }

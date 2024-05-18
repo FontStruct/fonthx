@@ -1,8 +1,8 @@
 package fonthx.opentype.tables;
 
 import fonthx.model.color.Palette;
-import fonthx.opentype.writers.ITrueTypeWriter;
 
+import haxe.io.Bytes;
 using Lambda;
 
 /**
@@ -21,12 +21,11 @@ class CPALTable extends Table {
         palettes = new Array();
     }
 
-    override public function write(tt:ITrueTypeWriter) {
+    override public function getBytes():Bytes {
         var numPaletteEntries = 0;
         if (palettes.length > 0) {
             numPaletteEntries = palettes[0].colors.length; // todo crass assumption
         }
-        trace(numPaletteEntries);
         tt
             .writeUINT16(this.version)
             .writeUINT16(numPaletteEntries) // numPaletteEntries Number of palette entries in each palette. (always the same?)
@@ -49,6 +48,7 @@ class CPALTable extends Table {
                 tt.writeByte(color.a);
             }
         }
+        return tt.getBytes();
     }
 
     public function addPalette(palette:Palette) {

@@ -17,7 +17,7 @@ class CFFSpec extends buddy.BuddySuite {
 
     private function getTableAsArray(table:Table):Array<Int> {
         var tt = new TrueTypeFileWriter();
-        table.write(tt);
+        table.getBytes(tt);
         var bytes = tt.getBytes();
         var b = [];
         for (i in 0...bytes.length) {

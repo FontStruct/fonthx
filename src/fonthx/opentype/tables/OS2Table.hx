@@ -1,10 +1,10 @@
 package fonthx.opentype.tables;
 
+import haxe.io.Bytes;
 import fonthx.opentype.constants.OS2Embeddable;
 import fonthx.opentype.constants.OS2FontSelectionFlags;
 import fonthx.opentype.constants.OS2Weight;
 import fonthx.opentype.constants.OS2Width;
-import fonthx.opentype.writers.ITrueTypeWriter;
 
 /**
     OS/2 and Windows Metrics Table
@@ -113,7 +113,7 @@ class OS2Table extends Table
 		usMaxContext = 0;
 	}
 
-	override public function write(tt:ITrueTypeWriter) {
+	override public function getBytes():Bytes {
 		tt
             .writeUSHORT(version)
             .writeSHORT(xAvgCharWidth)
@@ -155,6 +155,7 @@ class OS2Table extends Table
             .writeUSHORT(usDefaultChar)
             .writeUSHORT(usBreakChar)
             .writeUSHORT(usMaxContext);
+        return tt.getBytes();
 	}
 
 

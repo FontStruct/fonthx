@@ -1,9 +1,9 @@
 package fonthx.opentype.tables;
 
+import haxe.io.Bytes;
 import haxe.Int64;
 import Math;
 import fonthx.model.geom.Rectangle;
-import fonthx.opentype.writers.ITrueTypeWriter;
 
 /**
  * Font Header This table gives global information about the font. The bounding
@@ -65,7 +65,7 @@ class FontHeader extends Table {
         indexToLocFormat = 1;
     }
 
-    override public function write(tt:ITrueTypeWriter) {
+    override public function getBytes():Bytes {
         tt.writeVersion(1, 0) // TT header version 1.0
         .writeFixed(Std.parseFloat(version))
         .writeULONG(0) // will be rewritten
@@ -84,6 +84,7 @@ class FontHeader extends Table {
         .writeSHORT(indexToLocFormat) // indexToLocFormat 0 for short offsets, 1 for long.
         .writeSHORT(0)
         ;
+        return tt.getBytes();
     }
 
     /**

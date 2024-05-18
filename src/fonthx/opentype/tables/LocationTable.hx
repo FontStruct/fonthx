@@ -1,6 +1,6 @@
 package fonthx.opentype.tables;
 
-import fonthx.opentype.writers.ITrueTypeWriter;
+import haxe.io.Bytes;
 
 /**
  * This table stores the offsets to the locations of the glyphs in the font,
@@ -19,12 +19,13 @@ class LocationTable extends Table {
 		this.glyphTable = glyphTable;
 	}
 
-	override public function write(tt:ITrueTypeWriter) {
+	override public function getBytes():Bytes {
 		// we use the long format
 		var offsets = glyphTable.getOffsets();
 		for (o in offsets) {
 			tt.writeULONG(o);
 		}
+        return tt.getBytes();
 	}
 
 }

@@ -3,7 +3,6 @@ import haxe.Utf8;
 import fonthx.svg.SVGOptions;
 import fonthx.model.font.IFont;
 import fonthx.opentype.tables.Table;
-import fonthx.opentype.writers.ITrueTypeWriter;
 import fonthx.svg.SVGBuilder;
 import haxe.io.Bytes;
 #if sys
@@ -29,7 +28,7 @@ class SVGTable extends Table {
         super(Table.SVG);
     }
 
-    override public function write(tt:ITrueTypeWriter) {
+    override public function getBytes():Bytes {
         // Header
         tt.writeUINT16(0); // Table version (starting at 0). Set to 0.
         tt.writeOffset32(10); // Offset to the SVG Document List, from the start of the SVG table. Must be non-zero.
@@ -79,5 +78,6 @@ class SVGTable extends Table {
         for (svg in svgBytes) {
             tt.writeBytes(svg);
         }
+        return tt.getBytes();
     }
 }

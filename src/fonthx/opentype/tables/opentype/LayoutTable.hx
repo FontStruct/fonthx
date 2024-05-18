@@ -1,4 +1,5 @@
 package fonthx.opentype.tables.opentype;
+import haxe.io.Bytes;
 import fonthx.opentype.tables.Table;
 import fonthx.model.font.features.Layout;
 import fonthx.opentype.writers.ITrueTypeWriter;
@@ -29,7 +30,7 @@ class LayoutTable extends Table {
         lookupList.setLookups(layout.lookups);
     }
 
-    override public function write(tt:ITrueTypeWriter) {
+    override public function getBytes():Bytes {
         var offset = 10; // (length of this header)
         tt.writeUINT16(majorVersion)
             .writeUINT16(minorVersion)
@@ -41,5 +42,6 @@ class LayoutTable extends Table {
         scriptList.write(tt);
         featureList.write(tt);
         lookupList.write(tt);
+        return tt.getBytes();
     }
 }

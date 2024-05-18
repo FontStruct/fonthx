@@ -1,5 +1,6 @@
 package fonthx.opentype.tables.cmap;
 
+import haxe.io.Bytes;
 import fonthx.opentype.writers.ITrueTypeWriter;
 
 /**
@@ -68,7 +69,7 @@ class CharacterMapFormat4Subtable extends CharacterMapSubtable {
         }
     }
 
-    override public function write(tt:ITrueTypeWriter) {
+    override public function getBytes():Bytes {
         prepareSegments();
         var segCount = segments.length;
         tt.writeUSHORT(4); // Format number is set to 4.
@@ -113,7 +114,7 @@ class CharacterMapFormat4Subtable extends CharacterMapSubtable {
             // Glyph index array (arbitrary length)
             tt.writeUSHORT(0);
         }
-
+        return tt.getBytes();
     }
 
     override public function addCodepoint(codepoint:Int) {

@@ -3,8 +3,8 @@ package fonthx.model.font;
 import fonthx.model.color.RGBAColor;
 class PathProperties {
 
-    public var fill:RGBAColor;
-    public var stroke:RGBAColor;
+    public var fill:Null<RGBAColor>;
+    public var stroke:Null<RGBAColor>;
     public var opacity:Float;
 
     public function new() {

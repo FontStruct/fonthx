@@ -13,6 +13,7 @@ class BuildOptions {
 
     public var useFixedCoordinatesInCFF:Bool = false;
     public var useSubroutinesInCFF:Bool = false;
+    public var includeDeprecatedKERNTable:Bool = false;
     public var includeSVG:Bool = false; // todo general color config
     public var includeCOLR:Bool = false;
     public var sortGlyphs:Bool = true;

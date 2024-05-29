@@ -95,11 +95,13 @@ class OpenTypeBuilder {
         ttf.addTable(createHorizontalMetricsTable(font));
 
         if (font.hasKerning()) {
-            var numPairs = font.getKerningPairs().length;
-            if (numPairs > 10919) { // (((256 * 256) - 18) / 6);
-                trace('Too many kerning pairs ${numPairs}. KERN table will overflow. No KERN table will be written');
-            } else {
-                ttf.addTable(createKerningTable(font));
+            if (options.includeDeprecatedKERNTable) {
+                var numPairs = font.getKerningPairs().length;
+                if (numPairs > 10919) { // (((256 * 256) - 18) / 6);
+                    trace('Too many kerning pairs ${numPairs}. KERN table will overflow. No KERN table will be written');
+                } else {
+                    ttf.addTable(createKerningTable(font));
+                }
             }
             ttf.addTable(createGPOSTable(font));
         }

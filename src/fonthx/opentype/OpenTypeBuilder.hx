@@ -68,16 +68,6 @@ class OpenTypeBuilder {
             return null;
         }
 
-        if (options.includeCOLR) {
-            for (i in 0...font.glyphs.length) {
-                var g:IContourGlyph = font.glyphs[i];
-                var layers = g.getLayers();
-                for (l in layers) {
-                    font.glyphs.push(l);
-                }
-            }
-        }
-
         if (options.sortGlyphs) {
             font.sortGlyphs();
         }

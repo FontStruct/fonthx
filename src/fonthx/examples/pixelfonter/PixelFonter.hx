@@ -10,6 +10,7 @@ import fonthx.opentype.BuildOptions;
 import fonthx.services.FeatureSpecParser;
 import fonthx.opentype.OpenTypeBuilder;
 import fonthx.model.color.RGBAColor;
+import fonthx.model.font.IContourGlyph;
 using StringTools;
 using Lambda;
 
@@ -88,7 +89,13 @@ class PixelFonter {
         font.addDefaultGlyphs();
 
         if (opts.includeCOLR) {
-
+            for (i in 0...font.glyphs.length) {
+                var g:IContourGlyph = font.glyphs[i];
+                var layers = g.getLayers();
+                for (l in layers) {
+                    font.glyphs.push(l);
+                }
+            }
         }
 
         if (opts.useComposites) {

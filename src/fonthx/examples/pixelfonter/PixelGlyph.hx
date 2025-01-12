@@ -24,8 +24,8 @@ class PixelGlyph extends AbstractContourGlyph implements IContourGlyph {
     public var bounds:Rectangle;
     public var gridBounds:Rectangle;
 
-    public function new(codepoint:Int, name = null) {
-        super(codepoint, name);
+    public function new(codepoint:Int, name = null, isLayer = false) {
+        super(codepoint, name, isLayer);
         pixels = new Array();
         bounds = null;
         gridBounds = null;
@@ -127,6 +127,7 @@ class PixelGlyph extends AbstractContourGlyph implements IContourGlyph {
                     layerGlyph.emSquare = emSquare;
                     layerGlyph.shape = shape;
                     layerGlyph.color = p.color;
+                    layerGlyph.isLayer = true;
                     layers.push(layerGlyph);
                 }
                 layerGlyph.addPixel(p.x, p.y, p.color);

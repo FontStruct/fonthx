@@ -15,13 +15,15 @@ class AbstractContourGlyph implements IContourGlyph {
     @:isVar public var lsb(get, set):Float;
     @:isVar public var rsb(get, set):Float;
     @:isVar public var name(get, set):String;
+    @:isVar public var isLayer(get, set):Bool;
 
     public var unmapped:Bool;
     public var color:RGBAColor = RGBAColor.BLACK;
 
-    public function new(codepoint:Int = 0, name:String = null) {
+    public function new(codepoint:Int = 0, name:String = null, isLayer = false) {
         this.codepoint = codepoint;
         this.name = name;
+        this.isLayer = isLayer;
         unmapped = codepoint < 1;
         components = new Array();
     }
@@ -95,4 +97,14 @@ class AbstractContourGlyph implements IContourGlyph {
     public function getLayers():Array<IContourGlyph> {
         return layers;
     }
+
+    public function get_isLayer():Bool {
+        return isLayer;
+
+    }
+    public function set_isLayer(isLayer:Bool):Bool {
+        this.isLayer = isLayer;
+        return isLayer;
+    }
+
 }

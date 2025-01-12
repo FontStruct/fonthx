@@ -44,6 +44,8 @@ interface IContourGlyph {
     **/
     var name(get, set):String;
 
+    var isLayer(get, set):Bool;
+
     /**
     * @return true if the Glyph is unmapped (i.e. has no codepoint mapping in the cmap) // todo: could this be just codepoint == -1?
     **/
@@ -76,6 +78,5 @@ interface IContourGlyph {
     function hasLayers():Bool;
 
     function getLayers():Array<IContourGlyph>;
-
 
 }

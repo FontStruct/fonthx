@@ -56,7 +56,10 @@ class AbstractFont implements IFont {
     }
 
     public function getGlyphIndexForGlyph(g:IContourGlyph) {
-        var idx = this.getGlyphIndexForCodepoint(g.codepoint);
+        var idx = -1;
+        if (!g.isLayer) {
+            idx = this.getGlyphIndexForCodepoint(g.codepoint);
+        }
         if (idx == -1) {
             idx = this.getGlyphIndexForName(g.name);
         }

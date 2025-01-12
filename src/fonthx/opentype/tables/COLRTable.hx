@@ -29,7 +29,7 @@ class COLRTable extends Table {
             return g.hasLayers();
         });
         var layerGlyphs = font.glyphs.filter(function(g:IContourGlyph) {
-            return !g.hasLayers();
+            return g.isLayer;
         });
 
         // header
@@ -48,7 +48,8 @@ class COLRTable extends Table {
         // base glyph records
         var layerRecIdx = 0;
         for (g in baseGlyphs) {
-            tt.writeUINT16(font.getGlyphIndexForGlyph(g));  // glyphID 	Glyph ID of the base glyph.
+            var idx = font.getGlyphIndexForGlyph(g);
+            tt.writeUINT16(idx);  // glyphID 	Glyph ID of the base glyph.
             tt.writeUINT16(layerRecIdx);                    // firstLayerIndex 	Index (base 0) into the layerRecords array.
             tt.writeUINT16(g.getLayers().length);           // numLayers 	Number of color layers associated with this glyph.
             layerRecIdx += g.getLayers().length;
@@ -56,7 +57,8 @@ class COLRTable extends Table {
         // layer records
         for (g in baseGlyphs) {
             for (l in g.getLayers()) {
-                tt.writeUINT16(font.getGlyphIndexForGlyph(l));  // glyphID 	Glyph ID of the glyph used for a given layer.
+                var idx = font.getGlyphIndexForGlyph(l);
+                tt.writeUINT16(idx);  // glyphID 	Glyph ID of the glyph used for a given layer.
                 tt.writeUINT16(font.palette.colors.indexOf(l.color));                              // uint16 	paletteIndex 	Index (base 0) for a palette entry in the CPAL table.
             }
         }

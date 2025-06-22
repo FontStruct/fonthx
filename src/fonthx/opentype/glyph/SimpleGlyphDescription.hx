@@ -39,10 +39,12 @@ class SimpleGlyphDescription {
         * would be used as final point to create an ‘on’ – ‘off’ – ‘on’ sequence as described above.
         **/
         if (lastPoint != null && firstPoint != null && points.length > 0 && lastPoint.equals(firstPoint)) {
+            // remove superfluous point
             var extraPoint = points.pop();
             if (extraPoint.previous != null) {
                 extraPoint.previous.next = null;
             }
+            lastPoint = points[points.length - 1];
         }
     }
 
@@ -210,5 +212,7 @@ class SimpleGlyphDescription {
         return points;
     }
 
-
+    public function toString():String {
+        return this.getPoints().map(function(p:ContourPoint) {return '[' + p.toString() + ']';}).join(',');
+    }
 }

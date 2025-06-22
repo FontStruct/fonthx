@@ -91,7 +91,7 @@ class AbstractContourGlyph implements IContourGlyph {
 
 
     public function hasLayers():Bool {
-        return layers.length > 0;
+        return layers != null && layers.length > 0;
     }
 
     public function getLayers():Array<IContourGlyph> {

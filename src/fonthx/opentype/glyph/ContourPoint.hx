@@ -76,6 +76,6 @@ class ContourPoint {
     }
 
     public function toString() {
-        return x + "," + y + " " + (isEnd() ? "end" : "");
+        return "[" +  x + "," + y + "," + (isEnd() ? "end" : "") + "]";
     }
 }

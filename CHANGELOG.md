@@ -1,5 +1,9 @@
 # fonthhx Changelog
 
+## 0.0.9
+
+* Fix error with glyph sort on legacy kern table
+
 ## 0.0.8
 
 * Support for COLR table (version 0)

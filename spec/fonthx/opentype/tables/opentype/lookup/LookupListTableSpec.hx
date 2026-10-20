@@ -11,7 +11,6 @@ using buddy.Should;
 
 class LookupListTableSpec extends buddy.BuddySuite {
     public function new() {
-        @include
         describe("LookupListTable", function() {
             it("splits overflowing subtables and uses extension position if necessary", function() {
                 // create a massive kerning lookup

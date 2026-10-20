@@ -8,8 +8,8 @@ class Shape
 {
 
     public var paths:Array<Path>;
-	private var bounds:Rectangle;
-	
+    private var bounds:Rectangle;
+
     public function new() {
         paths = new Array<Path>();
     }
@@ -55,7 +55,6 @@ class Shape
         }
 		return clone;
     }
-
 
     public function toString():String{
         return "Shape \n" + paths.join("\n");

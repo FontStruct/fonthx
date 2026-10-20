@@ -22,9 +22,7 @@ using Lambda;
 class GPOSSpec extends buddy.BuddySuite {
 
     private function getTableAsArray(gpos:LayoutTable):Array<Int> {
-        var tt = new TrueTypeFileWriter();
-        gpos.write(tt);
-        var bytes = tt.getBytes();
+        var bytes = gpos.getBytes();
         var b = [];
         for (i in 0...bytes.length) {
             b.push(bytes.get(i));

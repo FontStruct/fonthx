@@ -526,7 +526,7 @@ class OpenTypeBuilder {
 
     private static function getLastCharCode(fnt:IFont) {
         return fnt.glyphs.fold(function(g:IContourGlyph, acc:Int) {
-            return g.codepoint < 0xFFFF && g.codepoint > acc ? g.codepoint : acc;
+            return g.codepoint <= 0xFFFD && g.codepoint > acc ? g.codepoint : acc;
         }, 0);
     }
 

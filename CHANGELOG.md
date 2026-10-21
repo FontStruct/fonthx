@@ -1,5 +1,9 @@
 # fonthhx Changelog
 
+## 0.0.10
+
+* Ignore glyphs with codepoints 0xFFFF and 0xFFFE
+
 ## 0.0.9
 
 * Fix error with glyph sort on legacy kern table

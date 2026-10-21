@@ -118,10 +118,11 @@ class CharacterMapFormat4Subtable extends CharacterMapSubtable {
     }
 
     override public function addCodepoint(codepoint:Int) {
-        if (codepoint <= 0xFFFF) {
+        if (codepoint > 0 && codepoint <= 0xFFFD) {
             codepoints.push(codepoint);
+        } else {
+            codepoints.push(0);
         }
-        // todo increment unmapped here?
     }
 
 }
